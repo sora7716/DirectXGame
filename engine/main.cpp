@@ -11,6 +11,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	
 	//DirectX12の初期化
 	DirectXCommon::GetInstance()->InitializeDirectX12();
+
 	//ウィンドウの×ボタンが押されるまでループ
 	while (true){
 		if (winApp->ProcesMessage()) {

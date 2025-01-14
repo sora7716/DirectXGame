@@ -38,6 +38,21 @@ private://メンバ関数
 	/// </summary>
 	void MakeD3D12Device();
 
+	/// <summary>
+	/// コマンドキューの生成
+	/// </summary>
+	void MakeCommandQueue();
+
+	/// <summary>
+	/// コマンドアローケータの生成
+	/// </summary>
+	void MakeCommandAllocator();
+
+	/// <summary>
+	/// コマンドリストの生成
+	/// </summary>
+	void MakeCommandList();
+
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
 	DirectXCommon(const DirectXCommon&) = delete;
@@ -47,5 +62,8 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<IDXGIAdapter4>useAdapter_ = nullptr;//使用するアダプタ
 	HRESULT hr_;
 	Microsoft::WRL::ComPtr<ID3D12Device> device_ = nullptr;//デバイス
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_ = nullptr;//コマンドアローケータ
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList_ = nullptr;//コマンドリスト
 };
 

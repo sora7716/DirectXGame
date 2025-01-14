@@ -66,3 +66,25 @@ void DirectXCommon::MakeD3D12Device() {
 	assert(device_ != nullptr);
 	Log::ConsolePrintf("Complete create D3D12Device!!!\n");//初期化完了のログをだす
 }
+
+//コマンドキューの生成
+void DirectXCommon::MakeCommandQueue(){
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
+	hr_ = device_->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue_));
+	//コマンドキューの生成がうまくいかなかったので起動できない
+	assert(SUCCEEDED(hr_));
+}
+
+// コマンドアローケータの生成
+void DirectXCommon::MakeCommandAllocator(){
+	hr_ = device_->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator_));
+	//コマンドアローケータがうまく生成できなかった場合止める
+	assert(SUCCEEDED(hr_));
+}
+
+// コマンドリストの生成
+void DirectXCommon::MakeCommandList(){
+	hr_ = device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(&commandList_));
+	//コマンドリストがうまく生成できなかった場合止める
+	assert(SUCCEEDED(hr_));
+}
