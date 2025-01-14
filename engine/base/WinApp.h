@@ -6,7 +6,7 @@
 /// <summary>
 /// ウィンドウズアプリケーション
 /// </summary>
-class WinApp{
+class WinApp final{
 public://メンバ関数
 
 	/// <summary>

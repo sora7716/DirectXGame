@@ -1,5 +1,4 @@
-#include "base/WinApp.h"
-#include "2d/Log.h"
+#include "base/DirectXCommon.h"
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -9,7 +8,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ログ
 	Log*log = Log::GetInstance();
 	log->ConsolePrintf("Hellow,DirectX!\n");
-
+	
+	//DirectX12の初期化
+	DirectXCommon::GetInstance()->InitializeDirectX12();
 	//ウィンドウの×ボタンが押されるまでループ
 	while (true){
 		if (winApp->ProcesMessage()) {
