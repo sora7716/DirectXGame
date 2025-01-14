@@ -1,5 +1,11 @@
 #include "WinApp.h"
 
+//インスタンスのゲッター
+WinApp* WinApp::GetInstance(){
+	static WinApp instance;
+	return &instance;
+}
+
 //ウィンドウプロシージャ
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
     //メッセージに応じてゲーム固有の処理を行う
@@ -16,39 +22,52 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
 }
 
 // ウィンドウの生成するための初期化
-void WinApp::InitializeWindow(){
-	WNDCLASS wc{};
+void WinApp::CreateGameWindow(){
 	//ウィンドウプロシージャ
-	wc.lpfnWndProc = WindowProc;
+	wndClass_.lpfnWndProc = WindowProc;
 	//ウィンドウのクラス名
-	wc.lpszClassName = L"CG2WindowClass";
+	wndClass_.lpszClassName = L"CG2WindowClass";
 	//インスタンスハンドル
-	wc.hInstance = GetModuleHandle(nullptr);
+	wndClass_.hInstance = GetModuleHandle(nullptr);
 	//カーソル
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wndClass_.hCursor = LoadCursor(nullptr, IDC_ARROW);
 
 	//ウィンドウクラスを登録する
-	RegisterClass(&wc);
+	RegisterClass(&wndClass_);
 
 	//ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc = { 0,0,kClientWidth,kClientHeight };
+	windowRect_ = { 0,0,kClientWidth,kClientHeight };
 
 	//クライアント領域を元に実際のサイズをwrcを変更してもらう
-	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
+	AdjustWindowRect(&windowRect_, WS_OVERLAPPEDWINDOW, false);
 
-	HWND hwnd = CreateWindow(
-		wc.lpszClassName,//利用するクラス
+	hwnd_ = CreateWindow(
+		wndClass_.lpszClassName,//利用するクラス
 		label.c_str(),
 		WS_OVERLAPPEDWINDOW,//よく見るウィンドウのスタイル
 		CW_USEDEFAULT,//表示X座標(Windowに任せる)
 		CW_USEDEFAULT,//表示Y座標(Windowに任せる)
-		wrc.right - wrc.left,//ウィンドウの横幅
-		wrc.bottom - wrc.top,//ウィンドウの縦幅
+		windowRect_.right - windowRect_.left,//ウィンドウの横幅
+		windowRect_.bottom - windowRect_.top,//ウィンドウの縦幅
 		nullptr,
 		nullptr,
-		wc.hInstance,//インスタンスハンドル
+		wndClass_.hInstance,//インスタンスハンドル
 		nullptr
 	);
 	//ウィンドウを表示する
-	ShowWindow(hwnd, SW_SHOW);
+	ShowWindow(hwnd_, SW_SHOW);
+}
+
+// プロセスメッセージ
+bool WinApp::ProcesMessage(){
+	MSG msg;
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessageW(&msg);
+	}
+
+	if (msg.message == WM_QUIT) {
+		return true;
+	}
+	return false;
 }

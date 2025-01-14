@@ -5,16 +5,11 @@
 /// ログ
 /// </summary>
 class Log{
-public:
+public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	Log() = default;
-	
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Log() = default;
+	static Log* GetInstance();
 
 	/// <summary>
 	/// コンソールプリント(ロガー)
@@ -35,5 +30,10 @@ public:
 	/// <param name="str">wstirng</param>
 	/// <returns>string</returns>
 	std::string ConvertString(const std::wstring& str);
+private://メンバ関数
+	Log() = default;
+	~Log() = default;
+	Log(const Log&) = delete;
+	const Log operator=(const Log&) = delete;
 };
 
