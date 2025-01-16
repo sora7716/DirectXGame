@@ -10,13 +10,21 @@ DirectXCommon* DirectXCommon::GetInstance() {
 }
 
 // DirectX12の初期化
-void DirectXCommon::InitializeDirectX12() {
+void DirectXCommon::InitializeDirectX12(HWND hwnd) {
 	//IDXIファクトリーの生成
 	dxgiFactory_ = MakeIDXGIFactory();
 	//使用するアダプタを決定
 	useAdapter_ = DecideUseAdapter();
 	//D3D12デバイスの生成
 	device_ = MakeD3D12Device();
+	//コマンドキューの生成
+	commandQueue_ = MakeCommandQueue();
+	//コマンドアローケータの生成
+	commandAllocator_ = MakeCommandAllocator();
+	//コマンドリストの生成
+	commandList_ = MakeCommandList();
+	//スワップチェーンの生成
+	swapChain_ = MakeSwapChain(hwnd);
 }
 
 // IDXIファクトリーの生成
@@ -99,4 +107,20 @@ ID3D12GraphicsCommandList* DirectXCommon::MakeCommandList() {
 	//コマンドリストがうまく生成できなかった場合止める
 	assert(SUCCEEDED(hr_));
 	return commandList;
+}
+
+//スワップチェーンの生成
+IDXGISwapChain4* DirectXCommon::MakeSwapChain(HWND hwnd){
+	IDXGISwapChain4* swapChain = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width = WinApp::kClientWidth;//画面の横幅
+	swapChainDesc.Height = WinApp::kClientHeight;//画面の縦幅
+	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色形式
+	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用
+	swapChainDesc.BufferCount = 2;//ダブルバッファ
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら、中身を破棄
+	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), hwnd, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
+	return swapChain;
 }

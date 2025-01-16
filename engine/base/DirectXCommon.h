@@ -20,37 +20,51 @@ public://メンバ関数
 	/// <summary>
 	/// DirectX12の初期化
 	/// </summary>
-	void InitializeDirectX12();
+	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
+	void InitializeDirectX12(HWND hwnd);
 
 	/// <summary>
 	/// IDXIファクトリーの生成
 	/// </summary>
+	/// <returns>IDXIファクトリー</returns>
 	IDXGIFactory7* MakeIDXGIFactory();
 
 	/// <summary>
 	/// 使用するアダプタを決定
 	/// </summary>
+	/// <returns>使用するアダプタ</returns>
 	IDXGIAdapter4* DecideUseAdapter();
 
 	/// <summary>
 	/// D3D12デバイスの生成
 	/// </summary>
+	/// <returns>D3D12デバイス</returns>
 	ID3D12Device* MakeD3D12Device();
 
 	/// <summary>
 	/// コマンドキューの生成
 	/// </summary>
+	/// <returns>コマンドキュー</returns>
 	ID3D12CommandQueue* MakeCommandQueue();
 
 	/// <summary>
-	/// コマンドアローケータの生成
+	/// コマンドアローケータの生成 
 	/// </summary>
+	/// <returns>コマンドアローケータ</returns>
 	ID3D12CommandAllocator* MakeCommandAllocator();
 
 	/// <summary>
 	/// コマンドリストの生成
 	/// </summary>
+	/// <returns>コマンドリスト</returns>
 	ID3D12GraphicsCommandList* MakeCommandList();
+
+	/// <summary>
+	/// スワップチェーンの生成
+	/// </summary>
+	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
+	/// <returns>スワップチェーン</returns>
+	IDXGISwapChain4* MakeSwapChain(HWND hwnd);
 
 private://メンバ関数
 	DirectXCommon() = default;
@@ -65,5 +79,6 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_ = nullptr;//コマンドアローケータ
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList_ = nullptr;//コマンドリスト
+	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_ = nullptr;//スワップチェーン
 };
 
