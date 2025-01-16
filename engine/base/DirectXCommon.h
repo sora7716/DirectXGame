@@ -22,45 +22,45 @@ public://メンバ関数
 	/// </summary>
 	void InitializeDirectX12();
 
-private://メンバ関数
 	/// <summary>
 	/// IDXIファクトリーの生成
 	/// </summary>
-	void MakeIDXGIFactory();
+	IDXGIFactory7* MakeIDXGIFactory();
 
 	/// <summary>
 	/// 使用するアダプタを決定
 	/// </summary>
-	void DecideUseAdapter();
+	IDXGIAdapter4* DecideUseAdapter();
 
 	/// <summary>
 	/// D3D12デバイスの生成
 	/// </summary>
-	void MakeD3D12Device();
+	ID3D12Device* MakeD3D12Device();
 
 	/// <summary>
 	/// コマンドキューの生成
 	/// </summary>
-	void MakeCommandQueue();
+	ID3D12CommandQueue* MakeCommandQueue();
 
 	/// <summary>
 	/// コマンドアローケータの生成
 	/// </summary>
-	void MakeCommandAllocator();
+	ID3D12CommandAllocator* MakeCommandAllocator();
 
 	/// <summary>
 	/// コマンドリストの生成
 	/// </summary>
-	void MakeCommandList();
+	ID3D12GraphicsCommandList* MakeCommandList();
 
+private://メンバ関数
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
 private://メンバ変数
+	HRESULT hr_;
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;//IDXIファクトリー
 	Microsoft::WRL::ComPtr<IDXGIAdapter4>useAdapter_ = nullptr;//使用するアダプタ
-	HRESULT hr_;
 	Microsoft::WRL::ComPtr<ID3D12Device> device_ = nullptr;//デバイス
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_ = nullptr;//コマンドアローケータ
