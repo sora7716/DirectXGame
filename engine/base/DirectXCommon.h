@@ -116,7 +116,7 @@ private://メンバ関数
 	~DirectXCommon();
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
-private://メンバ変数
+public://メンバ変数
 	HRESULT hr_;
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;//IDXIファクトリー
 	Microsoft::WRL::ComPtr<IDXGIAdapter4>useAdapter_ = nullptr;//使用するアダプタ

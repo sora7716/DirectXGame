@@ -307,19 +307,4 @@ void DirectXCommon::ResourceLeakCheck(){
 DirectXCommon::~DirectXCommon(){
 	//オブジェクトの開放
 	CloseHandle(fenceEvent_);
-	fence_->Release();
-	rtvDescriptorHeap_->Release();
-	swapChainResources_[0]->Release();
-	swapChainResources_[1]->Release();
-	swapChain_->Release();
-	commandList_->Release();
-	commandAllocator_->Release();
-	commandQueue_->Release();
-	device_->Release();
-	useAdapter_->Release();
-	dxgiFactory_->Release();
-#ifdef _DEBUG
-	debugController_->Release();
-#endif // _DEBUG
-
 }
