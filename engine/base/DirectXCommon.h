@@ -21,7 +21,7 @@ public://メンバ関数
 	/// DirectX12の初期化
 	/// </summary>
 	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
-	void InitializeDirectX12(HWND hwnd);
+	void InitializeDirectX12();
 
 	/// <summary>
 	/// IDXIファクトリーの生成
@@ -64,7 +64,40 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
 	/// <returns>スワップチェーン</returns>
-	IDXGISwapChain4* MakeSwapChain(HWND hwnd);
+	IDXGISwapChain4* MakeSwapChain();
+
+	/// <summary>
+	/// ディスクリプタヒープの生成
+	/// </summary>
+	/// <returns>ディスクリプタヒープ</returns>
+	ID3D12DescriptorHeap* MakeDescriptorHeap();
+
+	/// <summary>
+	/// SwapChainからResourceを引っ張ってくる
+	/// </summary>
+	/// <param name="num">何番目か</param>
+	/// <returns>リソース</returns>
+	ID3D12Resource* BringResourcesFromSwapChain(UINT num);
+
+	/// <summary>
+	/// RTVの作成
+	/// </summary>
+	void MakeRTV();
+
+	/// <summary>
+	/// ゲームウィンドウの色を変更する
+	/// </summary>
+	void ChangeGameWindowColor();
+
+	/// <summary>
+	/// デバックレイヤー
+	/// </summary>
+	void DebugLayer();
+
+	/// <summary>
+	/// 実行を停止する(エラー・警告の場合)
+	/// </summary>
+	void StopExecution();
 
 private://メンバ関数
 	DirectXCommon() = default;
@@ -80,5 +113,8 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_ = nullptr;//コマンドアローケータ
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList_ = nullptr;//コマンドリスト
 	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_ = nullptr;//スワップチェーン
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
+	Microsoft::WRL::ComPtr<ID3D12Resource>swapChainResources_[2] = { nullptr };//スワップチェーンから	リソースを引っ張ってくる
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 };
 

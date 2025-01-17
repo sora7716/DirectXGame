@@ -31,6 +31,7 @@ public://メンバ関数
 	/// <param name="str">wstirng</param>
 	/// <returns>string</returns>
 	static std::string ConvertString(const std::wstring& str);
+
 private://メンバ関数
 	Log() = default;
 	~Log() = default;

@@ -2,15 +2,21 @@
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	//ウィンドウの作成
-	WinApp* winApp = WinApp::GetInstance();
-	winApp->CreateGameWindow();
 	//ログ
-	Log*log = Log::GetInstance();
-	log->ConsolePrintf("Hellow,DirectX!\n");
-	
+	Log* log = Log::GetInstance();
+	//ウィンドウズアプリケーション
+	WinApp* winApp = WinApp::GetInstance();
+	//DirectXCommon
+	DirectXCommon* directXCommon = DirectXCommon::GetInstance();
+
+	//ウィンドウの作成
+	winApp->CreateGameWindow();
+	//デバックレイヤー
+	directXCommon->DebugLayer();
 	//DirectX12の初期化
-	DirectXCommon::GetInstance()->InitializeDirectX12();
+	directXCommon->InitializeDirectX12();
+	//ログの表示
+	log->ConsolePrintf("Hellow,DirectX!\n");
 
 	//ウィンドウの×ボタンが押されるまでループ
 	while (true){

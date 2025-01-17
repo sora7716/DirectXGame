@@ -10,13 +10,15 @@ DirectXCommon* DirectXCommon::GetInstance() {
 }
 
 // DirectX12の初期化
-void DirectXCommon::InitializeDirectX12(HWND hwnd) {
+void DirectXCommon::InitializeDirectX12() {
 	//IDXIファクトリーの生成
 	dxgiFactory_ = MakeIDXGIFactory();
 	//使用するアダプタを決定
 	useAdapter_ = DecideUseAdapter();
 	//D3D12デバイスの生成
 	device_ = MakeD3D12Device();
+	//警告・エラーがあった場合に実行を止める	
+	StopExecution();
 	//コマンドキューの生成
 	commandQueue_ = MakeCommandQueue();
 	//コマンドアローケータの生成
@@ -24,7 +26,16 @@ void DirectXCommon::InitializeDirectX12(HWND hwnd) {
 	//コマンドリストの生成
 	commandList_ = MakeCommandList();
 	//スワップチェーンの生成
-	swapChain_ = MakeSwapChain(hwnd);
+	swapChain_ = MakeSwapChain();
+	//ディスクリプタヒープの生成
+	rtvDescriptorHeap_ = MakeDescriptorHeap();
+	//SwapChainからResourceを引っ張ってくる
+	swapChainResources_[0] = BringResourcesFromSwapChain(0);
+	swapChainResources_[1] = BringResourcesFromSwapChain(1);
+	// RTVの作成
+	MakeRTV();
+	//ゲームウィンドウの色を変更する
+	ChangeGameWindowColor();
 }
 
 // IDXIファクトリーの生成
@@ -110,7 +121,7 @@ ID3D12GraphicsCommandList* DirectXCommon::MakeCommandList() {
 }
 
 //スワップチェーンの生成
-IDXGISwapChain4* DirectXCommon::MakeSwapChain(HWND hwnd){
+IDXGISwapChain4* DirectXCommon::MakeSwapChain() {
 	IDXGISwapChain4* swapChain = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	swapChainDesc.Width = WinApp::kClientWidth;//画面の横幅
@@ -121,6 +132,140 @@ IDXGISwapChain4* DirectXCommon::MakeSwapChain(HWND hwnd){
 	swapChainDesc.BufferCount = 2;//ダブルバッファ
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら、中身を破棄
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), hwnd, &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
+	hr_ = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), WinApp::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
 	return swapChain;
+}
+
+// ディスクリプタヒープの生成
+ID3D12DescriptorHeap* DirectXCommon::MakeDescriptorHeap() {
+	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
+	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
+	rtvDescriptorHeapDesc.NumDescriptors = 2;//ダブルバッファ用に2つ。
+	hr_ = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
+	//ディスクリプタヒープがうまく生成できなかった場合止める
+	assert(SUCCEEDED(hr_));
+	return rtvDescriptorHeap;
+}
+
+// SwapChainからResourceを引っ張ってくる
+ID3D12Resource* DirectXCommon::BringResourcesFromSwapChain(UINT num) {
+	ID3D12Resource* swapChainResource = nullptr;
+	hr_ = swapChain_->GetBuffer(num, IID_PPV_ARGS(&swapChainResource));
+	//うまく取得できなければ起動できない
+	assert(SUCCEEDED(hr_));
+	return swapChainResource;
+}
+
+//RTVの作成
+void DirectXCommon::MakeRTV() {
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
+	//ディスクリプタの先頭を取得
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+	//RTVを2つ作るのでディスクリプタを2つ用意
+	rtvHandles_[2];
+	//まずは1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
+	rtvHandles_[0] = rtvStartHandle;
+	device_->CreateRenderTargetView(swapChainResources_[0].Get(), &rtvDesc, rtvHandles_[0]);
+	//2つ目ディスクリプタハンドルを得る(自力で)
+	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	//2つ目を作る
+	device_->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc, rtvHandles_[1]);
+}
+
+// ゲームウィンドウの色を変更する
+void DirectXCommon::ChangeGameWindowColor() {
+
+	/*コマンドを積む*/
+	//これから書き込むバックバッファのインデックスを取得
+	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
+
+	//TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	//今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	//Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	//バリアを張る対象のリソース。現在のバックバッファに対して行う
+	barrier.Transition.pResource = swapChainResources_[backBufferIndex].Get();
+	//遷移前(現在)のResourceState
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+	//遷移後のResourceState
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	//TransitionBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier);
+
+	//描画先のRTVを設定する
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	//指定した色で画面をクリアする
+	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色。RGBAの順
+	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
+
+	//画面に描く処理は全て終わり、画面に移すので、状態を遷移
+	//今回はRenderTargetからPresentにする
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+	//TransitionBarrierを張る
+	commandList_->ResourceBarrier(1, &barrier);
+
+	//コマンドリストの内容を確定させる。全てのコマンドを積んでからCloseすること
+	hr_ = commandList_->Close();
+	assert(SUCCEEDED(hr_));
+
+	/*コマンドをキックする*/
+	//GPUにコマンドリストの実行を行わせる
+	ID3D12CommandList* commandLists[] = { commandList_.Get() };
+	commandQueue_->ExecuteCommandLists(1, commandLists);
+	//GPUとOSに画面の交換を行うように通知
+	swapChain_->Present(1, 0);
+	//次のフレーム用のコマンドリストを準備
+	hr_ = commandAllocator_->Reset();
+	assert(SUCCEEDED(hr_));
+	hr_ = commandList_->Reset(commandAllocator_.Get(), nullptr);
+	assert(SUCCEEDED(hr_));
+}
+
+//デバックレイヤー
+void DirectXCommon::DebugLayer(){
+#ifdef _DEBUG
+	ID3D12Debug1* debugController = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+		//デバックレイヤーを有効化する
+		debugController->EnableDebugLayer();
+		//さらにGPU側でもチェックを行うようにする
+		debugController->SetEnableGPUBasedValidation(TRUE);	
+	}
+#endif // _DEBUG
+}
+
+// 実行を停止する(エラー・警告の場合)
+void DirectXCommon::StopExecution(){
+#ifdef _DEBUG
+	ID3D12InfoQueue* infoQueue = nullptr;
+	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+		//やばいエラーの時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		//エラー時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		//警告時に止まる
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		//抑制するメッセージのID
+		D3D12_MESSAGE_ID denyIds[] = {
+			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+		};
+		//抑制するレベル
+		D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+		D3D12_INFO_QUEUE_FILTER filter{};
+		filter.DenyList.NumIDs = _countof(denyIds);
+		filter.DenyList.pIDList = denyIds;
+		filter.DenyList.NumSeverities = _countof(severities);
+		filter.DenyList.pSeverityList = severities;
+		//指定したメッセージの表示を抑制する
+		infoQueue->PushStorageFilter(&filter);
+		//解放
+		infoQueue->Release();
+	}
+#endif // _DEBUG
 }
