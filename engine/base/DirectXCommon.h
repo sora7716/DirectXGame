@@ -101,11 +101,6 @@ public://メンバ関数
 	/// </summary>
 	void StopExecution();
 
-	/// <summary>
-	/// リソースリークチェック
-	/// </summary>
-	void ResourceLeakCheck();
-
 private://メンバ関数
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
