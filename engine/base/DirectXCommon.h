@@ -2,7 +2,6 @@
 #include <d3d12.h>
 #include <dxgi1_6.h>
 #include <cassert>
-#include <wrl.h>
 #include <dxgidebug.h>
 #include "WinApp.h"
 #include "2d/Log.h"
@@ -10,19 +9,15 @@
 /// <summary>
 /// DirectXコモン
 /// </summary>
-class DirectXCommon final {
+class DirectXCommon {
 public://メンバ関数
-	/// <summary>
-	/// インスタンスのゲッター
-	/// </summary>
-	/// <returns>インスタンス</returns>
-	static DirectXCommon* GetInstance();
-
+	DirectXCommon() = default;
+	~DirectXCommon();
 	/// <summary>
 	/// DirectX12の初期化
 	/// </summary>
-	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
-	void InitializeDirectX12();
+	/// <param name="winApp">ウィンドウズアプリケーション</param>
+	void InitializeDirectX12(WinApp*winApp);
 
 	/// <summary>
 	/// IDXIファクトリーの生成
@@ -112,24 +107,23 @@ public://メンバ関数
 	void ResourceLeakCheck();
 
 private://メンバ関数
-	DirectXCommon() = default;
-	~DirectXCommon();
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
 public://メンバ変数
 	HRESULT hr_;
-	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;//IDXIファクトリー
-	Microsoft::WRL::ComPtr<IDXGIAdapter4>useAdapter_ = nullptr;//使用するアダプタ
-	Microsoft::WRL::ComPtr<ID3D12Device> device_ = nullptr;//デバイス
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator_ = nullptr;//コマンドアローケータ
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList_ = nullptr;//コマンドリスト
-	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_ = nullptr;//スワップチェーン
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
-	Microsoft::WRL::ComPtr<ID3D12Resource>swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
+	WinApp* winApp_ = nullptr;//ウィンドウズアプリケーション
+	IDXGIFactory7* dxgiFactory_ = nullptr;//IDXIファクトリー
+	IDXGIAdapter4*useAdapter_ = nullptr;//使用するアダプタ
+	ID3D12Device* device_ = nullptr;//デバイス
+	ID3D12CommandQueue* commandQueue_ = nullptr;//コマンドキュー
+	ID3D12CommandAllocator*commandAllocator_ = nullptr;//コマンドアローケータ
+	ID3D12GraphicsCommandList*commandList_ = nullptr;//コマンドリスト
+	IDXGISwapChain4*swapChain_ = nullptr;//スワップチェーン
+	ID3D12DescriptorHeap*rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
+	ID3D12Resource*swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
-	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_ = nullptr;//デバックコントローラー
-	Microsoft::WRL::ComPtr<ID3D12Fence>fence_ = nullptr;//Fence
+	ID3D12Debug1* debugController_ = nullptr;//デバックコントローラー
+	ID3D12Fence*fence_ = nullptr;//Fence
 	uint64_t fenceValue_ = 0;//FenceValue
 	HANDLE fenceEvent_ = 0;//FenceEvent
 };

@@ -6,15 +6,10 @@
 /// <summary>
 /// ウィンドウズアプリケーション
 /// </summary>
-class WinApp final {
+class WinApp {
 public://メンバ関数
-
-	/// <summary>
-	/// インスタンスのゲッター
-	/// </summary>
-	/// <returns>インスタンス</returns>
-	static WinApp* GetInstance();
-
+	WinApp() = default;
+	~WinApp();
 	/// <summary>
 	/// ウィンドウプロシージャ
 	/// </summary>
@@ -44,8 +39,6 @@ public://メンバ関数
 	HWND GetHwnd() { return hwnd_; }
 
 private://メンバ関数
-	WinApp() = default;
-	~WinApp();
 	WinApp(const WinApp&) = delete;
 	const WinApp& operator=(const WinApp&) = delete;
 
