@@ -1,6 +1,7 @@
 #include "DirectXCommon.h"
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
 
 
 //インスタンスのゲッター
@@ -34,8 +35,8 @@ void DirectXCommon::InitializeDirectX12() {
 	swapChainResources_[1] = BringResourcesFromSwapChain(1);
 	// RTVの作成
 	MakeRTV();
-	//ゲームウィンドウの色を変更する
-	ChangeGameWindowColor();
+	//Fenceを生成
+	fence_ = MakeFence();
 }
 
 // IDXIファクトリーの生成
@@ -164,8 +165,6 @@ void DirectXCommon::MakeRTV() {
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
 	//ディスクリプタの先頭を取得
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	//RTVを2つ作るのでディスクリプタを2つ用意
-	rtvHandles_[2];
 	//まずは1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
 	device_->CreateRenderTargetView(swapChainResources_[0].Get(), &rtvDesc, rtvHandles_[0]);
@@ -173,6 +172,19 @@ void DirectXCommon::MakeRTV() {
 	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//2つ目を作る
 	device_->CreateRenderTargetView(swapChainResources_[1].Get(), &rtvDesc, rtvHandles_[1]);
+}
+
+//Fenceを作成する
+ID3D12Fence* DirectXCommon::MakeFence(){
+	ID3D12Fence* fence = nullptr;
+	fenceValue_ = 0;
+	hr_ = device_->CreateFence(fenceValue_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
+	assert(SUCCEEDED(hr_));
+
+	//FenceのSignalを待つためのイベントを作成
+	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
+	assert(fenceEvent_ != nullptr);
+	return fence;
 }
 
 // ゲームウィンドウの色を変更する
@@ -220,6 +232,16 @@ void DirectXCommon::ChangeGameWindowColor() {
 	commandQueue_->ExecuteCommandLists(1, commandLists);
 	//GPUとOSに画面の交換を行うように通知
 	swapChain_->Present(1, 0);
+	//Fenceの値を更新
+	fenceValue_++;
+	//GPUがここまでたどり着いた時に、Fenceの値を指定した値に代入するようにSignalを送る
+	commandQueue_->Signal(fence_.Get(), fenceValue_);
+	if (fence_->GetCompletedValue() < fenceValue_) {
+		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
+		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
+		//イベントを待つ
+		WaitForSingleObject(fenceEvent_, INFINITE);
+	}
 	//次のフレーム用のコマンドリストを準備
 	hr_ = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr_));
@@ -230,12 +252,12 @@ void DirectXCommon::ChangeGameWindowColor() {
 //デバックレイヤー
 void DirectXCommon::DebugLayer(){
 #ifdef _DEBUG
-	ID3D12Debug1* debugController = nullptr;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
+	debugController_ = nullptr;
+	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController_)))) {
 		//デバックレイヤーを有効化する
-		debugController->EnableDebugLayer();
+		debugController_->EnableDebugLayer();
 		//さらにGPU側でもチェックを行うようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);	
+		debugController_->SetEnableGPUBasedValidation(TRUE);	
 	}
 #endif // _DEBUG
 }
@@ -250,7 +272,7 @@ void DirectXCommon::StopExecution(){
 		//エラー時に止まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		//警告時に止まる
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		//infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 		//抑制するメッセージのID
 		D3D12_MESSAGE_ID denyIds[] = {
 			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
@@ -268,4 +290,36 @@ void DirectXCommon::StopExecution(){
 		infoQueue->Release();
 	}
 #endif // _DEBUG
+}
+
+// リソースリークチェック
+void DirectXCommon::ResourceLeakCheck(){
+	IDXGIDebug1* debug;
+	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+		debug->Release();
+	}
+}
+
+//デストラクタ
+DirectXCommon::~DirectXCommon(){
+	//オブジェクトの開放
+	CloseHandle(fenceEvent_);
+	fence_->Release();
+	rtvDescriptorHeap_->Release();
+	swapChainResources_[0]->Release();
+	swapChainResources_[1]->Release();
+	swapChain_->Release();
+	commandList_->Release();
+	commandAllocator_->Release();
+	commandQueue_->Release();
+	device_->Release();
+	useAdapter_->Release();
+	dxgiFactory_->Release();
+#ifdef _DEBUG
+	debugController_->Release();
+#endif // _DEBUG
+
 }

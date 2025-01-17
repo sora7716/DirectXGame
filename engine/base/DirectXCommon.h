@@ -3,6 +3,7 @@
 #include <dxgi1_6.h>
 #include <cassert>
 #include <wrl.h>
+#include <dxgidebug.h>
 #include "WinApp.h"
 #include "2d/Log.h"
 
@@ -85,6 +86,12 @@ public://メンバ関数
 	void MakeRTV();
 
 	/// <summary>
+	/// Fenceを作成する
+	/// </summary>
+	/// <returns></returns>
+	ID3D12Fence* MakeFence();
+
+	/// <summary>
 	/// ゲームウィンドウの色を変更する
 	/// </summary>
 	void ChangeGameWindowColor();
@@ -99,9 +106,14 @@ public://メンバ関数
 	/// </summary>
 	void StopExecution();
 
+	/// <summary>
+	/// リソースリークチェック
+	/// </summary>
+	void ResourceLeakCheck();
+
 private://メンバ関数
 	DirectXCommon() = default;
-	~DirectXCommon() = default;
+	~DirectXCommon();
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
 private://メンバ変数
@@ -114,7 +126,11 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList_ = nullptr;//コマンドリスト
 	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain_ = nullptr;//スワップチェーン
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
-	Microsoft::WRL::ComPtr<ID3D12Resource>swapChainResources_[2] = { nullptr };//スワップチェーンから	リソースを引っ張ってくる
+	Microsoft::WRL::ComPtr<ID3D12Resource>swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
+	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_ = nullptr;//デバックコントローラー
+	Microsoft::WRL::ComPtr<ID3D12Fence>fence_ = nullptr;//Fence
+	uint64_t fenceValue_ = 0;//FenceValue
+	HANDLE fenceEvent_ = 0;//FenceEvent
 };
 

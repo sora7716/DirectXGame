@@ -24,6 +24,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 		//ゲームの処理
+		directXCommon->ChangeGameWindowColor();
 	}
+	directXCommon->ResourceLeakCheck();
 	return 0;
 }

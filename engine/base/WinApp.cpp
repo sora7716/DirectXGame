@@ -70,3 +70,8 @@ bool WinApp::ProcesMessage(){
 	}
 	return false;
 }
+
+//デストラクタ
+WinApp::~WinApp(){
+	CloseWindow(hwnd_);
+}

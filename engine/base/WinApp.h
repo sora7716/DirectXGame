@@ -45,7 +45,7 @@ public://メンバ関数
 
 private://メンバ関数
 	WinApp() = default;
-	~WinApp() = default;
+	~WinApp();
 	WinApp(const WinApp&) = delete;
 	const WinApp& operator=(const WinApp&) = delete;
 
