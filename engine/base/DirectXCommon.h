@@ -5,6 +5,9 @@
 #include <dxgidebug.h>
 #include "WinApp.h"
 #include "2d/Log.h"
+#include <dxcapi.h>
+#include "math/Vector4.h"
+
 
 /// <summary>
 /// DirectXコモン
@@ -87,9 +90,86 @@ public://メンバ関数
 	ID3D12Fence* MakeFence();
 
 	/// <summary>
+	/// DXCの初期化
+	/// </summary>
+	void DXCInitialize();
+
+	/// <summary>
+	/// CompilerShader関数
+	/// </summary>
+	/// <param name="filePath">Shaderファイルパス</param>
+	/// <param name="profile">Compileに使用するProfile</param>
+	/// <returns></returns>
+	IDxcBlob* CompileShader(const std::wstring& filePath,const wchar_t*profile);
+
+	/// <summary>
+	/// RootSignatureの生成
+	/// </summary>
+	/// <returns>RootSignature</returns>
+	ID3D12RootSignature* MakeRootSignature();
+
+	/// <summary>
+	/// InputLayOutの設定
+	/// </summary>
+	void InputLayOutSetting();
+
+	/// <summary>
+	/// ブレンドステートの設定
+	/// </summary>
+	void BlendStateSetting();
+
+	/// <summary>
+	/// ラスタライザの設定
+	/// </summary>
+	void RasterizerSetting();
+
+	/// <summary>
+	/// シェーダをコンパイル
+	/// </summary>
+	void ShaderCompile();
+
+	/// <summary>
 	/// ゲームウィンドウの色を変更する
 	/// </summary>
 	void ChangeGameWindowColor();
+
+	/// <summary>
+	/// PSOの生成
+	/// </summary>
+	/// <returns>PSO</returns>
+	ID3D12PipelineState* MakePSO();
+
+	/// <summary>
+	/// VertexResourceの生成
+	/// </summary>
+	/// <returns>VertexResource</returns>
+	ID3D12Resource* MakeVertexResource();
+
+	/// <summary>
+	/// VertexBufferViewの生成
+	/// </summary>
+	void MakeVertexBufferView();
+
+	/// <summary>
+	/// 頂点リソースデータの書き込み
+	/// </summary>
+	/// <returns>頂点リソースデータ</returns>
+	Vector4* VertexResourceData();
+
+	/// <summary>
+	/// ビューポートを生成
+	/// </summary>
+	void MakeViewport();
+
+	/// <summary>
+	/// シーザーを生成
+	/// </summary>
+	void MakeScissor();
+
+	/// <summary>
+	/// 三角形を描画
+	/// </summary>
+	void DrawTriangle();
 
 	/// <summary>
 	/// デバックレイヤー
@@ -105,7 +185,6 @@ private://メンバ関数
 	DirectXCommon(const DirectXCommon&) = delete;
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
 public://メンバ変数
-	HRESULT hr_;
 	WinApp* winApp_ = nullptr;//ウィンドウズアプリケーション
 	IDXGIFactory7* dxgiFactory_ = nullptr;//IDXIファクトリー
 	IDXGIAdapter4*useAdapter_ = nullptr;//使用するアダプタ
@@ -121,5 +200,24 @@ public://メンバ変数
 	ID3D12Fence*fence_ = nullptr;//Fence
 	uint64_t fenceValue_ = 0;//FenceValue
 	HANDLE fenceEvent_ = 0;//FenceEvent
+	//シェーダファイルの読み込みに使用するやつ↓
+	IDxcUtils* dxcUtils_ = nullptr;
+	IDxcCompiler3* dxcCompiler_ = nullptr;
+	IDxcIncludeHandler* includeHandler_ = nullptr;
+	//シェーダファイルの読み込みに使用するやつ↑
+	ID3D12RootSignature* rootSignature_ = nullptr;//RootSignature
+	//InputLayOut
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs_[1] = {};
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc_ = {};
+	D3D12_BLEND_DESC blendDesc_{};//BlendState
+	D3D12_RASTERIZER_DESC rasterizerDesc_{};//Rasterizer
+	IDxcBlob* vertexShaderBlob = nullptr;//vertexShaderBlob
+	IDxcBlob* pixelShaderBlob = nullptr;//pixelShaderBlob
+	ID3D12PipelineState* graphicsPiplineState_ = nullptr;//PSO
+	ID3D12Resource* vertexResource_ = nullptr;//VertexResource
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{};//VertexBufferView
+	Vector4* vertexData_ = nullptr;//頂点リソースデータ
+	D3D12_VIEWPORT viewport_{};//ビューポート
+	D3D12_RECT scissorRect_{};//シーザー矩形
 };
 
