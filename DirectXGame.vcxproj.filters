@@ -55,7 +55,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="engine\resource\shader\Object3d.VS.hlsl" />
-    <FxCompile Include="engine\resource\shader\Object3d.PS.hlsl" />
+    <FxCompile Include="Object3d.PS.hlsl" />
+    <FxCompile Include="Object3d.VS.hlsl" />
   </ItemGroup>
 </Project>
