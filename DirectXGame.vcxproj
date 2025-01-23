@@ -15,13 +15,19 @@
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
     <ClCompile Include="engine\main.cpp" />
+    <ClCompile Include="engine\math\func\Aithmetic.cpp" />
+    <ClCompile Include="engine\math\func\Math.cpp" />
+    <ClCompile Include="engine\math\rendering\Rendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Log.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
+    <ClInclude Include="engine\math\func\Aithmetic.h" />
+    <ClInclude Include="engine\math\func\Math.h" />
     <ClInclude Include="engine\math\Matrix3x3.h" />
     <ClInclude Include="engine\math\Matrix4x4.h" />
+    <ClInclude Include="engine\math\rendering\Rendering.h" />
     <ClInclude Include="engine\math\Vector2.h" />
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />
