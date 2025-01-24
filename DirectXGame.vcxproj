@@ -11,6 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\externals\imgui\imgui.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="engine\2d\Log.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
@@ -20,6 +27,14 @@
     <ClCompile Include="engine\math\rendering\Rendering.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\externals\imgui\imconfig.h" />
+    <ClInclude Include="..\externals\imgui\imgui.h" />
+    <ClInclude Include="..\externals\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="..\externals\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\externals\imgui\imgui_internal.h" />
+    <ClInclude Include="..\externals\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\externals\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\externals\imgui\imstb_truetype.h" />
     <ClInclude Include="engine\2d\Log.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
@@ -41,6 +56,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -87,7 +105,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,7 +133,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

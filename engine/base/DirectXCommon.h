@@ -66,10 +66,13 @@ public://メンバ関数
 	IDXGISwapChain4* MakeSwapChain();
 
 	/// <summary>
-	/// ディスクリプタヒープの生成
+	/// DescriptorHeapの作成
 	/// </summary>
-	/// <returns>ディスクリプタヒープ</returns>
-	ID3D12DescriptorHeap* MakeDescriptorHeap();
+	/// <param name="heapType">ヒープタイプ</param>
+	/// <param name="numDescriptors"></param>
+	/// <param name="shaderVisible"></param>
+	/// <returns>デスクリプターヒープ</returns>
+	ID3D12DescriptorHeap* MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool	shaderVisible);
 
 	/// <summary>
 	/// SwapChainからResourceを引っ張ってくる
@@ -92,12 +95,12 @@ public://メンバ関数
 	/// <summary>
 	/// フレームの開始
 	/// </summary>
-	void BeginFrame();
+	void DrawBeginFrame();
 
 	/// <summary>
 	/// フレームの終了
 	/// </summary>
-	void EndFrame();
+	void DrawEndFrame();
 
 
 	/// <summary>
@@ -123,7 +126,9 @@ public://メンバ変数
 	ID3D12CommandAllocator* commandAllocator_ = nullptr;//コマンドアローケータ
 	ID3D12GraphicsCommandList* commandList_ = nullptr;//コマンドリスト
 	IDXGISwapChain4* swapChain_ = nullptr;//スワップチェーン
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};//swapChainDesc
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};//rtvDesc
 	ID3D12Resource* swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 	ID3D12Debug1* debugController_ = nullptr;//デバックコントローラー

@@ -25,7 +25,7 @@ void DirectXCommon::InitializeDirectX12(WinApp* winApp) {
 	//スワップチェーンの生成
 	swapChain_ = MakeSwapChain();
 	//ディスクリプタヒープの生成
-	rtvDescriptorHeap_ = MakeDescriptorHeap();
+	rtvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV,2,false);
 	//SwapChainからResourceを引っ張ってくる
 	swapChainResources_[0] = BringResourcesFromSwapChain(0);
 	swapChainResources_[1] = BringResourcesFromSwapChain(1);
@@ -127,31 +127,29 @@ ID3D12GraphicsCommandList* DirectXCommon::MakeCommandList() {
 IDXGISwapChain4* DirectXCommon::MakeSwapChain() {
 	HRESULT result = S_FALSE;
 	IDXGISwapChain4* swapChain = nullptr;
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = WinApp::kClientWidth;//画面の横幅
-	swapChainDesc.Height = WinApp::kClientHeight;//画面の縦幅
-	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色形式
-	swapChainDesc.SampleDesc.Count = 1;//マルチサンプルしない
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用
-	swapChainDesc.BufferCount = 2;//ダブルバッファ
-	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら、中身を破棄
+	swapChainDesc_.Width = WinApp::kClientWidth;//画面の横幅
+	swapChainDesc_.Height = WinApp::kClientHeight;//画面の縦幅
+	swapChainDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色形式
+	swapChainDesc_.SampleDesc.Count = 1;//マルチサンプルしない
+	swapChainDesc_.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用
+	swapChainDesc_.BufferCount = 2;//ダブルバッファ
+	swapChainDesc_.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら、中身を破棄
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	result = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
+	result = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_, winApp_->GetHwnd(), &swapChainDesc_, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(&swapChain));
 	assert(SUCCEEDED(result));
 	return swapChain;
 }
 
 // ディスクリプタヒープの生成
-ID3D12DescriptorHeap* DirectXCommon::MakeDescriptorHeap() {
-	HRESULT result = S_FALSE;
-	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;//レンダーターゲットビュー用
-	rtvDescriptorHeapDesc.NumDescriptors = 2;//ダブルバッファ用に2つ。
-	result = device_->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
-	//ディスクリプタヒープがうまく生成できなかった場合止める
-	assert(SUCCEEDED(result));
-	return rtvDescriptorHeap;
+ID3D12DescriptorHeap* DirectXCommon::MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool	shaderVisible) {
+		ID3D12DescriptorHeap* descriptorHeap = nullptr;
+		D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc{};
+		descriptorHeapDesc.Type = heapType;
+		descriptorHeapDesc.NumDescriptors = numDescriptors;
+		descriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		HRESULT hr = device_->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+		assert(SUCCEEDED(hr));
+		return descriptorHeap;
 }
 
 // SwapChainからResourceを引っ張ってくる
@@ -166,18 +164,17 @@ ID3D12Resource* DirectXCommon::BringResourcesFromSwapChain(UINT num) {
 
 //RTVの作成
 void DirectXCommon::MakeRTV() {
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
+	rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;//出力結果をSRGBに変換して書き込む
+	rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;//2dテクスチャとして書き込む
 	//ディスクリプタの先頭を取得
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 	//まずは1つ目を作る。1つ目は最初のところに作る。作る場所をこちらで指定してあげる必要がある
 	rtvHandles_[0] = rtvStartHandle;
-	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc, rtvHandles_[0]);
+	device_->CreateRenderTargetView(swapChainResources_[0], &rtvDesc_, rtvHandles_[0]);
 	//2つ目ディスクリプタハンドルを得る(自力で)
 	rtvHandles_[1].ptr = rtvHandles_[0].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	//2つ目を作る
-	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc, rtvHandles_[1]);
+	device_->CreateRenderTargetView(swapChainResources_[1], &rtvDesc_, rtvHandles_[1]);
 }
 
 //Fenceを作成する
@@ -195,7 +192,7 @@ ID3D12Fence* DirectXCommon::MakeFence() {
 }
 
 // フレームの開始
-void DirectXCommon::BeginFrame(){
+void DirectXCommon::DrawBeginFrame(){
 	/*コマンドを積む*/
 	//これから書き込むバックバッファのインデックスを取得
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
@@ -222,7 +219,7 @@ void DirectXCommon::BeginFrame(){
 }
 
 // フレームの終了
-void DirectXCommon::EndFrame(){
+void DirectXCommon::DrawEndFrame(){
 	HRESULT result = S_FALSE;
 	//画面に描く処理は全て終わり、画面に移すので、状態を遷移
 	//今回はRenderTargetからPresentにする
