@@ -130,6 +130,7 @@ public://メンバ変数
 	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};//rtvDesc
 	ID3D12Resource* swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
+	UINT backBufferIndex_ = {};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
 	ID3D12Debug1* debugController_ = nullptr;//デバックコントローラー
 	ID3D12Fence* fence_ = nullptr;//Fence
