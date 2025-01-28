@@ -231,7 +231,7 @@ ID3D12Resource* CreateDepthStencilTextureResource(ID3D12Device* device, int32_t 
 	//Resourceの生成
 	ID3D12Resource* resource = nullptr;
 	HRESULT hr = device->CreateCommittedResource(
-	&heapProperties,//Heapの設定
+	    &heapProperties,//Heapの設定
 		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定。特になし
 		&resourceDesc,//Resourceの設定
 		D3D12_RESOURCE_STATE_DEPTH_WRITE,//深度値を書き込む状態にしておく
@@ -580,6 +580,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	depthStencilResource->Release();
+	dsvDescriptorHeap->Release();
 	intermediateResource->Release();
 	srvDescriptorHeap->Release();
 	vertexResource->Release();
