@@ -114,7 +114,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals;C:\Subject\CG\CG2\GameEngine1\externals;C:\Subject\CG\CG2\GameEngine1\DirectXGame\engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

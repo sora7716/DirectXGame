@@ -426,7 +426,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//単位行列を書き込んでおく
 	*wvpData = Math::MakeIdentity4x4();
 
-	const int kSubdivision = 4;
+	const int kSubdivision = 16;
 	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
 	//頂点リソースを生成
 	ID3D12Resource* vertexResource = CreateBufferResource(directXCommon->device_, sizeof(VertexData) * kSphereVertexNum);
@@ -450,12 +450,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//緯度の方向に分割
 	for (int latIndex = 0; latIndex < kSubdivision; ++latIndex) {
 		float lat = -pi_f / 2.0f + kLatEvery * latIndex;//θ
-		float nextLat = lat + kLatEvery;
 		//経度の方向に分割しながら線を描く
 		for (int lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
+			float lon = lonIndex * kLonEvery;//φ
 			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-			float lon = float(lonIndex * kSubdivision);
-			float nextLon=(lonIndex+1<)
 			//頂点データを打ち込む
 			//a(左下)
 			vertexData[start].position.x = std::cos(lat) * std::cos(lon);
@@ -491,24 +489,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vertexData[start + 5] = vertexData[start + 2];
 		}
 	}
-	////左下
-	//vertexData[0].position = { -0.5f,-0.5f,0.0f,1.0f };
-	//vertexData[0].texcoord = { 0.0f,1.0f };
-	////上
-	//vertexData[1].position = { 0.0f,0.5f,0.0f,1.0f };
-	//vertexData[1].texcoord = { 0.5f,0.0f };
-	////右下
-	//vertexData[2].position = { 0.5f,-0.5f,0.0f,1.0f };
-	//vertexData[2].texcoord = { 1.0f,1.0f };
-	////左下2
-	//vertexData[3].position = { -0.5f,-0.5f,0.5f,1.0f };
-	//vertexData[3].texcoord = { 0.0f,1.0f };
-	////上2
-	//vertexData[4].position = { 0.0f,0.0f,0.0f,1.0f };
-	//vertexData[4].texcoord = { 0.5f,0.0f };
-	////右下2
-	//vertexData[5].position = { 0.5f,-0.5f,-0.5f,1.0f };
-	//vertexData[5].texcoord = { 1.0f,1.0f };
 
 	//Sprite用の頂点リソースの作成
 	ID3D12Resource* vertexResourceSprite = CreateBufferResource(directXCommon->device_, sizeof(VertexData) * 6);
@@ -618,7 +598,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 		//更新処理
-		//transform.rotate.y += 0.02f;
+		transform.rotate.y += 0.001f;
 		Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 		Matrix4x4 cameraMatrix = Rendering::MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 		Matrix4x4 viewMatrix = ~cameraMatrix;
@@ -677,7 +657,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXCommon->commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);//VBVを設定
 		//TransformMatrixCBufferの場所を設定
 		directXCommon->commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruceSprite->GetGPUVirtualAddress());
-		//directXCommon->commandList_->DrawInstanced(6, 1, 0, 0);
+		directXCommon->commandList_->DrawInstanced(6, 1, 0, 0);
 
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXCommon->commandList_);
