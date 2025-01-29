@@ -9,6 +9,12 @@ typedef struct Transform {
 	Vector3 translate;
 }Transform;
 
+//TransformationMatrix
+typedef struct TransformationMatrix {
+	Matrix4x4 WVP;
+	Matrix4x4 World;
+}TransformationMatrix;
+
 /// <summary>
 /// レンダリング
 /// </summary>

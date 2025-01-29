@@ -46,7 +46,7 @@
     <ClInclude Include="engine\math\Vector2.h" />
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />
-    <ClInclude Include="engine\math\VertexData.h" />
+    <ClInclude Include="engine\math\ResourceData.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resource\shader\Object3d.PS.hlsl">

@@ -131,8 +131,8 @@
     <ClInclude Include="..\externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\math\VertexData.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="engine\math\ResourceData.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
