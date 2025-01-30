@@ -718,6 +718,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("translate", &transform.translate.x, 0.1f);
 		ImGui::Checkbox("useMonsterBall", &useMonsterBall);
 		ImGui::End();
+
 		ImGui::Begin("sprite");
 		ImGui::DragFloat3("scale", &transformSprite.scale.x, 0.1f, 0.0f, 5.0f);
 		ImGui::DragFloat3("rotate", &transformSprite.rotate.x, 0.1f);
