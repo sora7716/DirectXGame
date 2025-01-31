@@ -453,7 +453,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//書き込むためのアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色を書き込む
-	*materialData = Material({ 1.0f, 1.0f, 1.0f, 1.0f }, { true });
+	materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	materialData->enableLighting = true;
+	materialData->uvTransform = Math::MakeIdentity4x4();
 
 	//Spriteマテリアル用のリソースを作る
 	ID3D12Resource* materialResourceSprite = CreateBufferResource(directXCommon->device_, sizeof(Material));
@@ -462,7 +464,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//書き込むためのアドレスを取得
 	materialResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
 	//色を書き込む
-	*materialDataSprite = Material({ 1.0f, 1.0f, 1.0f, 1.0f }, { false });
+	materialDataSprite->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	materialDataSprite->enableLighting = false;
+	materialDataSprite->uvTransform = Math::MakeIdentity4x4();
+
+	//UVTransform用の変数
+	Transform uvTransformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
 
 	//WVP用のリソースを作る
 	ID3D12Resource* wvpResource = CreateBufferResource(directXCommon->device_, sizeof(TransformationMatrix));
@@ -760,8 +771,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 projectionMatrixSprite = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth, (float)WinApp::kClientHeight, 0.0f, 100.0f);
 		spriteWvpData.WVP = spriteWvpData.World * viewMatrix * projectionMatrixSprite;
 		*transformationMatrixDataSprite = spriteWvpData;
+		//ライト
 		directionalLight.direction = Math::Normalize(directionalLight.direction);
 		*directionalLightData = directionalLight;
+		//UVTransform
+		Matrix4x4 uvTransformMatrix = Rendering::MakeScaleMatrix(uvTransformSprite.scale);
+		uvTransformMatrix = uvTransformMatrix * Rendering::MakeRotateZMatrix(uvTransformSprite.rotate.z);
+		uvTransformMatrix = uvTransformMatrix * Rendering::MakeTranslateMatrix(uvTransformSprite.translate);
+		materialDataSprite->uvTransform = uvTransformMatrix;
 		//開発用のUIの処理
 		/*ImGui::ShowDemoWindow();*/
 		ImGui::Begin("sphere");
@@ -781,6 +798,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat4("color", &directionalLight.color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat3("direction", &directionalLight.direction.x, 0.1f);
 		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f, 0.0f, 10.0f);
+		ImGui::End();
+
+		ImGui::Begin("UV:sprite");
+		ImGui::DragFloat2("scale", &uvTransformSprite.scale.x, 0.01f,-10.0f,10.0f);
+		ImGui::SliderAngle("rotate", &uvTransformSprite.rotate.z);
+		ImGui::DragFloat2("translate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
 		ImGui::End();
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();

@@ -2,6 +2,7 @@
 #include "Vector2.h"
 #include "Vector4.h"
 #include "Vector3.h"
+#include "Matrix3x3.h"
 #include <cstdint>
 
 //頂点データ
@@ -15,6 +16,8 @@ typedef struct VertexData {
 typedef struct Material {
 	Vector4 color;//色
 	int32_t enableLighting;//ライティングするかどうかのフラグ
+	float padding[3];
+	Matrix4x4 uvTransform;//UVTransform
 }Material;
 
 //平行光源
