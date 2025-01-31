@@ -610,6 +610,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	transformationMatrixDataSprite->WVP = Math::MakeIdentity4x4();
 	transformationMatrixDataSprite->World = Math::MakeIdentity4x4();
 
+	//Index用
+	ID3D12Resource* indexResourceSprite = CreateBufferResource(directXCommon->device_, sizeof(uint32_t) * 6);
+	//Indexに対応したViewを作成するIndexBufferView(IBV)
+	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
+	//リソースの先頭のアドレスから使う
+	indexBufferViewSprite.BufferLocation = indexResourceSprite->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t) * 6;
+	//インデックスはuint32_tとする
+	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
+	//IndexResourceにデータを書き込む
+	uint32_t* indexDataSprite = nullptr;
+	indexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
+	indexDataSprite[0] = 0;
+	indexDataSprite[1] = 1;
+	indexDataSprite[2] = 2;
+	indexDataSprite[3] = 1;
+	indexDataSprite[4] = 3;
+	indexDataSprite[5] = 2;
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
@@ -786,9 +805,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXCommon->commandList_->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());//material
 		directXCommon->commandList_->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
 		directXCommon->commandList_->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);//VBVを設定
+		directXCommon->commandList_->IASetIndexBuffer(&indexBufferViewSprite);//IBVを設定
 		//TransformMatrixCBufferの場所を設定
 		directXCommon->commandList_->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruceSprite->GetGPUVirtualAddress());//wvp
-		directXCommon->commandList_->DrawInstanced(6, 1, 0, 0);
+		//directXCommon->commandList_->DrawInstanced(6, 1, 0, 0);
+		directXCommon->commandList_->DrawIndexedInstanced(6, 1, 0, 0, 0);
+
 
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXCommon->commandList_);
@@ -799,6 +821,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	indexResourceSprite->Release();
 	directionalLightResource->Release();
 	materialResourceSprite->Release();
 	transformationMatrixResoruceSprite->Release();
