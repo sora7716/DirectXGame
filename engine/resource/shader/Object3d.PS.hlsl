@@ -30,6 +30,8 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     if (gMaterial.enableLighring != 0)//Lightingする場合
     {
+        //lambert
+       // float cos = saturate(dot(normalize(input.normal), -gDirectionalLight.direction));
         //half lambert
         float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);

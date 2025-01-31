@@ -744,9 +744,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 		ImGui::Begin("light");
-		ImGui::DragFloat4("color", &directionalLight.color.x, 0.1f, 0.0f, 1.0f);
+		ImGui::DragFloat4("color", &directionalLight.color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat3("direction", &directionalLight.direction.x, 0.1f);
-		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f);
+		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f, 0.0f, 10.0f);
 		ImGui::End();
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();
