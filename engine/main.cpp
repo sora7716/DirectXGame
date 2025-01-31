@@ -468,13 +468,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	materialDataSprite->enableLighting = false;
 	materialDataSprite->uvTransform = Math::MakeIdentity4x4();
 
-	//UVTransform用の変数
-	Transform uvTransformSprite{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-
 	//WVP用のリソースを作る
 	ID3D12Resource* wvpResource = CreateBufferResource(directXCommon->device_, sizeof(TransformationMatrix));
 	//データを書き込む
@@ -580,8 +573,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vertexData[start + 5].normal.y = vertexData[start + 5].position.y;
 			vertexData[start + 5].normal.z = vertexData[start + 5].position.z;
 
-			indexData[start] = start; indexData[start + 1] = start+1; indexData[start + 2] = start+2;
-			indexData[start + 3] = start+1; indexData[start + 4] = start+4; indexData[start + 5] = start+2;
+			indexData[start] = start; indexData[start + 1] = start + 1; indexData[start + 2] = start + 2;
+			indexData[start + 3] = start + 1; indexData[start + 4] = start + 4; indexData[start + 5] = start + 2;
 		}
 	}
 
@@ -675,14 +668,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//GameObjectの初期化
 	//Transform変数を作成
-	Transform transform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	Transform transform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{1.7f,-1.0f,0.0f} };
 	//テクスチャの切り替え用
 	bool useMonsterBall = true;
 
 	//カメラ
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f,},{0.0f,0.0f,-10.0f} };
 	//スプライト
-	Transform transformSprite{ {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	Transform transformSprite{ {1.0f,1.0f,1.0f},{0.0f,.0f,0.0f},{0.0f,0.0f,0.0f} };
 	// Textureを呼んで転送する
 	DirectX::ScratchImage mipImages = LoadTexture("engine/resource/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
@@ -734,6 +727,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLight.direction = { 0.0f,-1.0f,0.0f };
 	directionalLight.intensity = 1.0f;
 
+	//UVTransform用の変数
+	Transform uvTransformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+
+	Transform uvTransform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -775,12 +781,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directionalLight.direction = Math::Normalize(directionalLight.direction);
 		*directionalLightData = directionalLight;
 		//UVTransform
-		Matrix4x4 uvTransformMatrix = Rendering::MakeScaleMatrix(uvTransformSprite.scale);
-		uvTransformMatrix = uvTransformMatrix * Rendering::MakeRotateZMatrix(uvTransformSprite.rotate.z);
-		uvTransformMatrix = uvTransformMatrix * Rendering::MakeTranslateMatrix(uvTransformSprite.translate);
-		materialDataSprite->uvTransform = uvTransformMatrix;
-		//開発用のUIの処理
-		/*ImGui::ShowDemoWindow();*/
+		Matrix4x4 uvTransformMatrixSprite = Rendering::MakeScaleMatrix(uvTransformSprite.scale);
+		uvTransformMatrixSprite = uvTransformMatrixSprite * Rendering::MakeRotateZMatrix(uvTransformSprite.rotate.z);
+		uvTransformMatrixSprite = uvTransformMatrixSprite * Rendering::MakeTranslateMatrix(uvTransformSprite.translate);
+		materialDataSprite->uvTransform = uvTransformMatrixSprite;
+		Matrix4x4 uvTransformMatrix = Rendering::MakeScaleMatrix(uvTransform.scale) * Rendering::MakeRotateZMatrix(uvTransform.rotate.z) * Rendering::MakeTranslateMatrix(uvTransform.translate);
+		materialData->uvTransform = uvTransformMatrix;
+			//開発用のUIの処理
+			/*ImGui::ShowDemoWindow();*/
 		ImGui::Begin("sphere");
 		ImGui::DragFloat3("scale", &transform.scale.x, 0.1f, 0.0f, 5.0f);
 		ImGui::DragFloat3("rotate", &transform.rotate.x, 0.1f);
@@ -801,9 +809,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 		ImGui::Begin("UV:sprite");
-		ImGui::DragFloat2("scale", &uvTransformSprite.scale.x, 0.01f,-10.0f,10.0f);
+		ImGui::DragFloat2("scale", &uvTransformSprite.scale.x, 0.01f, -10.0f, 10.0f);
 		ImGui::SliderAngle("rotate", &uvTransformSprite.rotate.z);
 		ImGui::DragFloat2("translate", &uvTransformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+		ImGui::End();
+
+		ImGui::Begin("UV:sphere");
+		ImGui::DragFloat2("scale", &uvTransform.scale.x, 0.01f, -10.0f, 10.0f);
+		ImGui::SliderAngle("rotate", &uvTransform.rotate.z);
+		ImGui::DragFloat2("translate", &uvTransform.translate.x, 0.01f, -10.0f, 10.0f);
 		ImGui::End();
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();
