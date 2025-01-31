@@ -476,6 +476,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	const int kSubdivision = 16;
 	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
+
+	//Index用(sphere)
+	ID3D12Resource* indexResource = CreateBufferResource(directXCommon->device_, sizeof(uint32_t) * kSphereVertexNum);
+	//Indexに対応したViewを作成するIndexBufferView(IBV)
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
+	//リソースの先頭のアドレスから使う
+	indexBufferView.BufferLocation = indexResource->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferView.SizeInBytes = sizeof(uint32_t) * kSphereVertexNum;
+	//インデックスはuint32_tとする
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	//IndexResourceにデータを書き込む
+	uint32_t* indexData = nullptr;
+	indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
+
 	//頂点リソースを生成
 	ID3D12Resource* vertexResource = CreateBufferResource(directXCommon->device_, sizeof(VertexData) * kSphereVertexNum);
 	//VertexBufferViewを作成する(頂点バッファービュー)
@@ -483,7 +498,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//リソースの先頭アドレスから使う
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * kSubdivision * kSubdivision * 6;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * kSphereVertexNum;
 	//1頂点当たりのサイズ
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 
@@ -553,6 +568,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vertexData[start + 5].normal.x = vertexData[start + 5].position.x;
 			vertexData[start + 5].normal.y = vertexData[start + 5].position.y;
 			vertexData[start + 5].normal.z = vertexData[start + 5].position.z;
+
+			indexData[start] = start; indexData[start + 1] = start+1; indexData[start + 2] = start+2;
+			indexData[start + 3] = start+1; indexData[start + 4] = start+4; indexData[start + 5] = start+2;
 		}
 	}
 
@@ -610,7 +628,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	transformationMatrixDataSprite->WVP = Math::MakeIdentity4x4();
 	transformationMatrixDataSprite->World = Math::MakeIdentity4x4();
 
-	//Index用
+	//Index用(sprite)
 	ID3D12Resource* indexResourceSprite = CreateBufferResource(directXCommon->device_, sizeof(uint32_t) * 6);
 	//Indexに対応したViewを作成するIndexBufferView(IBV)
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
@@ -778,6 +796,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXCommon->commandList_->SetGraphicsRootSignature(rootSignature);
 		directXCommon->commandList_->SetPipelineState(graphicsPipelineState);
 		directXCommon->commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
+		directXCommon->commandList_->IASetIndexBuffer(&indexBufferView);//IBVを設定
 		//形状を設定。PSOに設定しているものとはまた別。同じものを設定すると考えておけば良い
 		directXCommon->commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//マテリアルCBufferの場所を設定
@@ -794,7 +813,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//指定した深度で画面全体をクリアする
 		directXCommon->commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 		//描画!(DrawCall/ドローコール)。
-		directXCommon->commandList_->DrawInstanced(kSphereVertexNum, 1, 0, 0);
+		directXCommon->commandList_->DrawIndexedInstanced(kSphereVertexNum, 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
 		//使用するテクスチャの決定
@@ -818,6 +837,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+	indexResource->Release();
 	indexResourceSprite->Release();
 	directionalLightResource->Release();
 	materialResourceSprite->Release();
