@@ -323,10 +323,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//RootParameterの作成。複数設定できるので配列。
 	D3D12_ROOT_PARAMETER rootParameters[4] = {};
+	//色情報
 	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使うb0のbと一致する	
 	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインドb0の0と一致する
 
+	//Transform
 	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderを使う
 	rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号
@@ -337,10 +339,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
 	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
 
+	//ライト
 	rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
 	rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
 	rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
-	
+
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 
@@ -532,6 +535,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vertexData[start + 2].normal.z = vertexData[start + 2].position.z;
 			//b(左上)
 			vertexData[start + 3] = vertexData[start + 1];
+			vertexData[start + 3].normal.x = vertexData[start + 3].position.x;
+			vertexData[start + 3].normal.y = vertexData[start + 3].position.y;
+			vertexData[start + 3].normal.z = vertexData[start + 3].position.z;
 			//d(右上)
 			vertexData[start + 4].position.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
 			vertexData[start + 4].position.y = std::sin(lat + kLatEvery);
@@ -539,11 +545,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			vertexData[start + 4].position.w = 1.0f;
 			vertexData[start + 4].texcoord.x = float(lonIndex + 1) / float(kSubdivision);
 			vertexData[start + 4].texcoord.y = 1.0f - float(latIndex) / float(kSubdivision);
-			vertexData[start + 3].normal.x = vertexData[start + 3].position.x;
-			vertexData[start + 3].normal.y = vertexData[start + 3].position.y;
-			vertexData[start + 3].normal.z = vertexData[start + 3].position.z;
+			vertexData[start + 4].normal.x = vertexData[start + 4].position.x;
+			vertexData[start + 4].normal.y = vertexData[start + 4].position.y;
+			vertexData[start + 4].normal.z = vertexData[start + 4].position.z;
 			//c(右下)
 			vertexData[start + 5] = vertexData[start + 2];
+			vertexData[start + 5].normal.x = vertexData[start + 5].position.x;
+			vertexData[start + 5].normal.y = vertexData[start + 5].position.y;
+			vertexData[start + 5].normal.z = vertexData[start + 5].position.z;
 		}
 	}
 
@@ -592,13 +601,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	vertexDataSprite[5].normal = {};
 
 	//Sprite用のMaterialを作成
-	ID3D12Resource* transformationMatrixResoruceSprite = CreateBufferResource(directXCommon->device_, sizeof(Matrix4x4));
+	ID3D12Resource* transformationMatrixResoruceSprite = CreateBufferResource(directXCommon->device_, sizeof(TransformationMatrix));
 	//データを書き込む
-	Matrix4x4* transformationMatrixDataSprite = nullptr;
+	TransformationMatrix* transformationMatrixDataSprite = nullptr;
 	//書き込むためのアドレス
 	transformationMatrixResoruceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 	//単位行列を書き込んでおく
-	*transformationMatrixDataSprite = Math::MakeIdentity4x4();
+	transformationMatrixDataSprite->WVP = Math::MakeIdentity4x4();
+	transformationMatrixDataSprite->World = Math::MakeIdentity4x4();
 
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
@@ -674,6 +684,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3D12_CPU_DESCRIPTOR_HANDLE imGuiSrvHandleCPU = GetCPUDescriptorHandle(srvDescriptorHeap, descriptorSizeSRV, 0);
 	D3D12_GPU_DESCRIPTOR_HANDLE imGuiSrvHandleGPU = GetGPUDescriptorHandle(srvDescriptorHeap, descriptorSizeSRV, 0);
 
+	DirectionalLight directionalLight;
+	directionalLight.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLight.direction = { 0.0f,-1.0f,0.0f };
+	directionalLight.intensity = 1.0f;
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -705,11 +720,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereWvpData.WVP = sphereWvpData.World * viewMatrix * projectionMatrix;
 		*wvpData = sphereWvpData;
 		//Sprite用のWorldViewProjection
-		Matrix4x4 worldMatrixSprite = Rendering::MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
+		TransformationMatrix spriteWvpData;
+		spriteWvpData.World = Rendering::MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 		Matrix4x4 viewMatrixSprite = Math::MakeIdentity4x4();
 		Matrix4x4 projectionMatrixSprite = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth, (float)WinApp::kClientHeight, 0.0f, 100.0f);
-		Matrix4x4 worldViewProjectionMatrixSprite = worldMatrixSprite * viewMatrix * projectionMatrixSprite;
-		*transformationMatrixDataSprite = worldViewProjectionMatrixSprite;
+		spriteWvpData.WVP = spriteWvpData.World * viewMatrix * projectionMatrixSprite;
+		*transformationMatrixDataSprite = spriteWvpData;
+		directionalLight.direction = Math::Normalize(directionalLight.direction);
+		*directionalLightData = directionalLight;
 		//開発用のUIの処理
 		/*ImGui::ShowDemoWindow();*/
 		ImGui::Begin("sphere");
@@ -723,6 +741,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("scale", &transformSprite.scale.x, 0.1f, 0.0f, 5.0f);
 		ImGui::DragFloat3("rotate", &transformSprite.rotate.x, 0.1f);
 		ImGui::DragFloat3("translate", &transformSprite.translate.x, 0.1f);
+		ImGui::End();
+
+		ImGui::Begin("light");
+		ImGui::DragFloat4("color", &directionalLight.color.x, 0.1f, 0.0f, 1.0f);
+		ImGui::DragFloat3("direction", &directionalLight.direction.x, 0.1f);
+		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f);
 		ImGui::End();
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();

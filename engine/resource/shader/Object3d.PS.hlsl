@@ -9,9 +9,9 @@ struct Material
 //平行光源
 struct DirectionalLight
 {
-    float4 color;//ライトの色
-    float3 direction;//ライトの向き
-    float intensity;//輝度
+    float4 color; //ライトの色
+    float3 direction; //ライトの向き
+    float intensity; //輝度
 };
 
 ConstantBuffer<Material> gMaterial : register(b0);
@@ -30,12 +30,14 @@ PixelShaderOutput main(VertexShaderOutput input)
     PixelShaderOutput output;
     if (gMaterial.enableLighring != 0)//Lightingする場合
     {
-        float cos = saturate(dot(normalize(input.normal), -gDirectionalLight.direction));
+        //half lambert
+        float NdotL = dot(normalize(input.normal), -gDirectionalLight.direction);
+        float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
         output.color = gMaterial.color * textureColor * gDirectionalLight.color * cos * gDirectionalLight.intensity;
     }
     else
     {
         output.color = gMaterial.color * textureColor;
     }
-        return output;
+    return output;
 }
