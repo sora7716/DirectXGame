@@ -299,6 +299,7 @@ ModelData LoadObjeFile(const std::string& directoryPath, const std::string& file
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;
+			position.x*= -1.0f;
 			position.w = 1.0f;
 			positions.push_back(position);
 		}
@@ -310,9 +311,11 @@ ModelData LoadObjeFile(const std::string& directoryPath, const std::string& file
 		else if (identifier == "vn") {
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
+			normal.x *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
+			VertexData triangle[3];
 			//面は三角形限定。そのほかは未対応
 			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
 				std::string vertexDefinition;
@@ -329,9 +332,14 @@ ModelData LoadObjeFile(const std::string& directoryPath, const std::string& file
 				Vector4 position = positions[elementIndices[0] - 1];
 				Vector2 texcoord = texcoords[elementIndices[1] - 1];
 				Vector3 normal = normals[elementIndices[2] - 1];
-				VertexData vertex = { position,texcoord,normal };
-				modelData.vertices.push_back(vertex);
+				/*VertexData vertex = { position,texcoord,normal };
+				modelData.vertices.push_back(vertex);*/
+				triangle[faceVertex] = { position,texcoord,normal };
 			}
+			//頂点を逆順で登録することで、周りを逆にする
+			modelData.vertices.push_back(triangle[2]);
+			modelData.vertices.push_back(triangle[1]);
+			modelData.vertices.push_back(triangle[0]);
 		}
 	}
 	//4.ModelDataを返す
@@ -585,6 +593,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//書き込むためのアドレスを取得
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
 	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());//頂点データをリソースにコピー
+
+	for (int i = 0; i < modelData.vertices.size(); i++) {
+		indexData[i] = i; indexData[i + 1] = i + 1; indexData[i + 2] = i + 2;
+		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
+	}
+
 	/*for (int i = 0; i < modelData.vertices.size() / 6; i++) {
 		indexData[i] = i; indexData[i + 1] = i + 1; indexData[i + 2] = i + 2;
 		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
@@ -882,7 +896,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 
 		ImGui::Begin("light");
-		ImGui::DragFloat4("color", &directionalLight.color.x, 0.01f, 0.0f, 1.0f);
+		ImGui::ColorEdit4("color", &directionalLight.color.x);
 		ImGui::DragFloat3("direction", &directionalLight.direction.x, 0.1f);
 		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f, 0.0f, 10.0f);
 		ImGui::End();
