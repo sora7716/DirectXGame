@@ -561,7 +561,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
 
 	//モデルデータの読み込み
-	ModelData modelData = LoadObjeFile("engine/resource/base", "plane.obj");
+	ModelData modelData = LoadObjeFile("engine/resource/base", "axis.obj");
 
 	//Index用(3dGameObject)
 	ID3D12Resource* indexResource = CreateBufferResource(directXCommon->device_, sizeof(uint32_t) * modelData.vertices.size());
