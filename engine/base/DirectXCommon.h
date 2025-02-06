@@ -7,6 +7,7 @@
 #include "2d/Log.h"
 #include <dxcapi.h>
 #include "math/Vector4.h"
+#include <wrl.h>
 
 
 /// <summary>
@@ -102,6 +103,10 @@ public://メンバ関数
 	/// </summary>
 	void DrawEndFrame();
 
+	/// <summary>
+	/// ゲームウィンドウの生成
+	/// </summary>
+	void CreateGameWindow();
 
 	/// <summary>
 	/// デバックレイヤー
@@ -119,21 +124,21 @@ private://メンバ関数
 public://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
 	WinApp* winApp_ = nullptr;//ウィンドウズアプリケーション
-	IDXGIFactory7* dxgiFactory_ = nullptr;//IDXIファクトリー
-	IDXGIAdapter4* useAdapter_ = nullptr;//使用するアダプタ
-	ID3D12Device* device_ = nullptr;//デバイス
-	ID3D12CommandQueue* commandQueue_ = nullptr;//コマンドキュー
-	ID3D12CommandAllocator* commandAllocator_ = nullptr;//コマンドアローケータ
-	ID3D12GraphicsCommandList* commandList_ = nullptr;//コマンドリスト
-	IDXGISwapChain4* swapChain_ = nullptr;//スワップチェーン
+	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;//IDXIファクトリー
+	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_ = nullptr;//使用するアダプタ
+	Microsoft::WRL::ComPtr<ID3D12Device> device_ = nullptr;//デバイス
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_ = nullptr;//コマンドアローケータ
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_ = nullptr;//コマンドリスト
+	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_ = nullptr;//スワップチェーン
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_{};//swapChainDesc
-	ID3D12DescriptorHeap* rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;//ディスクリプタヒープ
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};//rtvDesc
-	ID3D12Resource* swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
+	Microsoft::WRL::ComPtr<ID3D12Resource> swapChainResources_[2] = { nullptr };//スワップチェーンからリソースを引っ張ってくる
 	UINT backBufferIndex_ = {};
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[2];//RTVを2つ作るのでディスクリプタを2つ用意
-	ID3D12Debug1* debugController_ = nullptr;//デバックコントローラー
-	ID3D12Fence* fence_ = nullptr;//Fence
+	Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_ = nullptr;//デバックコントローラー
+	Microsoft::WRL::ComPtr<ID3D12Fence> fence_ = nullptr;//Fence
 	uint64_t fenceValue_ = 0;//FenceValue
 	HANDLE fenceEvent_ = 0;//FenceEvent
 };
