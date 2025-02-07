@@ -8,6 +8,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <memory>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -391,6 +392,9 @@ ModelData LoadObjeFile(const std::string& directoryPath, const std::string& file
 	return modelData;
 }
 
+/// <summary>
+/// リークチェッカー
+/// </summary>
 struct D3DResourceLeakChacker {
 	~D3DResourceLeakChacker() {
 		//リソースリークチェック
@@ -409,16 +413,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3DResourceLeakChacker leakChacker;
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウズアプリケーション
-	WinApp* winApp = new WinApp();
+	std::unique_ptr<WinApp> winApp = std::make_unique<WinApp>();
 	//DirectXCommon
-	DirectXCommon* directXCommon = new DirectXCommon();
+	std::unique_ptr<DirectXCommon> directXCommon = std::make_unique<DirectXCommon>();
 
 	//ウィンドウの作成
 	winApp->CreateGameWindow();
 	//デバックレイヤー
 	directXCommon->DebugLayer();
 	//DirectX12の初期化
-	directXCommon->InitializeDirectX12(winApp);
+	directXCommon->InitializeDirectX12(winApp.get());
 
 	//SRV用のヒープでデスクリプタの数が128。SRVはShaderを触るものなので、ShaderVisibleはtrue
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap = directXCommon->MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
@@ -1028,8 +1032,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	delete winApp;
-	delete directXCommon;
 	CoUninitialize();
 	return 0;
 }
