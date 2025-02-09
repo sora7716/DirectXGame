@@ -3,8 +3,8 @@
 #include "math/func/Math.h"
 #include "math/ResourceData.h"
 #include "math/rendering/Rendering.h"
-#include "DirectXTex/DirectXTex.h"
-#include "DirectXTex/d3dx12.h"
+#include "externals/DirectXTex/DirectXTex.h"
+#include "externals/DirectXTex/d3dx12.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
