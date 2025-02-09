@@ -11,13 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\externals\imgui\imgui.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="engine\2d\Log.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
@@ -25,16 +18,15 @@
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
     <ClCompile Include="engine\math\func\Math.cpp" />
     <ClCompile Include="engine\math\rendering\Rendering.cpp" />
+    <ClCompile Include="externals\imgui\imgui.cpp" />
+    <ClCompile Include="externals\imgui\imgui_demo.cpp" />
+    <ClCompile Include="externals\imgui\imgui_draw.cpp" />
+    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="externals\imgui\imgui_tables.cpp" />
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\externals\imgui\imconfig.h" />
-    <ClInclude Include="..\externals\imgui\imgui.h" />
-    <ClInclude Include="..\externals\imgui\imgui_impl_dx12.h" />
-    <ClInclude Include="..\externals\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\externals\imgui\imgui_internal.h" />
-    <ClInclude Include="..\externals\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\externals\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\externals\imgui\imstb_truetype.h" />
     <ClInclude Include="engine\2d\Log.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
@@ -47,6 +39,14 @@
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\math\ResourceData.h" />
+    <ClInclude Include="externals\imgui\imconfig.h" />
+    <ClInclude Include="externals\imgui\imgui.h" />
+    <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="externals\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="externals\imgui\imgui_internal.h" />
+    <ClInclude Include="externals\imgui\imstb_rectpack.h" />
+    <ClInclude Include="externals\imgui\imstb_textedit.h" />
+    <ClInclude Include="externals\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resource\shader\Object3d.PS.hlsl">
@@ -59,15 +59,15 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\externals\imgui\LICENSE.txt" />
+    <None Include="engine\resource\shader\Object3d.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+    <Text Include="externals\imgui\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="engine\resource\shader\Object3d.hlsli" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -114,7 +114,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals;C:\Subject\CG\CG2\GameEngine1\externals;C:\Subject\CG\CG2\GameEngine1\DirectXGame\engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals;C:\Subject\CG\CG2\GameEngine1\externals;C:\Subject\CG\CG2\GameEngine1\DirectXGame\engine;C:\Subject\CG\CG2\GameEngine1\DirectXGame\externals</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
