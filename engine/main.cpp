@@ -538,11 +538,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//Shaderをコンパイルする
 	//VertexShader
-	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = CompilerShader(L"engine/resource/shader/Object3d.VS.hlsl", L"vs_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
+	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = CompilerShader(L"engine/resources/shaders/Object3d.VS.hlsl", L"vs_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
 	assert(vertexShaderBlob != nullptr);
 
 	//PixelShader
-	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = CompilerShader(L"engine/resource/shader/object3d.PS.hlsl", L"ps_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
+	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = CompilerShader(L"engine/resources/shaders/object3d.PS.hlsl", L"ps_6_0", dxcUtils.Get(), dxcCompiler.Get(), includeHandler.Get());
 	assert(pixelShaderBlob != nullptr);
 
 	//DepthStencilTextureをウィンドウのサイズで作成
@@ -624,7 +624,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
 
 	//モデルデータの読み込み
-	ModelData modelData = LoadObjeFile("engine/resource/base", "plane.obj");
+	ModelData modelData = LoadObjeFile("engine/resources/base", "plane.obj");
 
 	//Index用(3dGameObject)
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource = CreateBufferResource(directXCommon->device_.Get(), sizeof(uint32_t) * modelData.vertices.size());
@@ -833,7 +833,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//スプライト
 	Transform transformSprite{ {1.0f,1.0f,1.0f},{0.0f,.0f,0.0f},{0.0f,0.0f,0.0f} };
 	// Textureを呼んで転送する
-	DirectX::ScratchImage mipImages = LoadTexture("engine/resource/uvChecker.png");
+	DirectX::ScratchImage mipImages = LoadTexture("engine/resources/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = CreateTextureResource(directXCommon->device_.Get(), metadata);
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = UploadTextureData(textureResource.Get(), mipImages, directXCommon->device_.Get(), directXCommon->commandList_.Get());

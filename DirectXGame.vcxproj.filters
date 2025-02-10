@@ -28,6 +28,9 @@
     <Filter Include="math\func">
       <UniqueIdentifier>{f4a79ad1-4ad4-48c3-b59c-2cb96d487971}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{b16f66bf-0edd-4c70-9653-49abd78975bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -136,15 +139,21 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="engine\resource\shader\Object3d.VS.hlsl" />
-    <FxCompile Include="engine\resource\shader\Object3d.PS.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="engine\resource\shader\Object3d.hlsli" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="engine\externals\imgui\LICENSE.txt">
       <Filter>imgui</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="engine\resources\shaders\Object3d.PS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Object3d.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="engine\resources\shaders\Object3d.hlsli">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
