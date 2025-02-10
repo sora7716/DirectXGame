@@ -302,5 +302,21 @@ void DirectXCommon::StopExecution() {
 
 //デストラクタ
 DirectXCommon::~DirectXCommon() {
+	//オブジェクトの開放
+	CloseHandle(fenceEvent_);
+	fence_.Reset();
+	rtvDescriptorHeap_.Reset();
+	swapChainResources_[0].Reset();
+	swapChainResources_[1].Reset();
+	swapChain_.Reset();
+	commandList_.Reset();
+	commandAllocator_.Reset();
+	commandQueue_.Reset();
+	device_.Reset();
+	useAdapter_.Reset();
+	dxgiFactory_.Reset();
+#ifdef _DEBUG
+	debugController_.Reset();
+#endif // _DEBUG
 	CloseHandle(fenceEvent_);
 }
