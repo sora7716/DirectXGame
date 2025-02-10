@@ -27,44 +27,44 @@ public://メンバ関数
 	/// IDXIファクトリーの生成
 	/// </summary>
 	/// <returns>IDXIファクトリー</returns>
-	IDXGIFactory7* MakeIDXGIFactory();
+	Microsoft::WRL::ComPtr<IDXGIFactory7> MakeIDXGIFactory();
 
 	/// <summary>
 	/// 使用するアダプタを決定
 	/// </summary>
 	/// <returns>使用するアダプタ</returns>
-	IDXGIAdapter4* DecideUseAdapter();
+	Microsoft::WRL::ComPtr<IDXGIAdapter4> DecideUseAdapter();
 
 	/// <summary>
 	/// D3D12デバイスの生成
 	/// </summary>
 	/// <returns>D3D12デバイス</returns>
-	ID3D12Device* MakeD3D12Device();
+	Microsoft::WRL::ComPtr<ID3D12Device> MakeD3D12Device();
 
 	/// <summary>
 	/// コマンドキューの生成
 	/// </summary>
 	/// <returns>コマンドキュー</returns>
-	ID3D12CommandQueue* MakeCommandQueue();
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> MakeCommandQueue();
 
 	/// <summary>
 	/// コマンドアローケータの生成 
 	/// </summary>
 	/// <returns>コマンドアローケータ</returns>
-	ID3D12CommandAllocator* MakeCommandAllocator();
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> MakeCommandAllocator();
 
 	/// <summary>
 	/// コマンドリストの生成
 	/// </summary>
 	/// <returns>コマンドリスト</returns>
-	ID3D12GraphicsCommandList* MakeCommandList();
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> MakeCommandList();
 
 	/// <summary>
 	/// スワップチェーンの生成
 	/// </summary>
 	/// <param name="hwnd">メッセージが送信されたウィンドウのハンドル</param>
 	/// <returns>スワップチェーン</returns>
-	IDXGISwapChain4* MakeSwapChain();
+	Microsoft::WRL::ComPtr<IDXGISwapChain4> MakeSwapChain();
 
 	/// <summary>
 	/// DescriptorHeapの作成
@@ -73,14 +73,14 @@ public://メンバ関数
 	/// <param name="numDescriptors"></param>
 	/// <param name="shaderVisible"></param>
 	/// <returns>デスクリプターヒープ</returns>
-	ID3D12DescriptorHeap* MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool	shaderVisible);
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool	shaderVisible);
 
 	/// <summary>
 	/// SwapChainからResourceを引っ張ってくる
 	/// </summary>
 	/// <param name="num">何番目か</param>
 	/// <returns>リソース</returns>
-	ID3D12Resource* BringResourcesFromSwapChain(UINT num);
+	Microsoft::WRL::ComPtr<ID3D12Resource> BringResourcesFromSwapChain(UINT num);
 
 	/// <summary>
 	/// RTVの作成
@@ -91,7 +91,7 @@ public://メンバ関数
 	/// Fenceを作成する
 	/// </summary>
 	/// <returns></returns>
-	ID3D12Fence* MakeFence();
+	Microsoft::WRL::ComPtr<ID3D12Fence> MakeFence();
 
 	/// <summary>
 	/// フレームの開始
