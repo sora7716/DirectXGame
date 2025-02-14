@@ -5,18 +5,16 @@
 #include "math/rendering/Rendering.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
+#include "audio/Audio.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <memory>
-#include <xaudio2.h>
-#include <cstring>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
-#pragma comment(lib,"xaudio2.lib")
 
 /// <summary>
 /// CompilerShader関数
@@ -411,129 +409,129 @@ typedef struct D3DResourceLeakChacker {
 	}
 }D3DResourceLeakChacker;
 
-//チャンクヘッダ
-typedef struct ChunkHeader {
-	char id[4];//チャンク毎のID
-	int32_t size;//チャンクサイズ
-}ChunkHeader;
-
-//RIFFヘッダチャンク
-typedef struct RiffHeader {
-	ChunkHeader chunk;//"RIFF"
-	char type[4];//"WAVE"
-}RiffHeader;
-
-//FMTチャンク
-typedef struct FormatChunk {
-	ChunkHeader chunk;//"fmt"
-	WAVEFORMATEX fmt;//波形フォーマット
-}FormatChunk;
-
-//音声データ
-typedef struct SoundData {
-	WAVEFORMATEX wfex;//波形フォーマット
-	BYTE* pBuffer;//バッファの先頭アドレス
-	unsigned int bufferSize;//バッファサイズ
-}SoundData;
-
-/// <summary>
-/// サウンドデータのロード
-/// </summary>
-/// <param name="directoryPath">ディレクトリ名</param>
-/// <param name="filename">ファイル名</param>
-/// <returns></returns>
-SoundData SoundLoadWave(const std::string& directoryPath, const std::string& filename) {
-	//1.ファイルオープン
-	//ファイル入力ストリームのインスタンス
-	std::ifstream file;
-	//.wavファイルをバイナリーモードで開く
-	file.open(directoryPath + "/" + filename, std::ios_base::binary);
-	//ファイルオープン失敗を検知
-	assert(file.is_open());
-	//2..wavデータの読み込み
-	//RIFFヘッダーの読み込み
-	RiffHeader riff;
-	file.read((char*)&riff, sizeof(riff));
-	//ファイルがRIFFかチェック
-	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
-		assert(0);
-	}
-	//タイプがWAVEかチェック
-	if (strncmp(riff.type, "WAVE", 4)) {
-		assert(0);
-	}
-	//Formatチャンクの読み込み
-	FormatChunk format = {};
-	//チャンクヘッダーの確認
-	file.read((char*)&format, sizeof(ChunkHeader));
-	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
-		assert(0);
-	}
-	//チャンク本体の読み込み
-	assert(format.chunk.size <= sizeof(format.fmt));
-	file.read((char*)&format.fmt, format.chunk.size);
-	///Dataチャンクの読み込み
-	ChunkHeader data;
-	while (true) {
-		file.read(reinterpret_cast<char*>(&data), sizeof(data));
-
-		// "data" チャンクならループを抜ける
-		if (strncmp(data.id, "data", 4) == 0) {
-			break;
-		}
-
-		// それ以外のチャンクならスキップ
-		file.seekg(data.size, std::ios_base::cur);
-	}
-	//Dataチャンクのデータ部(波形データ)の読み込み
-	char* pBuffer = new char[data.size];
-	file.read(pBuffer, data.size);
-	//3.ファイルクローズ
-	//Waveファイルを閉じる
-	file.close();
-	//4.読み込んだ音声データをreturn
-	//returnする為の音声データ
-	SoundData soundData = {};
-	soundData.wfex = format.fmt;
-	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	soundData.bufferSize = data.size;
-	return soundData;
-}
-
-/// <summary>
-///音声データの解放
-/// </summary>
-/// <param name="soundData">サウンドデータ</param>
-void SoundUnLoad(SoundData* soundData) {
-	//バッファのメモリ解放
-	delete[] soundData->pBuffer;
-	soundData->pBuffer = 0;
-	soundData->bufferSize = 0;
-	soundData->wfex = {};
-}
-
-/// <summary>
-/// 音声を再生
-/// </summary>
-/// <param name="xAudio2">xAudio</param>
-/// <param name="soundData">サウンドデータ</param>
-void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
-	HRESULT result;
-
-	//波形フォーマットを元にSourceVoiceの生成
-	IXAudio2SourceVoice* pSorceVoice = nullptr;
-	result = xAudio2->CreateSourceVoice(&pSorceVoice, &soundData.wfex);
-	assert(SUCCEEDED(result));
-	//再生する波形データの設定
-	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.bufferSize;
-	buf.Flags = XAUDIO2_END_OF_STREAM;
-
-	//波形データの再生
-	result = pSorceVoice->SubmitSourceBuffer(&buf);
-	result = pSorceVoice->Start();
-}
+////チャンクヘッダ
+//typedef struct ChunkHeader {
+//	char id[4];//チャンク毎のID
+//	int32_t size;//チャンクサイズ
+//}ChunkHeader;
+//
+////RIFFヘッダチャンク
+//typedef struct RiffHeader {
+//	ChunkHeader chunk;//"RIFF"
+//	char type[4];//"WAVE"
+//}RiffHeader;
+//
+////FMTチャンク
+//typedef struct FormatChunk {
+//	ChunkHeader chunk;//"fmt"
+//	WAVEFORMATEX fmt;//波形フォーマット
+//}FormatChunk;
+//
+////音声データ
+//typedef struct SoundData {
+//	WAVEFORMATEX wfex;//波形フォーマット
+//	BYTE* pBuffer;//バッファの先頭アドレス
+//	unsigned int bufferSize;//バッファサイズ
+//}SoundData;
+//
+///// <summary>
+///// サウンドデータのロード
+///// </summary>
+///// <param name="directoryPath">ディレクトリ名</param>
+///// <param name="filename">ファイル名</param>
+///// <returns></returns>
+//SoundData SoundLoadWave(const std::string& directoryPath, const std::string& filename) {
+//	//1.ファイルオープン
+//	//ファイル入力ストリームのインスタンス
+//	std::ifstream file;
+//	//.wavファイルをバイナリーモードで開く
+//	file.open(directoryPath + "/" + filename, std::ios_base::binary);
+//	//ファイルオープン失敗を検知
+//	assert(file.is_open());
+//	//2..wavデータの読み込み
+//	//RIFFヘッダーの読み込み
+//	RiffHeader riff;
+//	file.read((char*)&riff, sizeof(riff));
+//	//ファイルがRIFFかチェック
+//	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
+//		assert(0);
+//	}
+//	//タイプがWAVEかチェック
+//	if (strncmp(riff.type, "WAVE", 4)) {
+//		assert(0);
+//	}
+//	//Formatチャンクの読み込み
+//	FormatChunk format = {};
+//	//チャンクヘッダーの確認
+//	file.read((char*)&format, sizeof(ChunkHeader));
+//	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
+//		assert(0);
+//	}
+//	//チャンク本体の読み込み
+//	assert(format.chunk.size <= sizeof(format.fmt));
+//	file.read((char*)&format.fmt, format.chunk.size);
+//	///Dataチャンクの読み込み
+//	ChunkHeader data;
+//	while (true) {
+//		file.read(reinterpret_cast<char*>(&data), sizeof(data));
+//
+//		// "data" チャンクならループを抜ける
+//		if (strncmp(data.id, "data", 4) == 0) {
+//			break;
+//		}
+//
+//		// それ以外のチャンクならスキップ
+//		file.seekg(data.size, std::ios_base::cur);
+//	}
+//	//Dataチャンクのデータ部(波形データ)の読み込み
+//	char* pBuffer = new char[data.size];
+//	file.read(pBuffer, data.size);
+//	//3.ファイルクローズ
+//	//Waveファイルを閉じる
+//	file.close();
+//	//4.読み込んだ音声データをreturn
+//	//returnする為の音声データ
+//	SoundData soundData = {};
+//	soundData.wfex = format.fmt;
+//	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+//	soundData.bufferSize = data.size;
+//	return soundData;
+//}
+//
+///// <summary>
+/////音声データの解放
+///// </summary>
+///// <param name="soundData">サウンドデータ</param>
+//void SoundUnLoad(SoundData* soundData) {
+//	//バッファのメモリ解放
+//	delete[] soundData->pBuffer;
+//	soundData->pBuffer = 0;
+//	soundData->bufferSize = 0;
+//	soundData->wfex = {};
+//}
+//
+///// <summary>
+///// 音声を再生
+///// </summary>
+///// <param name="xAudio2">xAudio</param>
+///// <param name="soundData">サウンドデータ</param>
+//void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
+//	HRESULT result;
+//
+//	//波形フォーマットを元にSourceVoiceの生成
+//	IXAudio2SourceVoice* pSorceVoice = nullptr;
+//	result = xAudio2->CreateSourceVoice(&pSorceVoice, &soundData.wfex);
+//	assert(SUCCEEDED(result));
+//	//再生する波形データの設定
+//	XAUDIO2_BUFFER buf{};
+//	buf.pAudioData = soundData.pBuffer;
+//	buf.AudioBytes = soundData.bufferSize;
+//	buf.Flags = XAUDIO2_END_OF_STREAM;
+//
+//	//波形データの再生
+//	result = pSorceVoice->SubmitSourceBuffer(&buf);
+//	result = pSorceVoice->Start();
+//}
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -1024,16 +1022,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	};
 
 	//音
-	Microsoft::WRL::ComPtr<IXAudio2>xAudio2;
-	IXAudio2MasteringVoice* masterVoice;
-	//XAudioエンジンのインスタンスを生成
-	hr = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	//マスターボイスを生成
-	hr = xAudio2->CreateMasteringVoice(&masterVoice);
+	Audio* audio_ = Audio::GetInstance();
+	//初期化
+	audio_->Initialize();
 	//音声読み込み
-	SoundData soundData1 = SoundLoadWave("engine/resources/sounds","mokugyo.wav");
+	audio_->SetSoundData(0, "mokugyo.wav");
 	//音声の再生
-	SoundPlayWave(xAudio2.Get(), soundData1);
+	audio_->SoundPlayWave(0, true);
+	float volume = 1.0f;
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -1114,6 +1110,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::SliderAngle("rotate", &uvTransform.rotate.z);
 		ImGui::DragFloat2("translate", &uvTransform.translate.x, 0.01f, -10.0f, 10.0f);
 		ImGui::End();
+
+		ImGui::Begin("sound");
+		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
+		ImGui::End();
+		audio_->SetVolume(0, volume);
+
+
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();
 		//描画処理
@@ -1172,9 +1175,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 	CoUninitialize();
-	//XAudio2解放
-	xAudio2.Reset();
-	//音声データ解放
-	SoundUnLoad(&soundData1);
+	audio_->Finalize();
 	return 0;
 }

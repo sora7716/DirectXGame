@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\2d\Log.cpp" />
+    <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
     <ClCompile Include="engine\externals\imgui\imgui.cpp" />
@@ -28,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Log.h" />
+    <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
     <ClInclude Include="engine\externals\imgui\imconfig.h" />
