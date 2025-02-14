@@ -439,14 +439,15 @@ typedef struct SoundData {
 /// <summary>
 /// サウンドデータのロード
 /// </summary>
+/// <param name="directoryPath">ディレクトリ名</param>
 /// <param name="filename">ファイル名</param>
 /// <returns></returns>
-SoundData SoundLoadWave(const std::string& filename) {
+SoundData SoundLoadWave(const std::string& directoryPath, const std::string& filename) {
 	//1.ファイルオープン
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
 	//.wavファイルをバイナリーモードで開く
-	file.open(filename, std::ios_base::binary);
+	file.open(directoryPath + "/" + filename, std::ios_base::binary);
 	//ファイルオープン失敗を検知
 	assert(file.is_open());
 	//2..wavデータの読み込み
@@ -518,7 +519,7 @@ void SoundUnLoad(SoundData* soundData) {
 /// <param name="soundData">サウンドデータ</param>
 void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
 	HRESULT result;
-	
+
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSorceVoice = nullptr;
 	result = xAudio2->CreateSourceVoice(&pSorceVoice, &soundData.wfex);
@@ -1030,7 +1031,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//マスターボイスを生成
 	hr = xAudio2->CreateMasteringVoice(&masterVoice);
 	//音声読み込み
-	SoundData soundData1 = SoundLoadWave("engine/resources/sounds/mokugyo.wav");
+	SoundData soundData1 = SoundLoadWave("engine/resources/sounds","mokugyo.wav");
 	//音声の再生
 	SoundPlayWave(xAudio2.Get(), soundData1);
 
