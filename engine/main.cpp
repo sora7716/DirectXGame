@@ -10,6 +10,7 @@
 #include <sstream>
 #include <memory>
 #include <xaudio2.h>
+#include <cstring>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -440,7 +441,7 @@ typedef struct SoundData {
 /// </summary>
 /// <param name="filename">ファイル名</param>
 /// <returns></returns>
-SoundData SoundLoadWave(const char* filename) {
+SoundData SoundLoadWave(const std::string& filename) {
 	//1.ファイルオープン
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
@@ -464,7 +465,7 @@ SoundData SoundLoadWave(const char* filename) {
 	FormatChunk format = {};
 	//チャンクヘッダーの確認
 	file.read((char*)&format, sizeof(ChunkHeader));
-	if (strncmp(format.chunk.id, "fmt", 4) != 0) {
+	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
 		assert(0);
 	}
 	//チャンク本体の読み込み
@@ -472,16 +473,16 @@ SoundData SoundLoadWave(const char* filename) {
 	file.read((char*)&format.fmt, format.chunk.size);
 	///Dataチャンクの読み込み
 	ChunkHeader data;
-	file.read((char*)&data, sizeof(data));
-	//JUNKチャンクを検出した場合
-	if (strncmp(data.id, "JUNK", 4) == 0) {
-		//読み取り位置をJUNKチャンクの終わりまで進める
+	while (true) {
+		file.read(reinterpret_cast<char*>(&data), sizeof(data));
+
+		// "data" チャンクならループを抜ける
+		if (strncmp(data.id, "data", 4) == 0) {
+			break;
+		}
+
+		// それ以外のチャンクならスキップ
 		file.seekg(data.size, std::ios_base::cur);
-		//再読み込み
-		file.read((char*)&data, sizeof(data));
-	}
-	if (strncmp(data.id, "data", 4) != 0) {
-		assert(0);
 	}
 	//Dataチャンクのデータ部(波形データ)の読み込み
 	char* pBuffer = new char[data.size];
@@ -521,7 +522,7 @@ void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSorceVoice = nullptr;
 	result = xAudio2->CreateSourceVoice(&pSorceVoice, &soundData.wfex);
-
+	assert(SUCCEEDED(result));
 	//再生する波形データの設定
 	XAUDIO2_BUFFER buf{};
 	buf.pAudioData = soundData.pBuffer;
@@ -1029,7 +1030,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//マスターボイスを生成
 	hr = xAudio2->CreateMasteringVoice(&masterVoice);
 	//音声読み込み
-	SoundData soundData1 = SoundLoadWave("resources/sounds/Alarm01.wav");
+	SoundData soundData1 = SoundLoadWave("engine/resources/sounds/mokugyo.wav");
 	//音声の再生
 	SoundPlayWave(xAudio2.Get(), soundData1);
 
