@@ -1116,7 +1116,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::End();
 		audio_->SetVolume(0, volume);
 
-
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();
 		//描画処理
