@@ -40,8 +40,13 @@ public://メンバ関数
 	/// HWNDのゲッター
 	/// </summary>
 	/// <returns>HWND</returns>
-	HWND GetHwnd() { return hwnd_; }
+	HWND GetHwnd();
 
+	/// <summary>
+	/// WNDクラスのゲッター
+	/// </summary>
+	/// <returns>wndClass</returns>
+	WNDCLASS GetWndClass();
 private://メンバ関数
 	WinApp(const WinApp&) = delete;
 	const WinApp& operator=(const WinApp&) = delete;

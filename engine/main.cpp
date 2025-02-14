@@ -1,3 +1,4 @@
+#define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include "base/DirectXCommon.h"
 #include "math/Matrix4x4.h"
 #include "math/func/Math.h"
@@ -10,11 +11,14 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <dinput.h>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
+#pragma comment(lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
 
 /// <summary>
 /// CompilerShader関数
@@ -408,130 +412,6 @@ typedef struct D3DResourceLeakChacker {
 		}
 	}
 }D3DResourceLeakChacker;
-
-////チャンクヘッダ
-//typedef struct ChunkHeader {
-//	char id[4];//チャンク毎のID
-//	int32_t size;//チャンクサイズ
-//}ChunkHeader;
-//
-////RIFFヘッダチャンク
-//typedef struct RiffHeader {
-//	ChunkHeader chunk;//"RIFF"
-//	char type[4];//"WAVE"
-//}RiffHeader;
-//
-////FMTチャンク
-//typedef struct FormatChunk {
-//	ChunkHeader chunk;//"fmt"
-//	WAVEFORMATEX fmt;//波形フォーマット
-//}FormatChunk;
-//
-////音声データ
-//typedef struct SoundData {
-//	WAVEFORMATEX wfex;//波形フォーマット
-//	BYTE* pBuffer;//バッファの先頭アドレス
-//	unsigned int bufferSize;//バッファサイズ
-//}SoundData;
-//
-///// <summary>
-///// サウンドデータのロード
-///// </summary>
-///// <param name="directoryPath">ディレクトリ名</param>
-///// <param name="filename">ファイル名</param>
-///// <returns></returns>
-//SoundData SoundLoadWave(const std::string& directoryPath, const std::string& filename) {
-//	//1.ファイルオープン
-//	//ファイル入力ストリームのインスタンス
-//	std::ifstream file;
-//	//.wavファイルをバイナリーモードで開く
-//	file.open(directoryPath + "/" + filename, std::ios_base::binary);
-//	//ファイルオープン失敗を検知
-//	assert(file.is_open());
-//	//2..wavデータの読み込み
-//	//RIFFヘッダーの読み込み
-//	RiffHeader riff;
-//	file.read((char*)&riff, sizeof(riff));
-//	//ファイルがRIFFかチェック
-//	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
-//		assert(0);
-//	}
-//	//タイプがWAVEかチェック
-//	if (strncmp(riff.type, "WAVE", 4)) {
-//		assert(0);
-//	}
-//	//Formatチャンクの読み込み
-//	FormatChunk format = {};
-//	//チャンクヘッダーの確認
-//	file.read((char*)&format, sizeof(ChunkHeader));
-//	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
-//		assert(0);
-//	}
-//	//チャンク本体の読み込み
-//	assert(format.chunk.size <= sizeof(format.fmt));
-//	file.read((char*)&format.fmt, format.chunk.size);
-//	///Dataチャンクの読み込み
-//	ChunkHeader data;
-//	while (true) {
-//		file.read(reinterpret_cast<char*>(&data), sizeof(data));
-//
-//		// "data" チャンクならループを抜ける
-//		if (strncmp(data.id, "data", 4) == 0) {
-//			break;
-//		}
-//
-//		// それ以外のチャンクならスキップ
-//		file.seekg(data.size, std::ios_base::cur);
-//	}
-//	//Dataチャンクのデータ部(波形データ)の読み込み
-//	char* pBuffer = new char[data.size];
-//	file.read(pBuffer, data.size);
-//	//3.ファイルクローズ
-//	//Waveファイルを閉じる
-//	file.close();
-//	//4.読み込んだ音声データをreturn
-//	//returnする為の音声データ
-//	SoundData soundData = {};
-//	soundData.wfex = format.fmt;
-//	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-//	soundData.bufferSize = data.size;
-//	return soundData;
-//}
-//
-///// <summary>
-/////音声データの解放
-///// </summary>
-///// <param name="soundData">サウンドデータ</param>
-//void SoundUnLoad(SoundData* soundData) {
-//	//バッファのメモリ解放
-//	delete[] soundData->pBuffer;
-//	soundData->pBuffer = 0;
-//	soundData->bufferSize = 0;
-//	soundData->wfex = {};
-//}
-//
-///// <summary>
-///// 音声を再生
-///// </summary>
-///// <param name="xAudio2">xAudio</param>
-///// <param name="soundData">サウンドデータ</param>
-//void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData) {
-//	HRESULT result;
-//
-//	//波形フォーマットを元にSourceVoiceの生成
-//	IXAudio2SourceVoice* pSorceVoice = nullptr;
-//	result = xAudio2->CreateSourceVoice(&pSorceVoice, &soundData.wfex);
-//	assert(SUCCEEDED(result));
-//	//再生する波形データの設定
-//	XAUDIO2_BUFFER buf{};
-//	buf.pAudioData = soundData.pBuffer;
-//	buf.AudioBytes = soundData.bufferSize;
-//	buf.Flags = XAUDIO2_END_OF_STREAM;
-//
-//	//波形データの再生
-//	result = pSorceVoice->SubmitSourceBuffer(&buf);
-//	result = pSorceVoice->Start();
-//}
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -1031,6 +911,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	audio_->SoundPlayWave(0, true);
 	float volume = 1.0f;
 
+	//入力関数の初期化処理
+	//DirectInputの初期化
+	IDirectInput8* directInput = nullptr;
+	hr = DirectInput8Create(winApp->GetWndClass().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+	assert(SUCCEEDED(hr));
+	//キーボードデバイスの生成
+	IDirectInputDevice8* keyboard = nullptr;
+	hr = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+	assert(SUCCEEDED(hr));
+	//入力データ形式のセット
+	hr = keyboard->SetDataFormat(&c_dfDIKeyboard);
+	assert(SUCCEEDED(hr));
+	//排他制御レベルのセット
+	hr = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	assert(SUCCEEDED(hr));
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -1052,6 +948,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui_ImplDX12_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		//キーボード情報の取得開始
+		keyboard->Acquire();
+		//全キーの入力状態を取得する
+		BYTE key[256] = {};
+		BYTE preKey[256] = {};
+		keyboard->GetDeviceState(sizeof(key), key);
+		for (int i = 0; i < 256; i++) {
+			if (key[i] != preKey[i]) {
+				// 現在の状態を前回の状態として保存
+				memcpy(preKey, key, sizeof(key));
+				break;
+			}
+		}
+
+		if (key[DIK_0] && !preKey[DIK_0]) {
+			transform.rotate.y += 0.1f;
+		}
 		//更新処理
 		//transform.rotate.y += 0.001f;
 		TransformationMatrix sphereWvpData;

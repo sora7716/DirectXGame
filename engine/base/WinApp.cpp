@@ -68,6 +68,16 @@ bool WinApp::ProcesMessage(){
 	return false;
 }
 
+//HWNDのゲッター
+HWND WinApp::GetHwnd(){
+	return hwnd_;
+}
+
+//WNDクラスのゲッター
+WNDCLASS WinApp::GetWndClass(){
+	return wndClass_;
+}
+
 //デストラクタ
 WinApp::~WinApp(){
 	CloseWindow(hwnd_);
