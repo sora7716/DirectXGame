@@ -926,6 +926,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//排他制御レベルのセット
 	hr = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
+	//全キーの入力状態を取得する
+	BYTE key[256] = {};
+	BYTE preKey[256] = {};
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -948,21 +951,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui_ImplDX12_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
-		//キーボード情報の取得開始
-		keyboard->Acquire();
-		//全キーの入力状態を取得する
-		BYTE key[256] = {};
-		BYTE preKey[256] = {};
-		keyboard->GetDeviceState(sizeof(key), key);
-		for (int i = 0; i < 256; i++) {
-			if (key[i] != preKey[i]) {
-				// 現在の状態を前回の状態として保存
-				memcpy(preKey, key, sizeof(key));
-				break;
-			}
-		}
 
-		if (key[DIK_0] && !preKey[DIK_0]) {
+		// 現在の状態を前回の状態として保存
+		memcpy(preKey, key, sizeof(key));
+		//キーボード情報の取得開始
+		hr = keyboard->Acquire();
+		hr = keyboard->GetDeviceState(sizeof(key), key);
+
+		if (!key[DIK_0] && !preKey[DIK_0]) {
+			Log::ConsolePrintf("push");
 			transform.rotate.y += 0.1f;
 		}
 		//更新処理
