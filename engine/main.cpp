@@ -629,7 +629,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
 
 	//モデルデータの読み込み
-	ModelData modelData = LoadObjeFile("engine/resources/base", "plane.obj");
+	ModelData modelData = LoadObjeFile("engine/resources/cube", "cube.obj");
 
 	//Index用(3dGameObject)
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource = CreateBufferResource(directXCommon->device_.Get(), sizeof(uint32_t) * modelData.vertices.size());
@@ -958,7 +958,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		hr = keyboard->Acquire();
 		hr = keyboard->GetDeviceState(sizeof(key), key);
 
-		if (!key[DIK_0] && !preKey[DIK_0]) {
+		if (key[DIK_0] && !preKey[DIK_0]) {
 			Log::ConsolePrintf("push");
 			transform.rotate.y += 0.1f;
 		}

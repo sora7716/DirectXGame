@@ -4,9 +4,9 @@
 #include <cassert>
 #include <dxgidebug.h>
 #include "WinApp.h"
-#include "2d/Log.h"
+#include "engine/debug/Log.h"
 #include <dxcapi.h>
-#include "math/Vector4.h"
+#include "engine/math/Vector4.h"
 #include <wrl.h>
 
 

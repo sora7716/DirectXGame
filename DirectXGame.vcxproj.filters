@@ -31,13 +31,16 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{b16f66bf-0edd-4c70-9653-49abd78975bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="debug">
+      <UniqueIdentifier>{c793e6da-f161-41c5-ba48-ad2073df3575}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{7d92218e-5326-48be-b8fe-be7c59b9dcfb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\2d\Log.cpp">
-      <Filter>2d</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>base</Filter>
@@ -54,29 +57,35 @@
     <ClCompile Include="engine\math\rendering\Rendering.cpp">
       <Filter>math\func</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui.cpp">
+    <ClCompile Include="externals\imgui\imgui.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_demo.cpp">
+    <ClCompile Include="externals\imgui\imgui_demo.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_draw.cpp">
+    <ClCompile Include="externals\imgui\imgui_draw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_impl_dx12.cpp">
+    <ClCompile Include="externals\imgui\imgui_impl_dx12.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="externals\imgui\imgui_impl_win32.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_tables.cpp">
+    <ClCompile Include="externals\imgui\imgui_tables.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="engine\externals\imgui\imgui_widgets.cpp">
+    <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug\Log.cpp">
+      <Filter>debug</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug\DebugCamera.cpp">
+      <Filter>debug</Filter>
     </ClCompile>
     <ClCompile Include="engine\audio\Audio.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,9 +107,6 @@
     <ClInclude Include="engine\base\DirectXCommon.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\2d\Log.h">
-      <Filter>2d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\base\WinApp.h">
       <Filter>base</Filter>
     </ClInclude>
@@ -116,38 +122,39 @@
     <ClInclude Include="engine\math\ResourceData.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imconfig.h">
+    <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imgui.h">
+    <ClInclude Include="externals\imgui\imgui.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imgui_impl_dx12.h">
+    <ClInclude Include="externals\imgui\imgui_impl_dx12.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imgui_impl_win32.h">
+    <ClInclude Include="externals\imgui\imgui_impl_win32.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imgui_internal.h">
+    <ClInclude Include="externals\imgui\imgui_internal.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imstb_rectpack.h">
+    <ClInclude Include="externals\imgui\imstb_rectpack.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imstb_textedit.h">
+    <ClInclude Include="externals\imgui\imstb_textedit.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="engine\externals\imgui\imstb_truetype.h">
+    <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\debug\Log.h">
+      <Filter>debug</Filter>
     </ClInclude>
     <ClInclude Include="engine\audio\Audio.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>audio</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="engine\externals\imgui\LICENSE.txt">
-      <Filter>imgui</Filter>
-    </Text>
+    <ClInclude Include="engine\debug\DebugCamera.h">
+      <Filter>debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resources\shaders\Object3d.PS.hlsl">
@@ -161,5 +168,10 @@
     <None Include="engine\resources\shaders\Object3d.hlsli">
       <Filter>shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="externals\imgui\LICENSE.txt">
+      <Filter>imgui</Filter>
+    </Text>
   </ItemGroup>
 </Project>
