@@ -16,6 +16,7 @@
     <ClCompile Include="engine\base\WinApp.cpp" />
     <ClCompile Include="engine\debug\DebugCamera.cpp" />
     <ClCompile Include="engine\debug\Log.cpp" />
+    <ClCompile Include="engine\input\Input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
     <ClCompile Include="engine\math\func\Math.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="engine\base\WinApp.h" />
     <ClInclude Include="engine\debug\DebugCamera.h" />
     <ClInclude Include="engine\debug\Log.h" />
+    <ClInclude Include="engine\input\Input.h" />
     <ClInclude Include="engine\math\func\Aithmetic.h" />
     <ClInclude Include="engine\math\func\Math.h" />
     <ClInclude Include="engine\math\Matrix3x3.h" />

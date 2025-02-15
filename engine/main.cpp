@@ -1,24 +1,21 @@
-#define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include "base/DirectXCommon.h"
 #include "math/Matrix4x4.h"
 #include "math/func/Math.h"
 #include "math/ResourceData.h"
 #include "math/rendering/Rendering.h"
+#include "audio/Audio.h"
+#include "input/Input.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
-#include "audio/Audio.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <memory>
-#include <dinput.h>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
-#pragma comment(lib,"dinput8.lib")
-#pragma comment(lib,"dxguid.lib")
 
 /// <summary>
 /// CompilerShader関数
@@ -418,7 +415,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3DResourceLeakChacker leakChacker;
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウズアプリケーション
-	std::unique_ptr<WinApp> winApp = std::make_unique<WinApp>();
+	std::shared_ptr<WinApp> winApp = std::make_shared<WinApp>();
 	//DirectXCommon
 	std::unique_ptr<DirectXCommon> directXCommon = std::make_unique<DirectXCommon>();
 
@@ -913,22 +910,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//入力関数の初期化処理
 	//DirectInputの初期化
-	IDirectInput8* directInput = nullptr;
-	hr = DirectInput8Create(winApp->GetWndClass().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
-	assert(SUCCEEDED(hr));
-	//キーボードデバイスの生成
-	IDirectInputDevice8* keyboard = nullptr;
-	hr = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
-	assert(SUCCEEDED(hr));
-	//入力データ形式のセット
-	hr = keyboard->SetDataFormat(&c_dfDIKeyboard);
-	assert(SUCCEEDED(hr));
-	//排他制御レベルのセット
-	hr = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-	assert(SUCCEEDED(hr));
-	//全キーの入力状態を取得する
-	BYTE key[256] = {};
-	BYTE preKey[256] = {};
+	Input* input = Input::GetInstance();
+	input->Initialize(winApp);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -952,15 +935,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		// 現在の状態を前回の状態として保存
-		memcpy(preKey, key, sizeof(key));
-		//キーボード情報の取得開始
-		hr = keyboard->Acquire();
-		hr = keyboard->GetDeviceState(sizeof(key), key);
+		input->Update();
 
-		if (key[DIK_0] && !preKey[DIK_0]) {
-			Log::ConsolePrintf("push");
-			transform.rotate.y += 0.1f;
+		if (input->PressKey(DIK_W)) {
+			transform.translate.y += 0.01f;
+		}
+		else if (input->PressKey(DIK_S)) {
+			transform.translate.y -= 0.01f;
+		}
+		if (input->PressKey(DIK_D)) {
+			transform.translate.x += 0.01f;
+		}
+		else if (input->PressKey(DIK_A)) {
+			transform.translate.x -= 0.01f;
 		}
 		//更新処理
 		//transform.rotate.y += 0.001f;

@@ -37,6 +37,9 @@
     <Filter Include="audio">
       <UniqueIdentifier>{7d92218e-5326-48be-b8fe-be7c59b9dcfb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{cd3a8eaa-58ec-49cd-bb11-0d6a68b13df8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="engine\audio\Audio.cpp">
       <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\input\Input.cpp">
+      <Filter>input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="engine\debug\DebugCamera.h">
       <Filter>debug</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\input\Input.h">
+      <Filter>input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
