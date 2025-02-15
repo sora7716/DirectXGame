@@ -412,19 +412,19 @@ typedef struct D3DResourceLeakChacker {
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	HRESULT hr = S_FALSE;
 	D3DResourceLeakChacker leakChacker;
-	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウズアプリケーション
-	std::shared_ptr<WinApp> winApp = std::make_shared<WinApp>();
+	std::shared_ptr<WinApi> winApi = std::make_shared<WinApi>();
 	//DirectXCommon
 	std::unique_ptr<DirectXCommon> directXCommon = std::make_unique<DirectXCommon>();
 
 	//ウィンドウの作成
-	winApp->CreateGameWindow();
+	winApi->Initialize();
 	//デバックレイヤー
 	directXCommon->DebugLayer();
 	//DirectX12の初期化
-	directXCommon->InitializeDirectX12(winApp.get());
+	directXCommon->InitializeDirectX12(winApi.get());
 
 	//SRV用のヒープでデスクリプタの数が128。SRVはShaderを触るものなので、ShaderVisibleはtrue
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap = directXCommon->MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
@@ -548,7 +548,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	assert(pixelShaderBlob != nullptr);
 
 	//DepthStencilTextureをウィンドウのサイズで作成
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource = CreateDepthStencilTextureResource(directXCommon->device_.Get(), winApp->kClientWidth, winApp->kClientHeight);
+	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource = CreateDepthStencilTextureResource(directXCommon->device_.Get(), winApi->kClientWidth, winApi->kClientHeight);
 	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触れるものではないので、ShaderVisibleはfalse
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap = directXCommon->MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 	//DSVの設定
@@ -809,8 +809,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = WinApp::kClientWidth;
-	viewport.Height = WinApp::kClientHeight;
+	viewport.Width = WinApi::kClientWidth;
+	viewport.Height = WinApi::kClientHeight;
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	viewport.MinDepth = 0.0f;
@@ -820,9 +820,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	D3D12_RECT scissorRect{};
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect.left = 0;
-	scissorRect.right = WinApp::kClientWidth;
+	scissorRect.right = WinApi::kClientWidth;
 	scissorRect.top = 0;
-	scissorRect.bottom = WinApp::kClientHeight;
+	scissorRect.bottom = WinApi::kClientHeight;
 
 	//GameObjectの初期化
 	//Transform変数を作成
@@ -911,12 +911,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//入力関数の初期化処理
 	//DirectInputの初期化
 	Input* input = Input::GetInstance();
-	input->Initialize(winApp);
+	input->Initialize(winApi);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winApp->GetHwnd());
+	ImGui_ImplWin32_Init(winApi->GetHwnd());
 	ImGui_ImplDX12_Init(
 		directXCommon->device_.Get(),
 		directXCommon->swapChainDesc_.BufferCount,
@@ -927,7 +927,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//ウィンドウの✖ボタンが押されるまでループ
 	while (true) {
-		if (winApp->ProcesMessage()) {
+		if (winApi->ProcesMessage()) {
 			break;
 		}
 		//ImGuiの開始
@@ -955,14 +955,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereWvpData.World = Rendering::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 		Matrix4x4 cameraMatrix = Rendering::MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 		Matrix4x4 viewMatrix = ~cameraMatrix;
-		Matrix4x4 projectionMatrix = Rendering::MakePerspectiveFovMatrix(0.45f, float(WinApp::kClientWidth) / float(WinApp::kClientHeight), 0.1f, 100.0f);
+		Matrix4x4 projectionMatrix = Rendering::MakePerspectiveFovMatrix(0.45f, float(WinApi::kClientWidth) / float(WinApi::kClientHeight), 0.1f, 100.0f);
 		sphereWvpData.WVP = sphereWvpData.World * viewMatrix * projectionMatrix;
 		*wvpData = sphereWvpData;
 		//Sprite用のWorldViewProjection
 		TransformationMatrix spriteWvpData;
 		spriteWvpData.World = Rendering::MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
 		Matrix4x4 viewMatrixSprite = Math::MakeIdentity4x4();
-		Matrix4x4 projectionMatrixSprite = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth, (float)WinApp::kClientHeight, 0.0f, 100.0f);
+		Matrix4x4 projectionMatrixSprite = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
 		spriteWvpData.WVP = spriteWvpData.World * viewMatrix * projectionMatrixSprite;
 		*transformationMatrixDataSprite = spriteWvpData;
 		//ライト
@@ -1070,7 +1070,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	CoUninitialize();
+	//WindowsAPIの終了処理
+	winApi->Finalize();
+	//Audioの終了処理
 	audio_->Finalize();
 	return 0;
 }

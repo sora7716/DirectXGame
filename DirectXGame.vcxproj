@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
-    <ClCompile Include="engine\base\WinApp.cpp" />
+    <ClCompile Include="engine\base\WinApi.cpp" />
     <ClCompile Include="engine\debug\DebugCamera.cpp" />
     <ClCompile Include="engine\debug\Log.cpp" />
     <ClCompile Include="engine\input\Input.cpp" />
@@ -32,7 +32,7 @@
   <ItemGroup>
     <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
-    <ClInclude Include="engine\base\WinApp.h" />
+    <ClInclude Include="engine\base\WinApi.h" />
     <ClInclude Include="engine\debug\DebugCamera.h" />
     <ClInclude Include="engine\debug\Log.h" />
     <ClInclude Include="engine\input\Input.h" />

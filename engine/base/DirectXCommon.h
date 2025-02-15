@@ -3,7 +3,7 @@
 #include <dxgi1_6.h>
 #include <cassert>
 #include <dxgidebug.h>
-#include "WinApp.h"
+#include "WinApi.h"
 #include "engine/debug/Log.h"
 #include <dxcapi.h>
 #include "engine/math/Vector4.h"
@@ -21,7 +21,7 @@ public://メンバ関数
 	/// DirectX12の初期化
 	/// </summary>
 	/// <param name="winApp">ウィンドウズアプリケーション</param>
-	void InitializeDirectX12(WinApp* winApp);
+	void InitializeDirectX12(WinApi* winApi);
 
 	/// <summary>
 	/// IDXIファクトリーの生成
@@ -123,7 +123,7 @@ private://メンバ関数
 	const DirectXCommon operator=(const DirectXCommon&) = delete;
 public://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
-	WinApp* winApp_ = nullptr;//ウィンドウズアプリケーション
+	WinApi* winApi_ = nullptr;//ウィンドウズAPI
 	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_ = nullptr;//IDXIファクトリー
 	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_ = nullptr;//使用するアダプタ
 	Microsoft::WRL::ComPtr<ID3D12Device> device_ = nullptr;//デバイス

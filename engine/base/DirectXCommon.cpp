@@ -5,9 +5,9 @@
 #pragma comment(lib,"dxcompiler.lib")
 
 // DirectX12の初期化
-void DirectXCommon::InitializeDirectX12(WinApp* winApp) {
+void DirectXCommon::InitializeDirectX12(WinApi* winApi) {
 	//ウィンドウズアプリケーションを受け取る
-	winApp_ = winApp;
+	winApi_ = winApi;
 	//IDXIファクトリーの生成
 	dxgiFactory_ = MakeIDXGIFactory();
 	//使用するアダプタを決定
@@ -127,15 +127,15 @@ Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> DirectXCommon::MakeCommandList
 Microsoft::WRL::ComPtr<IDXGISwapChain4> DirectXCommon::MakeSwapChain() {
 	HRESULT result = S_FALSE;
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain = nullptr;
-	swapChainDesc_.Width = WinApp::kClientWidth;//画面の横幅
-	swapChainDesc_.Height = WinApp::kClientHeight;//画面の縦幅
+	swapChainDesc_.Width = WinApi::kClientWidth;//画面の横幅
+	swapChainDesc_.Height = WinApi::kClientHeight;//画面の縦幅
 	swapChainDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM;//色形式
 	swapChainDesc_.SampleDesc.Count = 1;//マルチサンプルしない
 	swapChainDesc_.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;//描画のターゲットとして利用
 	swapChainDesc_.BufferCount = 2;//ダブルバッファ
 	swapChainDesc_.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;//モニタにうつしたら、中身を破棄
 	//コマンドキュー、ウィンドウハンドル、設定を渡して生成する
-	result = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), winApp_->GetHwnd(), &swapChainDesc_, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain.GetAddressOf()));
+	result = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), winApi_->GetHwnd(), &swapChainDesc_, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain.GetAddressOf()));
 	assert(SUCCEEDED(result));
 	return swapChain;
 }

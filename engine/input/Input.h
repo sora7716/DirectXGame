@@ -5,7 +5,7 @@
 #include <wrl.h>
 
 //前方宣言
-class WinApp;
+class WinApi;
 
 /// <summary>
 /// 入力
@@ -25,7 +25,7 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="winApp">ウィンドウズアプリケーション</param>
-	void Initialize(std::weak_ptr<WinApp>winApp);
+	void Initialize(std::weak_ptr<WinApi>winApp);
 
 	/// <summary>
 	/// 更新
@@ -68,8 +68,8 @@ private://メンバ関数
 	/// </summary>
 	~Input() = default;
 private://メンバ変数
-	//ウィンドウズアプリケーション
-	std::shared_ptr<WinApp> winApp_ = nullptr;
+	//ウィンドウズAPI
+	std::shared_ptr<WinApi> winApi_ = nullptr;
 	//キーボードデバイス
 	ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
 	//全キーの入力状態を取得する

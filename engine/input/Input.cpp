@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "engine/base/WinApp.h"
+#include "engine/base/WinApi.h"
 #include <cassert>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -11,13 +11,13 @@ Input* Input::GetInstance(){
 }
 
 //初期化
-void Input::Initialize(std::weak_ptr<WinApp>winApp) {
+void Input::Initialize(std::weak_ptr<WinApi>winApp) {
 	HRESULT result = S_FALSE;
 	//ウィンドウズアプリケーションを受け取る
-	winApp_ = winApp.lock();
+	winApi_ = winApp.lock();
 	//DirectInputの初期化
 	ComPtr<IDirectInput8> directInput = nullptr;
-	result = DirectInput8Create(winApp_->GetWndClass().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+	result = DirectInput8Create(winApi_->GetWndClass().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
 	assert(SUCCEEDED(result));
 	//キーボードデバイスの生成
 	result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
@@ -26,7 +26,7 @@ void Input::Initialize(std::weak_ptr<WinApp>winApp) {
 	result = keyboard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(result));
 	//排他制御レベルのセット
-	result = keyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = keyboard_->SetCooperativeLevel(winApi_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 }
 

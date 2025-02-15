@@ -1,24 +1,9 @@
-#include "WinApp.h"
-
-//ウィンドウプロシージャ
-LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)){
-		return true;
-	}
-    //メッセージに応じてゲーム固有の処理を行う
-    switch(msg){
-    //ウィンドウが破棄された
-    case WM_DESTROY:
-        //OSに対して、アプリの終了を伝える
-        PostQuitMessage(0);
-        return 0;   
-    }
-    //標準のメッセージ処理を行う
-    return DefWindowProc(hwnd, msg, wparam, lparam);
-}
+#include "WinApi.h"
 
 // ウィンドウの生成するための初期化
-void WinApp::CreateGameWindow(){
+void WinApi::Initialize() {
+	//メインスレッドではMTAでCOMを利用
+	HRESULT result = CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウプロシージャ
 	wndClass_.lpfnWndProc = WindowProc;
 	//ウィンドウのクラス名
@@ -55,7 +40,7 @@ void WinApp::CreateGameWindow(){
 }
 
 // プロセスメッセージ
-bool WinApp::ProcesMessage(){
+bool WinApi::ProcesMessage(){
 	MSG msg;
 	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 		TranslateMessage(&msg);
@@ -68,17 +53,35 @@ bool WinApp::ProcesMessage(){
 	return false;
 }
 
+//終了
+void WinApi::Finalize(){
+	CloseWindow(hwnd_);
+	CoUninitialize();
+}
+
 //HWNDのゲッター
-HWND WinApp::GetHwnd(){
+HWND WinApi::GetHwnd()const{
 	return hwnd_;
 }
 
 //WNDクラスのゲッター
-WNDCLASS WinApp::GetWndClass(){
+WNDCLASS WinApi::GetWndClass()const{
 	return wndClass_;
 }
 
-//デストラクタ
-WinApp::~WinApp(){
-	CloseWindow(hwnd_);
+//ウィンドウプロシージャ
+LRESULT WinApi::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
+	//メッセージに応じてゲーム固有の処理を行う
+	switch (msg) {
+		//ウィンドウが破棄された
+	case WM_DESTROY:
+		//OSに対して、アプリの終了を伝える
+		PostQuitMessage(0);
+		return 0;
+	}
+	//標準のメッセージ処理を行う
+	return DefWindowProc(hwnd, msg, wparam, lparam);
 }

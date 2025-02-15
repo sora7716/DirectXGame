@@ -48,7 +48,7 @@
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\WinApp.cpp">
+    <ClCompile Include="engine\base\WinApi.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\func\Aithmetic.cpp">
@@ -113,7 +113,7 @@
     <ClInclude Include="engine\base\DirectXCommon.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\WinApp.h">
+    <ClInclude Include="engine\base\WinApi.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="engine\math\func\Aithmetic.h">
