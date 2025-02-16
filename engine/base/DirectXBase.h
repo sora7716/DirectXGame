@@ -313,11 +313,11 @@ private://メンバ変数
 	ComPtr<ID3D12CommandQueue> commandQueue_ = nullptr;//コマンドキュー
 	ComPtr<ID3D12CommandAllocator> commandAllocator_ = nullptr;//コマンドアローケータ
 	ComPtr<ID3D12GraphicsCommandList> commandList_ = nullptr;//コマンドリスト
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_;
-	ComPtr<ID3D12Resource> depthStencilResource_;//深度バッファ
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc_ = {};
+	ComPtr<ID3D12Resource> depthStencilResource_ = nullptr;//深度バッファ
 	ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_ = nullptr;//RTV
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};//rtvDesc
-	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle;//DSVハンドル
+	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = {};//DSVハンドル
 	//DescriptorSize
 	uint32_t descriptorSizeRTV_;
 	std::array<ComPtr<ID3D12Resource>, 2> swapChainResources_ = { nullptr };//スワップチェーンからリソースを引っ張ってくる
@@ -330,13 +330,13 @@ private://メンバ変数
 	ComPtr<IDxcUtils> dxcUtils_ = nullptr;//DXCユーティリティ
 	ComPtr<IDxcCompiler3> dxcCompiler_ = nullptr;//DXCコンパイラ
 	ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;//デフォルトインクルードハンドラ
-	public:
+public:
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_{};
-	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_;//DSV
-	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_;//SRV
-	uint32_t descriptorSizeSRV_;
-	uint32_t descriptorSizeDSV_;
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvHandles_;//RTVを2つ作るのでディスクリプタを2つ用意
+	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;//DSV
+	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;//SRV
+	uint32_t descriptorSizeSRV_ = 0;
+	uint32_t descriptorSizeDSV_ = 0;
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvHandles_ = {};//RTVを2つ作るのでディスクリプタを2つ用意
 	ComPtr<IDXGISwapChain4> swapChain_ = nullptr;//スワップチェーン
 };
 

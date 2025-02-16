@@ -199,9 +199,8 @@ void DirectXBase::PreDraw() {
 	commandList_->ResourceBarrier(1, &barrier_);
 	//描画先のRTVとDSVを設定する
 	D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = DirectXBase::GetCPUDescriptorHandle(dsvDescriptorHeap_.Get(), descriptorSizeDSV_, 0);
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, &dsvHandle);
 	//描画先のRTVを設定する
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, nullptr);
+	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, &dsvHandle);
 	//指定した色で画面をクリアする
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//青っぽい色。RGBAの順
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);

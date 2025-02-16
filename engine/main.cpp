@@ -710,10 +710,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
 		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
 		directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, useMonsterBall ? textureSrvHandleGPU2 : textureSrvHandleGPU);
-		//描画先のRTVとDSVを設定する
-		/*UINT backBufferIndex = directXBase->swapChain_->GetCurrentBackBufferIndex();
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = directXBase->GetCPUDescriptorHandle(directXBase->dsvDescriptorHeap_.Get(), directXBase->descriptorSizeDSV_, 0);
-		directXBase->GetCommandList()->OMSetRenderTargets(1, &directXBase->rtvHandles_[backBufferIndex], false, &dsvHandle);*/
 		//描画!(DrawCall/ドローコール)。
 		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
