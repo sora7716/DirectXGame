@@ -11,10 +11,10 @@ Input* Input::GetInstance(){
 }
 
 //初期化
-void Input::Initialize(std::weak_ptr<WinApi>winApp) {
+void Input::Initialize() {
 	HRESULT result = S_FALSE;
 	//ウィンドウズアプリケーションを受け取る
-	winApi_ = winApp.lock();
+	winApi_ = WinApi::GetInstance();
 	//DirectInputの初期化
 	ComPtr<IDirectInput8> directInput = nullptr;
 	result = DirectInput8Create(winApi_->GetWndClass().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);

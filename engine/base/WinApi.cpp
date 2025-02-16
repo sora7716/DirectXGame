@@ -1,5 +1,11 @@
 #include "WinApi.h"
 
+//インスタンスのゲッター
+WinApi* WinApi::GetInstance(){
+	static WinApi instance;
+	return &instance;
+}
+
 // ウィンドウの生成するための初期化
 void WinApi::Initialize() {
 	//メインスレッドではMTAでCOMを利用

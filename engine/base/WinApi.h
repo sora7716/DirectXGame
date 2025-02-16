@@ -13,15 +13,11 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 class WinApi {
 public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	WinApi() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~WinApi() = default;
-
+	/// <returns></returns>
+	static WinApi* GetInstance();
+	
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -55,7 +51,15 @@ public://メンバ関数
 	//代入演算子禁止
 	const WinApi& operator=(const WinApi&) = delete;
 private://メンバ関数
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	WinApi() = default;
 
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~WinApi() = default;
 public://静的メンバ関数
 	/// <summary>
 	/// ウィンドウプロシージャ

@@ -25,7 +25,7 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="winApp">ウィンドウズアプリケーション</param>
-	void Initialize(std::weak_ptr<WinApi>winApp);
+	void Initialize();
 
 	/// <summary>
 	/// 更新
@@ -69,7 +69,7 @@ private://メンバ関数
 	~Input() = default;
 private://メンバ変数
 	//ウィンドウズAPI
-	std::shared_ptr<WinApi> winApi_ = nullptr;
+	WinApi* winApi_ = nullptr;
 	//キーボードデバイス
 	ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
 	//全キーの入力状態を取得する
