@@ -1,4 +1,5 @@
 #include "WinApi.h"
+#pragma comment(lib,"winmm.lib")
 
 //インスタンスのゲッター
 WinApi* WinApi::GetInstance(){
@@ -8,6 +9,8 @@ WinApi* WinApi::GetInstance(){
 
 // ウィンドウの生成するための初期化
 void WinApi::Initialize() {
+	//システムタイマーの分解能を上げる
+	timeBeginPeriod(1);
 	//メインスレッドではMTAでCOMを利用
 	HRESULT result = CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウプロシージャ

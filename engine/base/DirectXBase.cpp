@@ -1,4 +1,5 @@
 #include "DirectXBase.h"
+#include <thread>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -7,6 +8,8 @@ using namespace Microsoft::WRL;
 
 // DirectX12の初期化
 void DirectXBase::Initialize() {
+	//FPS固定初期化
+	InitializeFixFPS();
 	//ウィンドウズアプリケーションを受け取る
 	winApi_ = WinApi::GetInstance();
 	//デバイスの初期化
@@ -108,7 +111,7 @@ void DirectXBase::InitializeRTV() {
 }
 
 //深度ステンシルビューの初期化
-void DirectXBase::InitializeDepthStencil(){	
+void DirectXBase::InitializeDepthStencil() {
 	//Depthの機能を有効化
 	depthStencilDesc_.DepthEnable = true;
 	//書き込みをする
@@ -125,12 +128,12 @@ void DirectXBase::InitializeDepthStencil(){
 }
 
 //フェンスの初期化
-void DirectXBase::InitializeFence(){
+void DirectXBase::InitializeFence() {
 	fence_ = MakeFence();
 }
 
 //ビューポート矩形の初期化
-void DirectXBase::InitializeViewport(){
+void DirectXBase::InitializeViewport() {
 	//クライアント領域のサイズと一緒にして画面全体に表示
 	viewport_.Width = WinApi::kClientWidth;
 	viewport_.Height = WinApi::kClientHeight;
@@ -141,7 +144,7 @@ void DirectXBase::InitializeViewport(){
 }
 
 //シザリング矩形の初期化
-void DirectXBase::InitializeScissorRect(){
+void DirectXBase::InitializeScissorRect() {
 	//基本的にビューポートと同じ矩形が構成されるようにする
 	scissorRect_.left = 0;
 	scissorRect_.right = WinApi::kClientWidth;
@@ -151,7 +154,7 @@ void DirectXBase::InitializeScissorRect(){
 }
 
 //DXCコンパイラの生成
-void DirectXBase::CreateDXCCompiler(){
+void DirectXBase::CreateDXCCompiler() {
 	HRESULT result = S_FALSE;
 	//DXCユーティリティの生成
 	result = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
@@ -165,7 +168,7 @@ void DirectXBase::CreateDXCCompiler(){
 }
 
 //ImGuiの初期化
-void DirectXBase::InitializeImGui(){
+void DirectXBase::InitializeImGui() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
@@ -237,16 +240,16 @@ void DirectXBase::PostDraw() {
 	commandQueue_->ExecuteCommandLists(1, commandLists->GetAddressOf());
 	//GPUとOSに画面の交換を行うように通知
 	swapChain_->Present(1, 0);
-	//Fenceの値を更新
-	fenceValue_++;
 	//GPUがここまでたどり着いた時に、Fenceの値を指定した値に代入するようにSignalを送る
-	commandQueue_->Signal(fence_.Get(), fenceValue_);
+	commandQueue_->Signal(fence_.Get(), ++fenceValue_);
 	if (fence_->GetCompletedValue() < fenceValue_) {
 		//指定したSignalにたどり着いていないので、たどり着くまで待つようにイベントを設定する
 		fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
 		//イベントを待つ
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
+	//FPS固定
+	UpdateFixFPS();
 	//次のフレーム用のコマンドリストを準備
 	//コマンドアローケータのリセット
 	result = commandAllocator_->Reset();
@@ -304,7 +307,7 @@ ComPtr<ID3D12DescriptorHeap> DirectXBase::MakeDescriptorHeap(D3D12_DESCRIPTOR_HE
 }
 
 //シェーダーのコンパイル
-ComPtr<IDxcBlob> DirectXBase::CompilerShader(const std::wstring& filePath, const wchar_t* profile){
+ComPtr<IDxcBlob> DirectXBase::CompilerShader(const std::wstring& filePath, const wchar_t* profile) {
 	//1. hlslファイルを読み込む
 		//これからシェーダーをコンパイルする旨をログに出す
 	Log::ConsolePrintf(Log::ConvertString(std::format(L"Begin CompileShader, path:{}, profile:{}\n", filePath, profile)));
@@ -361,7 +364,7 @@ ComPtr<IDxcBlob> DirectXBase::CompilerShader(const std::wstring& filePath, const
 }
 
 //バッファリソースの生成
-ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(size_t sizeInBytes){
+ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(size_t sizeInBytes) {
 	//リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES uploadHeapProperities{};
 	uploadHeapProperities.Type = D3D12_HEAP_TYPE_UPLOAD;//UploadHeapを使う
@@ -385,7 +388,7 @@ ComPtr<ID3D12Resource> DirectXBase::CreateBufferResource(size_t sizeInBytes){
 }
 
 // テクスチャリソースの生成
-ComPtr<ID3D12Resource> DirectXBase::CreateTextureResource(const DirectX::TexMetadata& metadada){
+ComPtr<ID3D12Resource> DirectXBase::CreateTextureResource(const DirectX::TexMetadata& metadada) {
 	//1.metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = UINT(metadada.width);//Textureの幅
@@ -415,7 +418,7 @@ ComPtr<ID3D12Resource> DirectXBase::CreateTextureResource(const DirectX::TexMeta
 }
 
 // TextureResourceにデータを転送する 
-ComPtr<ID3D12Resource> DirectXBase::UploadTextureData(ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages){
+ComPtr<ID3D12Resource> DirectXBase::UploadTextureData(ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
 	std::vector<D3D12_SUBRESOURCE_DATA>subResources;
 	//PrePareUploadを利用して読み込んだデータからDirectX12用のSubresourceの配列を作成する
 	DirectX::PrepareUpload(device_.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subResources);
@@ -438,42 +441,42 @@ ComPtr<ID3D12Resource> DirectXBase::UploadTextureData(ComPtr<ID3D12Resource> tex
 }
 
 // SRVの指定番号のCPUデスクリプタハンドルを取得する
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVCPUDescriptorHandle(uint32_t index){
-	return GetCPUDescriptorHandle(srvDescriptorHeap_,descriptorSizeSRV_,index);
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVCPUDescriptorHandle(uint32_t index) {
+	return GetCPUDescriptorHandle(srvDescriptorHeap_, descriptorSizeSRV_, index);
 }
 
 // SRVの指定番号のGPUデスクリプタハンドルを取得する
 D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVGPUDescriptorHandle(uint32_t index) {
-	return GetGPUDescriptorHandle(srvDescriptorHeap_,descriptorSizeSRV_,index);
+	return GetGPUDescriptorHandle(srvDescriptorHeap_, descriptorSizeSRV_, index);
 }
 
 // RTVの指定番号のCPUデスクリプタハンドルを取得する
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetRTVCPUDescriptorHandle(uint32_t index){
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetRTVCPUDescriptorHandle(uint32_t index) {
 	return  GetCPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, index);
 }
 
 // RTVの指定番号のGPUデスクリプタハンドルを取得する
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetRTVGPUDescriptorHandle(uint32_t index){
+D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetRTVGPUDescriptorHandle(uint32_t index) {
 	return  GetGPUDescriptorHandle(rtvDescriptorHeap_, descriptorSizeRTV_, index);
 }
 
 // DSVの指定番号のCPUデスクリプタハンドルを取得する
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetDSVCPUDescriptorHandle(uint32_t index){
+D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetDSVCPUDescriptorHandle(uint32_t index) {
 	return  GetCPUDescriptorHandle(dsvDescriptorHeap_, descriptorSizeDSV_, index);
 }
 
 // DSVの指定番号のGPUデスクリプタハンドルを取得する
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetDSVGPUDescriptorHandle(uint32_t index){
+D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetDSVGPUDescriptorHandle(uint32_t index) {
 	return  GetGPUDescriptorHandle(dsvDescriptorHeap_, descriptorSizeDSV_, index);
 }
 
 //デバイスのゲッター
-ID3D12Device* DirectXBase::GetDevice() const{
+ID3D12Device* DirectXBase::GetDevice() const {
 	return device_.Get();
 }
 
 //コマンドリストのゲッター
-ID3D12GraphicsCommandList* DirectXBase::GetCommandList() const{
+ID3D12GraphicsCommandList* DirectXBase::GetCommandList() const {
 	return commandList_.Get();
 }
 
@@ -678,6 +681,35 @@ void DirectXBase::StopExecution() {
 		infoQueue->Release();
 	}
 #endif // _DEBUG
+}
+
+// FPS固定初期化
+void DirectXBase::InitializeFixFPS() {
+	//現在時間を記録する
+	reference_ = std::chrono::steady_clock::now();
+
+}
+
+// FPS固定更新
+void DirectXBase::UpdateFixFPS() {
+	//1/60秒ぴったりの時間
+	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
+	//1/60秒よりわずかに短い時間
+	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
+	//現在の時間を取得す
+	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+	//前回記録から経過時間を取得する
+	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
+	//1/60秒(よりわずかに短い時間)経っていない場合
+	if (elapsed < kMinCheckTime) {
+		//1/60秒経過するまで微小なスリープを繰り返す
+		while(std::chrono::steady_clock::now()-reference_<kMinTime){
+			//1マイクロ秒スリープ
+			std::this_thread::sleep_for(std::chrono::microseconds(1));
+		}
+	}
+	//現在の時間を記録する
+	reference_ = std::chrono::steady_clock::now();
 }
 
 //デストラクタ

@@ -3,13 +3,14 @@
 #include <dxgi1_6.h>
 #include <cassert>
 #include <dxgidebug.h>
-#include "WinApi.h"
-#include "engine/debug/Log.h"
 #include <dxcapi.h>
-#include "engine/math/Vector4.h"
 #include <wrl.h>
 #include <vector>
 #include <array>
+#include <chrono>
+#include "WinApi.h"
+#include "engine/debug/Log.h"
+#include "engine/math/Vector4.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
 
@@ -232,7 +233,11 @@ public://静的メンバ関数
 	/// <param name="index">インデックス</param>
 	/// <returns>デスクリプターGPUハンドル</returns>
 	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-
+	
+	//コピーコンストラクタ禁止
+	DirectXBase(const DirectXBase&) = delete;
+	//代入演算子を禁止
+	const DirectXBase operator=(const DirectXBase&) = delete;
 private://メンバ関数
 	/// <summary>
 	/// IDXIファクトリーの生成
@@ -299,10 +304,15 @@ private://メンバ関数
 	/// </summary>
 	void StopExecution();
 
-	//コピーコンストラクタ禁止
-	DirectXBase(const DirectXBase&) = delete;
-	//代入演算子を禁止
-	const DirectXBase operator=(const DirectXBase&) = delete;
+	/// <summary>
+	/// FPS固定初期化
+	/// </summary>
+	void InitializeFixFPS();
+
+	/// <summary>
+	/// FPS固定更新
+	/// </summary>
+	void UpdateFixFPS();
 
 private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
@@ -330,7 +340,8 @@ private://メンバ変数
 	ComPtr<IDxcUtils> dxcUtils_ = nullptr;//DXCユーティリティ
 	ComPtr<IDxcCompiler3> dxcCompiler_ = nullptr;//DXCコンパイラ
 	ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;//デフォルトインクルードハンドラ
-public:
+	std::chrono::steady_clock::time_point reference_;//記録時間(FPS固定用)
+public://あとで消す
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_{};
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;//DSV
 	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;//SRV

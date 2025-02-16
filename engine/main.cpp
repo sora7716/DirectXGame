@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include "base/D3DResourceLeakChecker.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -137,26 +138,10 @@ ModelData LoadObjeFile(const std::string& directoryPath, const std::string& file
 	return modelData;
 }
 
-/// <summary>
-/// リークチェッカー
-/// </summary>
-typedef struct D3DResourceLeakChacker {
-	~D3DResourceLeakChacker() {
-		//リソースリークチェック
-		IDXGIDebug1* debug;
-		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-			debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-			debug->Release();
-		}
-	}
-}D3DResourceLeakChacker;
-
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	HRESULT hr = S_FALSE;
-	D3DResourceLeakChacker leakChacker;
+	D3DResourceLeakChecker leakChacker;//メモリーリークをチェック
 	//ウィンドウズアプリケーション
 	WinApi* winApi = WinApi::GetInstance();
 	//DirectXCommon
