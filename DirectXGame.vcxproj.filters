@@ -94,7 +94,10 @@
       <Filter>input</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\FixFPS.cpp">
+      <Filter>base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -168,7 +171,10 @@
       <Filter>input</Filter>
     </ClInclude>
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\FixFPS.h">
+      <Filter>base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

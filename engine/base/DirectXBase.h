@@ -7,7 +7,6 @@
 #include <wrl.h>
 #include <vector>
 #include <array>
-#include <chrono>
 #include "WinApi.h"
 #include "engine/debug/Log.h"
 #include "engine/math/Vector4.h"
@@ -22,14 +21,10 @@ public://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	DirectXBase() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~DirectXBase();
+	/// <returns>インスタンス</returns>
+	static DirectXBase* GetInstance();
 
 	/// <summary>
 	/// DirectX12の初期化
@@ -105,6 +100,11 @@ public://メンバ関数
 	/// フレームの終了
 	/// </summary>
 	void PostDraw();
+
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void Finalize();
 
 	/// <summary>
 	/// 深度バッファリソースの設定
@@ -233,12 +233,22 @@ public://静的メンバ関数
 	/// <param name="index">インデックス</param>
 	/// <returns>デスクリプターGPUハンドル</returns>
 	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	
+
 	//コピーコンストラクタ禁止
 	DirectXBase(const DirectXBase&) = delete;
 	//代入演算子を禁止
 	const DirectXBase operator=(const DirectXBase&) = delete;
 private://メンバ関数
+	/// <summary>
+    /// コンストラクタ
+    /// </summary>
+	DirectXBase() = default;
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~DirectXBase() = default;
+
 	/// <summary>
 	/// IDXIファクトリーの生成
 	/// </summary>
@@ -304,16 +314,6 @@ private://メンバ関数
 	/// </summary>
 	void StopExecution();
 
-	/// <summary>
-	/// FPS固定初期化
-	/// </summary>
-	void InitializeFixFPS();
-
-	/// <summary>
-	/// FPS固定更新
-	/// </summary>
-	void UpdateFixFPS();
-
 private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
 	WinApi* winApi_ = nullptr;//ウィンドウズAPI
@@ -340,7 +340,6 @@ private://メンバ変数
 	ComPtr<IDxcUtils> dxcUtils_ = nullptr;//DXCユーティリティ
 	ComPtr<IDxcCompiler3> dxcCompiler_ = nullptr;//DXCコンパイラ
 	ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;//デフォルトインクルードハンドラ
-	std::chrono::steady_clock::time_point reference_;//記録時間(FPS固定用)
 public://あとで消す
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_{};
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;//DSV

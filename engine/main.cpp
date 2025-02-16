@@ -1,14 +1,13 @@
 #include "base/DirectXBase.h"
+#include <vector>
+#include <fstream>
+#include <sstream>
 #include "math/Matrix4x4.h"
 #include "math/func/Math.h"
 #include "math/ResourceData.h"
 #include "math/rendering/Rendering.h"
 #include "audio/Audio.h"
 #include "input/Input.h"
-#include <vector>
-#include <fstream>
-#include <sstream>
-#include <memory>
 #include "base/D3DResourceLeakChecker.h"
 
 #pragma comment(lib,"d3d12.lib")
@@ -145,15 +144,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウズアプリケーション
 	WinApi* winApi = WinApi::GetInstance();
 	//DirectXCommon
-	std::unique_ptr<DirectXBase> directXBase = std::make_unique<DirectXBase>();
+	DirectXBase* directXBase = DirectXBase::GetInstance();
 
 	//ウィンドウの作成
 	winApi->Initialize();
 	//DirectX12の初期化
 	directXBase->Initialize();
-
-	//SRV用のヒープでデスクリプタの数が128。SRVはShaderを触るものなので、ShaderVisibleはtrue
-	//Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap = directXBase->MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};

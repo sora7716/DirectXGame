@@ -1,15 +1,21 @@
 #include "DirectXBase.h"
-#include <thread>
+#include "engine/base/FixFPS.h"
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 using namespace Microsoft::WRL;
 
+//インスタンスのゲッター
+DirectXBase* DirectXBase::GetInstance(){
+	static DirectXBase instance;
+	return &instance;
+}
+
 // DirectX12の初期化
 void DirectXBase::Initialize() {
 	//FPS固定初期化
-	InitializeFixFPS();
+	FixFPS::GetInstance()->Initialize();
 	//ウィンドウズアプリケーションを受け取る
 	winApi_ = WinApi::GetInstance();
 	//デバイスの初期化
@@ -249,7 +255,7 @@ void DirectXBase::PostDraw() {
 		WaitForSingleObject(fenceEvent_, INFINITE);
 	}
 	//FPS固定
-	UpdateFixFPS();
+	FixFPS::GetInstance()->Update();
 	//次のフレーム用のコマンドリストを準備
 	//コマンドアローケータのリセット
 	result = commandAllocator_->Reset();
@@ -257,6 +263,12 @@ void DirectXBase::PostDraw() {
 	//コマンドリストのリセット
 	result = commandList_->Reset(commandAllocator_.Get(), nullptr);
 	assert(SUCCEEDED(result));
+}
+
+//終了処理
+void DirectXBase::Finalize(){
+	//オブジェクトの開放
+	CloseHandle(fenceEvent_);
 }
 
 //深度バッファリソースの生成
@@ -681,39 +693,4 @@ void DirectXBase::StopExecution() {
 		infoQueue->Release();
 	}
 #endif // _DEBUG
-}
-
-// FPS固定初期化
-void DirectXBase::InitializeFixFPS() {
-	//現在時間を記録する
-	reference_ = std::chrono::steady_clock::now();
-
-}
-
-// FPS固定更新
-void DirectXBase::UpdateFixFPS() {
-	//1/60秒ぴったりの時間
-	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
-	//1/60秒よりわずかに短い時間
-	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
-	//現在の時間を取得す
-	std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-	//前回記録から経過時間を取得する
-	std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-	//1/60秒(よりわずかに短い時間)経っていない場合
-	if (elapsed < kMinCheckTime) {
-		//1/60秒経過するまで微小なスリープを繰り返す
-		while(std::chrono::steady_clock::now()-reference_<kMinTime){
-			//1マイクロ秒スリープ
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
-		}
-	}
-	//現在の時間を記録する
-	reference_ = std::chrono::steady_clock::now();
-}
-
-//デストラクタ
-DirectXBase::~DirectXBase() {
-	//オブジェクトの開放
-	CloseHandle(fenceEvent_);
 }
