@@ -99,6 +99,12 @@
     <ClCompile Include="engine\base\FixFPS.cpp">
       <Filter>base</Filter>
     </ClCompile>
+    <ClCompile Include="engine\2d\Sprite.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\2d\SpriteGeneral.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -175,6 +181,12 @@
     </ClInclude>
     <ClInclude Include="engine\base\FixFPS.h">
       <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\2d\Sprite.h">
+      <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\2d\SpriteGeneral.h">
+      <Filter>2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

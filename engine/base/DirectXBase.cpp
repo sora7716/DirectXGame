@@ -1,5 +1,6 @@
 #include "DirectXBase.h"
 #include "engine/base/FixFPS.h"
+#include <cassert>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -557,7 +558,7 @@ ComPtr<IDXGIAdapter4> DirectXBase::DecideUseAdapter() {
 // D3D12デバイスの生成
 ComPtr<ID3D12Device> DirectXBase::MakeD3D12Device() {
 	HRESULT result = S_FALSE;
-	ID3D12Device* device = nullptr;
+	ComPtr<ID3D12Device> device = nullptr;
 	//機能レベルとログ出力用の文字列
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0
