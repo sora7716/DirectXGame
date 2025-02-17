@@ -153,68 +153,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX12の初期化
 	directXBase->Initialize();
 
-	////RootSignature作成
-	//D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-	//descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-	////Samplerの設定
-	//D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
-	//staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//バイナリフィルター
-	//staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
-	//staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
-	//staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
-	//staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;//比較しない
-	//staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;//ありたっけのMipmapを使う
-	//staticSamplers[0].ShaderRegister = 0;//レジスタ番号
-	//staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
-	//descriptionRootSignature.pStaticSamplers = staticSamplers;
-	//descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
-
-	////DescriptorRange
-	//D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	//descriptorRange[0].BaseShaderRegister = 0;//0から始まる
-	//descriptorRange[0].NumDescriptors = 1;//数は1つ
-	//descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
-	//descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
-
-	////RootParameterの作成。複数設定できるので配列。
-	//D3D12_ROOT_PARAMETER rootParameters[4] = {};
-	////色情報
-	//rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使うb0のbと一致する	
-	//rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
-	//rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインドb0の0と一致する
-
-	////Transform
-	//rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	//rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderを使う
-	//rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号
-
-	////DescriptorTable(DescriptorRangeをまとめたもの)
-	//rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
-	//rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
-	//rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRange;//Tableの中身の配列を指定
-	//rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);//Tableで利用する数
-
-	////ライト
-	//rootParameters[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使う
-	//rootParameters[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
-	//rootParameters[3].Descriptor.ShaderRegister = 1;//レジスタ番号1を使う
-
-	//descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
-	//descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
-
-	////シリアライズしてバイナリにする
-	//Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob = nullptr;
-	//Microsoft::WRL::ComPtr<ID3DBlob> errorBlob = nullptr;
-	//hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
-	//if (FAILED(hr)) {
-	//	Log::ConsolePrintf(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
-	//	assert(false);
-	//}
-	////バイナリを元に作成
-	//Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature = nullptr;
-	//hr = directXBase->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
-	//assert(SUCCEEDED(hr));
-
 	//InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 
@@ -277,10 +215,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DepthStencilの設定
 	graphicsPipelineStateDesc.DepthStencilState = directXBase->depthStencilDesc_;
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	////実際に生成
-	//Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState = nullptr;
-	//hr = directXBase->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState));
-	//assert(SUCCEEDED(hr));
 
 	spriteGeneral->Initialize(directXBase.get(),graphicsPipelineStateDesc);
 
@@ -347,78 +281,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
 	}
 
-	/*for (int i = 0; i < modelData.vertices.size() / 6; i++) {
-		indexData[i] = i; indexData[i + 1] = i + 1; indexData[i + 2] = i + 2;
-		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
-	}*/
-	////経度分割1つ分の角度φd
-	//const float kLonEvery = pi_f * 2.0f / float(kSubdivision);
-	////緯度分割1つ分の角度θd
-	//const float kLatEvery = pi_f / float(kSubdivision);
-	////緯度の方向に分割
-	//for (int latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-	//	float lat = -pi_f / 2.0f + kLatEvery * latIndex;//θ
-	//	//経度の方向に分割しながら線を描く
-	//	for (int lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-	//		float lon = lonIndex * kLonEvery;//φ
-	//		uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-	//		//頂点データを打ち込む
-	//		//a(左下)
-	//		vertexData[start].position.x = std::cos(lat) * std::cos(lon);
-	//		vertexData[start].position.y = std::sin(lat);
-	//		vertexData[start].position.z = std::cos(lat) * std::sin(lon);
-	//		vertexData[start].position.w = 1.0f;
-	//		vertexData[start].texcoord.x = float(lonIndex) / float(kSubdivision);
-	//		vertexData[start].texcoord.y = 1.0f - float(latIndex - 1) / float(kSubdivision);
-	//		vertexData[start].normal.x = vertexData[start].position.x;
-	//		vertexData[start].normal.y = vertexData[start].position.y;
-	//		vertexData[start].normal.z = vertexData[start].position.z;
-	//		//b(左上)
-	//		vertexData[start + 1].position.x = std::cos(lat + kLatEvery) * std::cos(lon);
-	//		vertexData[start + 1].position.y = std::sin(lat + kLatEvery);
-	//		vertexData[start + 1].position.z = std::cos(lat + kLatEvery) * std::sin(lon);
-	//		vertexData[start + 1].position.w = 1.0f;
-	//		vertexData[start + 1].texcoord.x = float(lonIndex) / float(kSubdivision);
-	//		vertexData[start + 1].texcoord.y = 1.0f - float(latIndex) / float(kSubdivision);
-	//		vertexData[start + 1].normal.x = vertexData[start + 1].position.x;
-	//		vertexData[start + 1].normal.y = vertexData[start + 1].position.y;
-	//		vertexData[start + 1].normal.z = vertexData[start + 1].position.z;
-	//		//c(右下)
-	//		vertexData[start + 2].position.x = std::cos(lat) * std::cos(lon + kLonEvery);
-	//		vertexData[start + 2].position.y = std::sin(lat);
-	//		vertexData[start + 2].position.z = std::cos(lat) * std::sin(lon + kLonEvery);
-	//		vertexData[start + 2].position.w = 1.0f;
-	//		vertexData[start + 2].texcoord.x = float(lonIndex + 1) / float(kSubdivision);
-	//		vertexData[start + 2].texcoord.y = 1.0f - float(latIndex - 1) / float(kSubdivision);
-	//		vertexData[start + 2].normal.x = vertexData[start + 2].position.x;
-	//		vertexData[start + 2].normal.y = vertexData[start + 2].position.y;
-	//		vertexData[start + 2].normal.z = vertexData[start + 2].position.z;
-	//		//b(左上)
-	//		vertexData[start + 3] = vertexData[start + 1];
-	//		vertexData[start + 3].normal.x = vertexData[start + 3].position.x;
-	//		vertexData[start + 3].normal.y = vertexData[start + 3].position.y;
-	//		vertexData[start + 3].normal.z = vertexData[start + 3].position.z;
-	//		//d(右上)
-	//		vertexData[start + 4].position.x = std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery);
-	//		vertexData[start + 4].position.y = std::sin(lat + kLatEvery);
-	//		vertexData[start + 4].position.z = std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery);
-	//		vertexData[start + 4].position.w = 1.0f;
-	//		vertexData[start + 4].texcoord.x = float(lonIndex + 1) / float(kSubdivision);
-	//		vertexData[start + 4].texcoord.y = 1.0f - float(latIndex) / float(kSubdivision);
-	//		vertexData[start + 4].normal.x = vertexData[start + 4].position.x;
-	//		vertexData[start + 4].normal.y = vertexData[start + 4].position.y;
-	//		vertexData[start + 4].normal.z = vertexData[start + 4].position.z;
-	//		//c(右下)
-	//		vertexData[start + 5] = vertexData[start + 2];
-	//		vertexData[start + 5].normal.x = vertexData[start + 5].position.x;
-	//		vertexData[start + 5].normal.y = vertexData[start + 5].position.y;
-	//		vertexData[start + 5].normal.z = vertexData[start + 5].position.z;
-
-	//		indexData[start] = start; indexData[start + 1] = start + 1; indexData[start + 2] = start + 2;
-	//		indexData[start + 3] = start + 1; indexData[start + 4] = start + 4; indexData[start + 5] = start + 2;
-	//	}
-	//}
-
 	//光源のリソースを作成
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource = directXBase->CreateBufferResource(sizeof(DirectionalLight));
 	DirectionalLight* directionalLightData = nullptr;
@@ -426,79 +288,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLightData->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData->intensity = 1.0f;
-
-	////Sprite用の頂点リソースの作成
-	//Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite = directXBase->CreateBufferResource(sizeof(VertexData) * 6);
-
-	////頂点リソース
-	//D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
-	////リソースの先頭アドレスから使う
-	//vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
-	////使用するリソースのサイズは頂点6つ分のサイズ
-	//vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 6;
-	////1頂点当たりのサイズ
-	//vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-	////頂点データを設定する
-	//VertexData* vertexDataSprite = nullptr;
-	//vertexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
-	////1枚目の三角形
-	//vertexDataSprite[0].position = { 0.0f,360.0f,0.0f,1.0f };//左下
-	//vertexDataSprite[0].texcoord = { 0.0f,1.0f };
-	//vertexDataSprite[0].normal = {};
-	//vertexDataSprite[1].position = { 0.0f,0.0f,0.0f,1.0f };//左上
-	//vertexDataSprite[1].texcoord = { 0.0f,0.0f };
-	//vertexDataSprite[1].normal = {};
-	//vertexDataSprite[2].position = { 640.0f,360.0f,0.0f,1.0f };//右下
-	//vertexDataSprite[2].texcoord = { 1.0f,1.0f };
-	//vertexDataSprite[2].normal = {};
-
-	////2枚目の三角形
-	//vertexDataSprite[3].position = { 0.0f,0.0f,0.0f,1.0f };//左上
-	//vertexDataSprite[3].texcoord = { 0.0f,0.0f };
-	//vertexDataSprite[3].normal = {};
-	//vertexDataSprite[4].position = { 640.0f,0.0f,0.0f,1.0f };//右上
-	//vertexDataSprite[4].texcoord = { 1.0f,0.0f };
-	//vertexDataSprite[4].normal = {};
-	//vertexDataSprite[5].position = { 640.0f,360.0f,0.0f,1.0f };//右下
-	//vertexDataSprite[5].texcoord = { 1.0f,1.0f };
-	//vertexDataSprite[5].normal = {};
-
-	////Spriteマテリアル用のリソースを作る
-	//Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite = directXBase->CreateBufferResource(sizeof(Material));
-	////マテリアルにデータを書き込む
-	//Material* materialDataSprite = nullptr;
-	////書き込むためのアドレスを取得
-	//materialResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-	////色を書き込む
-	//materialDataSprite->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//materialDataSprite->enableLighting = false;
-	//materialDataSprite->uvTransform = Math::MakeIdentity4x4();
-
-	////Spriteワールド変換
-	//Microsoft::WRL::ComPtr<ID3D12Resource> transformationMatrixResoruceSprite = directXBase->CreateBufferResource(sizeof(TransformationMatrix));
-	////データを書き込む
-	//TransformationMatrix* transformationMatrixDataSprite = nullptr;
-	////書き込むためのアドレス
-	//transformationMatrixResoruceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-	////単位行列を書き込んでおく
-	//transformationMatrixDataSprite->WVP = Math::MakeIdentity4x4();
-	//transformationMatrixDataSprite->World = Math::MakeIdentity4x4();
-
-	////Index用(sprite)
-	//Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceSprite = directXBase->CreateBufferResource(sizeof(uint32_t) * 6);
-	////Indexに対応したViewを作成するIndexBufferView(IBV)
-	//D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-	////リソースの先頭のアドレスから使う
-	//indexBufferViewSprite.BufferLocation = indexResourceSprite->GetGPUVirtualAddress();
-	////使用するリソースのサイズはインデックス6つ分のサイズ
-	//indexBufferViewSprite.SizeInBytes = sizeof(uint32_t) * 6;
-	////インデックスはuint32_tとする
-	//indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
-	////IndexResourceにデータを書き込む
-	//uint32_t* indexDataSprite = nullptr;
-	//indexResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
-	//indexDataSprite[0] = 0; indexDataSprite[1] = 1; indexDataSprite[2] = 2;
-	//indexDataSprite[3] = 1; indexDataSprite[4] = 4; indexDataSprite[5] = 2;
 
 	//スプライト
 	std::unique_ptr<Sprite>sprite_ = std::make_unique<Sprite>();
@@ -539,11 +328,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	srvDesc2.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc2.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2D11テクスチャ
 	srvDesc2.Texture2D.MipLevels = UINT(metadata2.mipLevels);
-
-	//DescriptorSize
-	/*const uint32_t descriptorSizeSRV = directXBase->device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	const uint32_t descriptorSizeRTV = directXBase->device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	const uint32_t descriptorSizeDSV = directXBase->device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);*/
 
 	//SRVを作成するDescriptorHeapの場所を決める
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU = DirectXBase::GetCPUDescriptorHandle(directXBase->srvDescriptorHeap_.Get(), directXBase->descriptorSizeSRV_, 1);
@@ -627,21 +411,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//スプイライト用の更新
 		sprite_->Update();
-		////Sprite用のWorldViewProjection
-		//transformationMatrixDataSprite->World = Rendering::MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
-		//Matrix4x4 viewMatrixSprite = Math::MakeIdentity4x4();
-		//Matrix4x4 projectionMatrixSprite = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
-		//transformationMatrixDataSprite->WVP = transformationMatrixDataSprite->World * (viewMatrixSprite * projectionMatrixSprite);
 		//ライト
 		directionalLight.direction = Math::Normalize(directionalLight.direction);
 		*directionalLightData = directionalLight;
-		//UVTransform
-	/*	Matrix4x4 uvTransformMatrixSprite = Rendering::MakeScaleMatrix(uvTransformSprite.scale);
-		uvTransformMatrixSprite = uvTransformMatrixSprite * Rendering::MakeRotateZMatrix(uvTransformSprite.rotate.z);
-		uvTransformMatrixSprite = uvTransformMatrixSprite * Rendering::MakeTranslateMatrix(uvTransformSprite.translate);
-		materialDataSprite->uvTransform = uvTransformMatrixSprite;
-		Matrix4x4 uvTransformMatrix = Rendering::MakeScaleMatrix(uvTransform.scale) * Rendering::MakeRotateZMatrix(uvTransform.rotate.z) * Rendering::MakeTranslateMatrix(uvTransform.translate);
-		materialData->uvTransform = uvTransformMatrix;*/
 		//開発用のUIの処理
 		/*ImGui::ShowDemoWindow();*/
 		ImGui::Begin("3dObject");
