@@ -302,8 +302,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//カメラ
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f,},{0.0f,0.0f,-10.0f} };
-	//スプライト
-	Transform transformSprite{ {1.0f,1.0f,1.0f},{0.0f,.0f,0.0f},{0.0f,0.0f,0.0f} };
+
 	// Textureを呼んで転送する
 	DirectX::ScratchImage mipImages = DirectXBase::LoadTexture("engine/resources/texture/monsterBall.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
@@ -348,12 +347,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLight.intensity = 1.0f;
 
 	//UVTransform用の変数
-	Transform uvTransformSprite{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-
 	Transform uvTransform{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
