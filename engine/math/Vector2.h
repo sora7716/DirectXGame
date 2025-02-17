@@ -5,4 +5,21 @@
 typedef struct Vector2 final {
 	float x;
 	float y;
+
+	//加法
+	Vector2 operator+(const Vector2& v)const;
+	//減法
+	Vector2 operator-(const Vector2& v)const;
+	//乗法
+	Vector2 operator*(const Vector2& v)const;
+	//除法
+	Vector2 operator/(const Vector2& v)const;
+	//加法(複合)
+	Vector2& operator+=(const Vector2& v);
+	//減法(複合)
+	Vector2& operator-=(const Vector2& v);
+	//乗法(複合)
+	Vector2& operator*=(const Vector2& v);
+	//除法(複合)
+	Vector2& operator/=(const Vector2& v);
 }Vector2;

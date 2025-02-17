@@ -42,6 +42,18 @@ public://メンバ関数
 	/// 描画処理
 	/// </summary>
 	void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
+
+	/// <summary>
+	/// 位置のゲッター
+	/// </summary>
+	/// <returns>位置</returns>
+	const Vector2& GetPosition()const;
+
+	/// <summary>
+	/// 位置のセッター
+	/// </summary>
+	/// <param name="position">位置</param>
+	void SetPosition(const Vector2& position);
 private://メンバ関数
 	/// <summary>
 	/// 頂点データの初期化
@@ -73,6 +85,7 @@ private://メンバ関数
 	/// </summary>
 	void UpdateUVTransform();
 private://メンバ変数
+	Vector2 position_ = { 0.0f,0.0f };//位置
 	Transform transform_ = {};//トランスフォームの情報
 	Transform uvTransform_ = {};//UVトランスフォームの情報
 	SpriteGeneral* spriteGeneral_ = nullptr;//スプライトの共通部分

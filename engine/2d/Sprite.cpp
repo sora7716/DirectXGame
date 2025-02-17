@@ -81,6 +81,8 @@ void Sprite::Update() {
 	ImGui::SliderAngle("rotate", &uvTransform_.rotate.z);
 	ImGui::DragFloat2("translate", &uvTransform_.translate.x, 0.01f, -10.0f, 10.0f);
 	ImGui::End();
+	//メンバ変数の値を見た目に反映
+	transform_.translate = { position_.x,position_.y,0.0f };
 	//Transform情報を作成する
 	UpdateTransform();
 	//UVTransform情報を作成する
@@ -103,6 +105,17 @@ void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
 	//描画(DrwaCall/ドローコール)
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+}
+
+// 位置のゲッター
+const Vector2& Sprite::GetPosition() const{
+	// TODO: return ステートメントをここに挿入します
+	return position_;
+}
+
+// 位置のセッター
+void Sprite::SetPosition(const Vector2& position){
+	position_ = position;
 }
 
 //頂点データの初期化

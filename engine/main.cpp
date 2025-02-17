@@ -1,7 +1,4 @@
 #include "base/DirectXBase.h"
-#include <vector>
-#include <fstream>
-#include <sstream>
 #include "math/Matrix4x4.h"
 #include "math/func/Math.h"
 #include "math/ResourceData.h"
@@ -11,6 +8,9 @@
 #include "base/D3DResourceLeakChecker.h"
 #include "2d/SpriteGeneral.h"
 #include "2d/Sprite.h"
+#include <vector>
+#include <fstream>
+#include <sstream>
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -402,6 +402,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereWvpData.WVP = sphereWvpData.World * viewMatrix * projectionMatrix;
 		*wvpData = sphereWvpData;
 
+		//スプライトの位置を決める
+		Vector2 position = sprite_->GetPosition();//現在の位置を受け取る
+		//座標の変更
+		position += Vector2{ 0.1f,0.1f };
+		//変更を反映する
+		sprite_->SetPosition(position);
 		//スプイライト用の更新
 		sprite_->Update();
 		//ライト
