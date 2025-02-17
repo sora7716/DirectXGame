@@ -110,8 +110,8 @@ Matrix4x4 Rendering::MakeOBBWorldMatrix(const Vector3* orientations, const Vecto
 }
 
 //アフィン関数
-Matrix4x4 Rendering::MakeAffineMatrix(const Vector3& scale, const Vector3& radian, const Vector3& translate) {
-	return (MakeScaleMatrix(scale) * MakeRotateXYZMatrix(radian)) * MakeTranslateMatrix(translate);
+Matrix4x4 Rendering::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+	return (MakeScaleMatrix(scale) * MakeRotateXYZMatrix(rotate)) * MakeTranslateMatrix(translate);
 }
 
 //アフィン関数
@@ -120,8 +120,13 @@ Matrix4x4 Rendering::MakeAffineMatrix(const Vector3& rotate, const Vector3& tran
 }
 
 //STRの変換
-Matrix4x4 Rendering::MakeSTRMatrix(const Vector3& scale, const Vector3& radian, const Vector3& translate) {
-	return MakeScaleMatrix(scale) * MakeTranslateMatrix(translate) * MakeRotateXYZMatrix(radian);
+Matrix4x4 Rendering::MakeSTRMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
+	return MakeScaleMatrix(scale) * MakeTranslateMatrix(translate) * MakeRotateXYZMatrix(rotate);
+}
+
+// UVのアフィン変換
+Matrix4x4 Rendering::MakeUVAffineMatrix(const Vector3& scale, float rotate, const Vector3& translate){
+	return MakeScaleMatrix(scale) * MakeRotateZMatrix(rotate) * MakeTranslateMatrix(translate);
 }
 
 // 正射影行列

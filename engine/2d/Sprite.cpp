@@ -19,6 +19,7 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
 	//1頂点当たりのサイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
 	//IndexBufferViewを作成する
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -26,11 +27,15 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
 	//インデックスはuint32_tとする
 	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
 	//VertexResorceにデータを書き込むためのアドレスを取得してvertexDataに割り当てる
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	InitialilzeVertexData();
+
 	//IndexResourceにデータを書き込むためのアドレスを取得してindexDataに割り当てる
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 	InitializeIndexData();
+
 	//マテリアルリソースを作る
 	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
 	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる
@@ -38,6 +43,7 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//マテリアルデータの初期値を書き込む
 	InitialilzeMaterialData();
+
 	//座標変換行列リソースを作成する
 	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
 	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
@@ -47,6 +53,13 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 
 	//Transformの情報の初期化
 	transform_ = {
+		.scale = {1.0f,1.0f,1.0f},
+		.rotate = {},
+		.translate{}
+	};
+
+	//uvTransformの情報の初期化
+	uvTransform_ = {
 		.scale = {1.0f,1.0f,1.0f},
 		.rotate = {},
 		.translate{}
@@ -62,18 +75,20 @@ void Sprite::Update() {
 	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
 	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
 	ImGui::End();
+
+	ImGui::Begin("UV:sprite");
+	ImGui::DragFloat2("scale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
+	ImGui::SliderAngle("rotate", &uvTransform_.rotate.z);
+	ImGui::DragFloat2("translate", &uvTransform_.translate.x, 0.01f, -10.0f, 10.0f);
+	ImGui::End();
 	//Transform情報を作成する
-	//TransformからWorldMatrixを作る
-	transformationMatrixData_->World = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//ViewMatirxを作って単位行列を入れる
-	Matrix4x4 viewMatrix = Math::MakeIdentity4x4();
-	//ProjectionMatrixを作って平行投影行列を書き込む
-	Matrix4x4 projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
-	transformationMatrixData_->WVP = transformationMatrixData_->World * (viewMatrix * projectionMatrix);
+	UpdateTransform();
+	//UVTransform情報を作成する
+	UpdateUVTransform();
 }
 
 //描画処理
-void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture){
+void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//IndexBufferViewを設定
@@ -134,4 +149,21 @@ void Sprite::InitializeTransformationMatrixData() {
 	//単位行列を書き込んでおく
 	transformationMatrixData_->WVP = Math::MakeIdentity4x4();
 	transformationMatrixData_->World = Math::MakeIdentity4x4();
+}
+
+// 座標変換の更新
+void Sprite::UpdateTransform(){
+	//TransformからWorldMatrixを作る
+	transformationMatrixData_->World = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//ViewMatirxを作って単位行列を入れる
+	Matrix4x4 viewMatrix = Math::MakeIdentity4x4();
+	//ProjectionMatrixを作って平行投影行列を書き込む
+	Matrix4x4 projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
+	transformationMatrixData_->WVP = transformationMatrixData_->World * (viewMatrix * projectionMatrix);
+}
+
+// UVの座標変換の更新
+void Sprite::UpdateUVTransform(){
+	//UVTransform
+	materialData_->uvTransform = Rendering::MakeUVAffineMatrix(uvTransform_.scale, uvTransform_.rotate.z, uvTransform_.translate);
 }

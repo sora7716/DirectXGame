@@ -62,8 +62,19 @@ private://メンバ関数
 	/// 座標変換行列の初期化
 	/// </summary>
 	void InitializeTransformationMatrixData();
+
+	/// <summary>
+	/// 座標変換の更新
+	/// </summary>
+	void UpdateTransform();
+
+	/// <summary>
+	/// UVの座標変換の更新
+	/// </summary>
+	void UpdateUVTransform();
 private://メンバ変数
 	Transform transform_ = {};//トランスフォームの情報
+	Transform uvTransform_ = {};//UVトランスフォームの情報
 	SpriteGeneral* spriteGeneral_ = nullptr;//スプライトの共通部分
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//バッファリソース

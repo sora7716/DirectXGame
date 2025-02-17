@@ -90,10 +90,10 @@ public://メンバ関数
 	/// アフィン関数
 	/// </summary>
 	/// <param name="scale">倍率</param>
-	/// <param name="radian">角度</param>
+	/// <param name="rotate">回転</param>
 	/// <param name="translate">移動</param>
 	/// <returns>アフィン行列</returns>
-	static Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& radian, const Vector3& translate);
+	static Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 
 	/// <summary>
 	/// アフィン関数
@@ -107,10 +107,19 @@ public://メンバ関数
 	/// STRの変換
 	/// </summary>
 	/// <param name="scale">倍率</param>
-	/// <param name="radian">角度</param>
+	/// <param name="rotate">回転</param>
 	/// <param name="translate">移動</param>
 	/// <returns>STRの変換</returns>
-	static Matrix4x4 MakeSTRMatrix(const Vector3& scale, const Vector3& radian, const Vector3& translate);
+	static Matrix4x4 MakeSTRMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
+
+	/// <summary>
+	/// UVのアフィン変換
+	/// </summary>
+	/// <param name="scale">倍率</param>
+	/// <param name="rotate">回転</param>
+	/// <param name="translate">移動</param>
+	/// <returns></returns>
+	static Matrix4x4 MakeUVAffineMatrix(const Vector3& scale,float rotate,const Vector3&translate);
 
 	/// <summary>
 	/// 正射影行列
