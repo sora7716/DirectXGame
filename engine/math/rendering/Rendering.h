@@ -1,6 +1,6 @@
 #pragma once
-#include "math/Vector3.h"
-#include "math/Matrix4x4.h"
+#include "engine/math/Vector3.h"
+#include "engine/math/Matrix4x4.h"
 
 //Transform情報
 typedef struct Transform {

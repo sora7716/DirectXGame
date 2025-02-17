@@ -15,15 +15,19 @@
 /// <summary>
 /// DirectXコモン
 /// </summary>
-class DirectXBase {
+class DirectXBase final{
 public://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
-	/// インスタンスのゲッター
+	/// コンストラクタ
 	/// </summary>
-	/// <returns>インスタンス</returns>
-	static DirectXBase* GetInstance();
+	DirectXBase() = default;
+
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~DirectXBase() = default;
 
 	/// <summary>
 	/// DirectX12の初期化
@@ -238,16 +242,6 @@ public://静的メンバ関数
 	//代入演算子を禁止
 	const DirectXBase operator=(const DirectXBase&) = delete;
 private://メンバ関数
-	/// <summary>
-    /// コンストラクタ
-    /// </summary>
-	DirectXBase() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~DirectXBase() = default;
-
 	/// <summary>
 	/// IDXIファクトリーの生成
 	/// </summary>

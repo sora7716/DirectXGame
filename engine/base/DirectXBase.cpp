@@ -7,12 +7,6 @@
 #pragma comment(lib,"dxcompiler.lib")
 using namespace Microsoft::WRL;
 
-//インスタンスのゲッター
-DirectXBase* DirectXBase::GetInstance(){
-	static DirectXBase instance;
-	return &instance;
-}
-
 // DirectX12の初期化
 void DirectXBase::Initialize() {
 	//FPS固定初期化
@@ -558,7 +552,7 @@ ComPtr<IDXGIAdapter4> DirectXBase::DecideUseAdapter() {
 // D3D12デバイスの生成
 ComPtr<ID3D12Device> DirectXBase::MakeD3D12Device() {
 	HRESULT result = S_FALSE;
-	ComPtr<ID3D12Device> device = nullptr;
+	ID3D12Device* device = nullptr;
 	//機能レベルとログ出力用の文字列
 	D3D_FEATURE_LEVEL featureLevels[] = {
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0

@@ -1,5 +1,5 @@
 #include "Rendering.h"
-#include "math/func/Math.h"
+#include "engine/math/func/Math.h"
 
 //拡縮
 Matrix4x4 Rendering::MakeScaleMatrix(const Vector3& scale) {
