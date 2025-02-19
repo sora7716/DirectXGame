@@ -22,4 +22,8 @@ typedef struct Vector2 final {
 	Vector2& operator*=(const Vector2& v);
 	//除法(複合)
 	Vector2& operator/=(const Vector2& v);
+	//スカラー倍
+	Vector2 operator*(float n)const;
+	//スカラー倍(複合)
+	Vector2& operator*=(float n);
 }Vector2;

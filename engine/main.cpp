@@ -216,7 +216,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	graphicsPipelineStateDesc.DepthStencilState = directXBase->depthStencilDesc_;
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-	spriteGeneral->Initialize(directXBase.get(),graphicsPipelineStateDesc);
+	spriteGeneral->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
@@ -290,9 +290,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLightData->intensity = 1.0f;
 
 	//スプライト
-	std::unique_ptr<Sprite>sprite_ = std::make_unique<Sprite>();
-	//初期化
-	sprite_->Initialize(spriteGeneral.get());
+	std::vector<Sprite*>sprites;
+	for (uint32_t i = 0; i < 5; i++) {
+		Sprite* sprite = new Sprite();
+		sprite->Initialize(spriteGeneral.get());
+		sprites.push_back(sprite);
+	}
 
 	//GameObjectの初期化
 	//Transform変数を作成
@@ -304,7 +307,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f,},{0.0f,0.0f,-10.0f} };
 
 	// Textureを呼んで転送する
-	DirectX::ScratchImage mipImages = DirectXBase::LoadTexture("engine/resources/texture/monsterBall.png");
+	DirectX::ScratchImage mipImages = DirectXBase::LoadTexture("engine/resources/texture/uvChecker.png");
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource = directXBase->CreateTextureResource(metadata);
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = directXBase->UploadTextureData(textureResource.Get(), mipImages);
@@ -402,14 +405,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sphereWvpData.WVP = sphereWvpData.World * viewMatrix * projectionMatrix;
 		*wvpData = sphereWvpData;
 
-		//スプライトの位置を決める
-		Vector2 position = sprite_->GetPosition();//現在の位置を受け取る
-		//座標の変更
-		position += Vector2{ 0.1f,0.1f };
-		//変更を反映する
-		sprite_->SetPosition(position);
+
 		//スプイライト用の更新
-		sprite_->Update();
+		for (uint32_t i = 0; i < sprites.size(); i++){
+			Vector2 pos = { 70.0f,0.0f };
+			pos *= (float)i;
+			sprites[i]->SetPosition(pos);
+			sprites[i]->SetSize({ 50.0f,180.0f });
+			sprites[i]->Update();
+		}
 		//ライト
 		directionalLight.direction = Math::Normalize(directionalLight.direction);
 		*directionalLightData = directionalLight;
@@ -461,7 +465,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
-		sprite_->Draw(textureSrvHandleGPU);
+		for (auto sprite : sprites) {
+			sprite->Draw(textureSrvHandleGPU);
+		}
 		////使用するテクスチャの決定
 		////マテリアルCBufferの場所を設定
 		//directXBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);//VBVを設定
@@ -486,5 +492,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winApi->Finalize();
 	//Audioの終了処理
 	audio_->Finalize();
+	for (auto sprite : sprites) {
+		delete sprite;
+	}
+	sprites.clear();
 	return 0;
 }

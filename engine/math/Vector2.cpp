@@ -51,3 +51,16 @@ Vector2& Vector2::operator/=(const Vector2& v) {
 	y /= v.y;
 	return *this;
 }
+
+//スカラー倍
+Vector2 Vector2::operator*(float n) const {
+	return { x * n,y * n };
+}
+
+//スカラー倍複合
+Vector2& Vector2::operator*=(float n) {
+	// TODO: return ステートメントをここに挿入します
+	x *= n;
+	y *= n;
+	return *this;
+}

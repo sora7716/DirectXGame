@@ -24,6 +24,7 @@
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
     <ClCompile Include="engine\math\func\Math.cpp" />
+    <ClCompile Include="engine\math\Matrix4x4.cpp" />
     <ClCompile Include="engine\math\rendering\Rendering.cpp" />
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />

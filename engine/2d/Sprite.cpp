@@ -83,6 +83,8 @@ void Sprite::Update() {
 	ImGui::End();
 	//メンバ変数の値を見た目に反映
 	transform_.translate = { position_.x,position_.y,0.0f };
+	transform_.rotate = { 0.0f,0.0f,rotation_ };
+	transform_.scale = { size_.x,size_.y,1.0f };
 	//Transform情報を作成する
 	UpdateTransform();
 	//UVTransform情報を作成する
@@ -107,40 +109,74 @@ void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
+//サイズのゲッター
+const Vector2& Sprite::GetSize() const{
+	// TODO: return ステートメントをここに挿入します
+	return size_;
+}
+
+//回転のゲッター
+float Sprite::GetRotation() const {
+	return rotation_;
+}
+
 // 位置のゲッター
-const Vector2& Sprite::GetPosition() const{
+const Vector2& Sprite::GetPosition() const {
 	// TODO: return ステートメントをここに挿入します
 	return position_;
 }
 
+//色のゲッター
+const Vector4& Sprite::GetColor() const{
+	// TODO: return ステートメントをここに挿入します
+	return materialData_->color;
+}
+
+//サイズのセッター
+void Sprite::SetSize(const Vector2& size){
+	size_ = size;
+}
+
+//回転のセッター
+void Sprite::SetRotation(float rotation) {
+	rotation_ = rotation;
+}
+
 // 位置のセッター
-void Sprite::SetPosition(const Vector2& position){
+void Sprite::SetPosition(const Vector2& position) {
 	position_ = position;
+}
+
+//色のセッター
+void Sprite::SetColor(const Vector4& color){
+	materialData_->color = color;
 }
 
 //頂点データの初期化
 void Sprite::InitialilzeVertexData() {
 	//1枚目の三角形
-	vertexData_[0].position = { 0.0f,360.0f,0.0f,1.0f };//左下
+	vertexData_[0].position = { 0.0f,1.0f,0.0f,1.0f };//左下
 	vertexData_[0].texcoord = { 0.0f,1.0f };
-	vertexData_[0].normal = {};
+	vertexData_[0].normal = {0.0f,0.0f,-1.0f};
+
 	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };//左上
 	vertexData_[1].texcoord = { 0.0f,0.0f };
-	vertexData_[1].normal = {};
-	vertexData_[2].position = { 640.0f,360.0f,0.0f,1.0f };//右下
+	vertexData_[1].normal = {0.0f,0.0f,-1.0f};
+
+	vertexData_[2].position = { 1.0f,1.0f,0.0f,1.0f };//右下
 	vertexData_[2].texcoord = { 1.0f,1.0f };
-	vertexData_[2].normal = {};
+	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
 
 	//2枚目の三角形
 	vertexData_[3].position = { 0.0f,0.0f,0.0f,1.0f };//左上
 	vertexData_[3].texcoord = { 0.0f,0.0f };
-	vertexData_[3].normal = {};
-	vertexData_[4].position = { 640.0f,0.0f,0.0f,1.0f };//右上
+	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+	vertexData_[4].position = { 1.0f,0.0f,0.0f,1.0f };//右上
 	vertexData_[4].texcoord = { 1.0f,0.0f };
-	vertexData_[4].normal = {};
-	vertexData_[5].position = { 640.0f,360.0f,0.0f,1.0f };//右下
+	vertexData_[4].normal = { 0.0f,0.0f,-1.0f };
+	vertexData_[5].position = { 1.0f,1.0f,0.0f,1.0f };//右下
 	vertexData_[5].texcoord = { 1.0f,1.0f };
-	vertexData_[5].normal = {};
+	vertexData_[5].normal = { 0.0f,0.0f,-1.0f };
 }
 
 //インデックスの初期化
@@ -165,7 +201,7 @@ void Sprite::InitializeTransformationMatrixData() {
 }
 
 // 座標変換の更新
-void Sprite::UpdateTransform(){
+void Sprite::UpdateTransform() {
 	//TransformからWorldMatrixを作る
 	transformationMatrixData_->World = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	//ViewMatirxを作って単位行列を入れる
@@ -176,7 +212,7 @@ void Sprite::UpdateTransform(){
 }
 
 // UVの座標変換の更新
-void Sprite::UpdateUVTransform(){
+void Sprite::UpdateUVTransform() {
 	//UVTransform
 	materialData_->uvTransform = Rendering::MakeUVAffineMatrix(uvTransform_.scale, uvTransform_.rotate.z, uvTransform_.translate);
 }

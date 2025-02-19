@@ -44,16 +44,52 @@ public://メンバ関数
 	void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
 
 	/// <summary>
+	/// サイズのゲッター
+	/// </summary>
+	/// <returns></returns>
+	const Vector2& GetSize()const;
+
+	/// <summary>
+	/// 回転のゲッター
+	/// </summary>
+	/// <returns>回転</returns>
+	float GetRotation()const;
+
+	/// <summary>
 	/// 位置のゲッター
 	/// </summary>
 	/// <returns>位置</returns>
 	const Vector2& GetPosition()const;
 
 	/// <summary>
+	/// 色のゲッター
+	/// </summary>
+	/// <returns>色</returns>
+	const Vector4& GetColor()const;
+
+	/// <summary>
+	/// サイズのセッター
+	/// </summary>
+	/// <param name="size">サイズ</param>
+	void SetSize(const Vector2& size);
+
+	/// <summary>
+	/// 回転のセッター
+	/// </summary>
+	/// <param name="rotation"></param>
+	void SetRotation(float rotation);
+
+	/// <summary>
 	/// 位置のセッター
 	/// </summary>
 	/// <param name="position">位置</param>
 	void SetPosition(const Vector2& position);
+
+	/// <summary>
+	/// 色のセッター
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4& color);
 private://メンバ関数
 	/// <summary>
 	/// 頂点データの初期化
@@ -85,6 +121,8 @@ private://メンバ関数
 	/// </summary>
 	void UpdateUVTransform();
 private://メンバ変数
+	Vector2 size_ = { 640.0f,360.0f };
+	float rotation_ = 0.0f;//回転
 	Vector2 position_ = { 0.0f,0.0f };//位置
 	Transform transform_ = {};//トランスフォームの情報
 	Transform uvTransform_ = {};//UVトランスフォームの情報
