@@ -286,6 +286,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLightData->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData->intensity = 1.0f;
+
 	TextureManager::GetInstance()->LoadTexture("engine/resources/texture/uvChecker.png");
 	//スプライト
 	std::vector<Vector2> pos;
@@ -474,7 +475,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
 		//directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndexx));
 		//描画!(DrawCall/ドローコール)。
-		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
+		//directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {

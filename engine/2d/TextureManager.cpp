@@ -1,5 +1,9 @@
 #include "TextureManager.h"
 #include <cassert>
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"dxguid.lib")
+#pragma comment(lib,"dxcompiler.lib")
 //初期化
 TextureManager* TextureManager::instance = nullptr;
 //ImGuiで0番目を使用するため、1番目から使用
@@ -13,7 +17,7 @@ TextureManager* TextureManager::GetInstance() {
 	return instance;
 }
 
-void TextureManager::Initialize(DirectXBase* directXBase){
+void TextureManager::Initialize(DirectXBase* directXBase) {
 	assert(directXBase);//Nullチェック
 	directXBase_ = directXBase;
 	//SRVの数と同数
@@ -41,7 +45,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.metadata = image.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
 	//テクスチャデータの要素数番号をSRVのインデックスとする
-	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1+kSRVIndexTop);
+	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1) + kSRVIndexTop;
 	//CPU・GPUのSRVハンドルを取得
 	textureData.srvHandleCPU = directXBase_->GetSRVCPUDescriptorHandle(srvIndex);
 	textureData.srvHandleGPU = directXBase_->GetSRVGPUDescriptorHandle(srvIndex);
@@ -68,7 +72,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 }
 
 //ファイルパス
-uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath){
+uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath) {
 	//読み込み済みテクスチャデータを検索
 	auto it = std::find_if(
 		textureDatas_.begin(),
@@ -87,7 +91,7 @@ uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath){
 }
 
 //テクスチャ番号からGPUハンドルを取得
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureIndex){
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureIndex) {
 	//範囲外違反チェック
 	assert(textureIndex < textureDatas_.size());
 	TextureData& textureData = textureDatas_[textureIndex];
