@@ -290,10 +290,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directionalLightData->intensity = 1.0f;
 
 	//スプライト
+	std::vector<Vector2> pos;
 	std::vector<Sprite*>sprites;
 	for (uint32_t i = 0; i < 5; i++) {
 		Sprite* sprite = new Sprite();
 		sprite->Initialize(spriteGeneral.get());
+		pos.push_back(Vector2(120.0f, 0.0f) * (float)i);
+		sprite->SetPosition(pos[i]);
+		sprite->SetSize({ 100.0f,180.0f });
 		sprites.push_back(sprite);
 	}
 
@@ -407,11 +411,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 
 		//スプイライト用の更新
-		for (uint32_t i = 0; i < sprites.size(); i++){
-			Vector2 pos = { 70.0f,0.0f };
-			pos *= (float)i;
-			sprites[i]->SetPosition(pos);
-			sprites[i]->SetSize({ 50.0f,180.0f });
+		for (uint32_t i = 0; i < sprites.size(); i++) {
+			sprites[i]->SetPosition(pos[i]);
 			sprites[i]->Update();
 		}
 		//ライト
@@ -441,6 +442,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
 		ImGui::End();
+
+		ImGui::Begin("sprite");
+		//ImGui::DragFloat3("scale", &size.x, 0.1f, 0.0f, 5.0f);
+		//ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
+		ImGui::DragFloat2("translate", &pos[0].x, 0.1f);
+		ImGui::End();
+
+		/*	ImGui::Begin("UV:sprite");
+			ImGui::DragFloat2("scale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
+			ImGui::SliderAngle("rotate", &uvTransform_.rotate.z);
+			ImGui::DragFloat2("translate", &uvTransform_.translate.x, 0.01f, -10.0f, 10.0f);
+			ImGui::End();*/
+
 		audio_->SetVolume(0, volume);
 
 		//ImGuiの内部コマンドを生成する
@@ -468,16 +482,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		for (auto sprite : sprites) {
 			sprite->Draw(textureSrvHandleGPU);
 		}
-		////使用するテクスチャの決定
-		////マテリアルCBufferの場所を設定
-		//directXBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);//VBVを設定
-		//directXBase->GetCommandList()->IASetIndexBuffer(&indexBufferViewSprite);//IBVを設定
-		//directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());//material
-		//directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruceSprite->GetGPUVirtualAddress());//wvp
-		//directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
-		////TransformMatrixCBufferの場所を設定
-		//directXBase->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
-
 
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());

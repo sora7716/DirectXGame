@@ -11,6 +11,13 @@
 class SpriteGeneral;
 class DirectXBase;
 
+// 2次元用の座標変換
+typedef struct Transform2D {
+	Vector2 size;
+	float rotation;
+	Vector2 translation;
+}Transform2D;
+
 /// <summary>
 /// スプライト
 /// </summary>
@@ -46,7 +53,7 @@ public://メンバ関数
 	/// <summary>
 	/// サイズのゲッター
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>サイズ</returns>
 	const Vector2& GetSize()const;
 
 	/// <summary>
@@ -60,6 +67,24 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>位置</returns>
 	const Vector2& GetPosition()const;
+
+	/// <summary>
+	/// UVのサイズのゲッター
+	/// </summary>
+	/// <returns>UVサイズ</returns>
+	const Vector2& GetUVSize()const;
+
+	/// <summary>
+	/// UVの回転のゲッター
+	/// </summary>
+	/// <returns>UVの回転</returns>
+	float GetUVRotation()const;
+
+	/// <summary>
+	/// UVの位置のゲッター
+	/// </summary>
+	/// <returns>UVの位置</returns>
+	const Vector2& GetUVPosition()const;
 
 	/// <summary>
 	/// 色のゲッター
@@ -76,7 +101,7 @@ public://メンバ関数
 	/// <summary>
 	/// 回転のセッター
 	/// </summary>
-	/// <param name="rotation"></param>
+	/// <param name="rotation">回転</param>
 	void SetRotation(float rotation);
 
 	/// <summary>
@@ -84,6 +109,24 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="position">位置</param>
 	void SetPosition(const Vector2& position);
+
+	/// <summary>
+	/// UVのサイズのセッター
+	/// </summary>
+	/// <param name="size">サイズ</param>
+	void SetUVSize(const Vector2& size);
+
+	/// <summary>
+	/// UVの回転のセッター
+	/// </summary>
+	/// <param name="rotation">回転</param>
+	void SetUVRoation(float rotation);
+
+	/// <summary>
+	/// UVの位置のゲッター
+	/// </summary>
+	/// <param name="position">位置</param>
+	void SetUVPosition(const Vector2& position);
 
 	/// <summary>
 	/// 色のセッター
@@ -121,9 +164,18 @@ private://メンバ関数
 	/// </summary>
 	void UpdateUVTransform();
 private://メンバ変数
-	Vector2 size_ = { 640.0f,360.0f };
-	float rotation_ = 0.0f;//回転
-	Vector2 position_ = { 0.0f,0.0f };//位置
+	//ローカル座標
+	Transform2D transform2D_ = {
+		.size = { 640.0f,360.0f },
+		.rotation = 0.0f,
+		.translation = {0.0f,0.0f}
+	};
+	//UV座標
+	Transform2D uvTransform2D_ = {
+		.size = { 1.0f,1.0f },
+		.rotation = 0.0f,
+		.translation = {0.0f,0.0f}
+	};
 	Transform transform_ = {};//トランスフォームの情報
 	Transform uvTransform_ = {};//UVトランスフォームの情報
 	SpriteGeneral* spriteGeneral_ = nullptr;//スプライトの共通部分

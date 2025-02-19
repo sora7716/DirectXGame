@@ -70,21 +70,15 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 void Sprite::Update() {
 	//頂点リソースにデータを書き込む(4点分)
 	//インデックスリソースにデータを書き込む(6個分)
-	ImGui::Begin("sprite");
-	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f, 0.0f, 5.0f);
-	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
-	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
-	ImGui::End();
-
-	ImGui::Begin("UV:sprite");
-	ImGui::DragFloat2("scale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("rotate", &uvTransform_.rotate.z);
-	ImGui::DragFloat2("translate", &uvTransform_.translate.x, 0.01f, -10.0f, 10.0f);
-	ImGui::End();
+	
 	//メンバ変数の値を見た目に反映
-	transform_.translate = { position_.x,position_.y,0.0f };
-	transform_.rotate = { 0.0f,0.0f,rotation_ };
-	transform_.scale = { size_.x,size_.y,1.0f };
+	transform_.translate = { transform2D_.translation.x,transform2D_.translation.y,0.0f };
+	transform_.rotate = { 0.0f,0.0f,transform2D_.rotation};
+	transform_.scale = { transform2D_.size.x,transform2D_.size.y,1.0f };
+	//メンバ変数の値を見た目に反映UV
+	uvTransform_.translate = {uvTransform2D_.translation.x,uvTransform2D_.translation.y,0.0f };
+	uvTransform_.rotate = { 0.0f,0.0f,uvTransform2D_.rotation };
+	uvTransform_.scale = { uvTransform2D_.size.x,uvTransform2D_.size.y,1.0f };
 	//Transform情報を作成する
 	UpdateTransform();
 	//UVTransform情報を作成する
@@ -112,18 +106,35 @@ void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
 //サイズのゲッター
 const Vector2& Sprite::GetSize() const{
 	// TODO: return ステートメントをここに挿入します
-	return size_;
+	return transform2D_.size;
 }
 
 //回転のゲッター
 float Sprite::GetRotation() const {
-	return rotation_;
+	return transform2D_.rotation;
 }
 
 // 位置のゲッター
 const Vector2& Sprite::GetPosition() const {
 	// TODO: return ステートメントをここに挿入します
-	return position_;
+	return transform2D_.translation;
+}
+
+//UVのサイズのゲッター
+const Vector2& Sprite::GetUVSize() const{
+	// TODO: return ステートメントをここに挿入します
+	return uvTransform2D_.size;
+}
+
+//UVの回転のセッター
+float Sprite::GetUVRotation() const{
+	return uvTransform2D_.rotation;
+}
+
+//UVの位置のゲッター
+const Vector2& Sprite::GetUVPosition() const{
+	// TODO: return ステートメントをここに挿入します
+	return uvTransform2D_.translation;
 }
 
 //色のゲッター
@@ -134,17 +145,32 @@ const Vector4& Sprite::GetColor() const{
 
 //サイズのセッター
 void Sprite::SetSize(const Vector2& size){
-	size_ = size;
+	transform2D_.size = size;
 }
 
 //回転のセッター
 void Sprite::SetRotation(float rotation) {
-	rotation_ = rotation;
+	transform2D_.rotation= rotation;
 }
 
 // 位置のセッター
 void Sprite::SetPosition(const Vector2& position) {
-	position_ = position;
+	transform2D_.translation = position;
+}
+
+//UVのサイズのセッター
+void Sprite::SetUVSize(const Vector2& size){
+	uvTransform2D_.size = size;
+}
+
+//UVの回転のセッター
+void Sprite::SetUVRoation(float rotation){
+	uvTransform2D_.rotation = rotation;
+}
+
+//UVの位置のセッター
+void Sprite::SetUVPosition(const Vector2& position){
+	uvTransform2D_.translation = position;
 }
 
 //色のセッター
