@@ -2,9 +2,10 @@
 #include "SpriteGeneral.h"
 #include <cassert>
 #include "engine/math/func/Math.h"
+#include "TextureManager.h"
 
 //初期化
-void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
+void Sprite::Initialize(SpriteGeneral* spriteGeneral, std::string textureFilePath) {
 	assert(spriteGeneral);//Nullチェック
 	spriteGeneral_ = spriteGeneral;//共通部分を受け取る
 	directXBase_ = spriteGeneral_->GetDirectXBase();//DirectXの基盤部分を受け取る
@@ -64,6 +65,7 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral) {
 		.rotate = {},
 		.translate{}
 	};
+	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
 //更新処理
@@ -86,7 +88,7 @@ void Sprite::Update() {
 }
 
 //描画処理
-void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
+void Sprite::Draw() {
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//IndexBufferViewを設定
@@ -98,7 +100,7 @@ void Sprite::Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture) {
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruce_->GetGPUVirtualAddress());//wvp
 
 	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, texture);
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
 	//描画(DrwaCall/ドローコール)
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }

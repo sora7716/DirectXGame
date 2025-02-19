@@ -106,13 +106,16 @@
       <Filter>2d</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\Vector2.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\math\Vector3.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>math</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\Matrix4x4.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\Vector3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\2d\TextureManager.cpp">
+      <Filter>2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +198,9 @@
       <Filter>2d</Filter>
     </ClInclude>
     <ClInclude Include="engine\2d\SpriteGeneral.h">
+      <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\2d\TextureManager.h">
       <Filter>2d</Filter>
     </ClInclude>
   </ItemGroup>

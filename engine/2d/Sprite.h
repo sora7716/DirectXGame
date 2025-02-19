@@ -6,6 +6,7 @@
 #include <dxgidebug.h>
 #include <dxcapi.h>
 #include <wrl.h>
+#include <string>
 
 //前方宣言
 class SpriteGeneral;
@@ -38,7 +39,9 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(SpriteGeneral* spriteGeneral);
+	/// <param name="spriteGeneral">スプライトの共通部分</param>
+	/// <param name="textureFilePath">テクスチャのファイルパス</param>
+	void Initialize(SpriteGeneral* spriteGeneral,std::string textureFilePath);
 
 	/// <summary>
 	/// 更新処理
@@ -48,7 +51,7 @@ public://メンバ関数
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw(const D3D12_GPU_DESCRIPTOR_HANDLE& texture);
+	void Draw();
 
 	/// <summary>
 	/// サイズのゲッター
@@ -164,6 +167,8 @@ private://メンバ関数
 	/// </summary>
 	void UpdateUVTransform();
 private://メンバ変数
+	//テクスチャ番号
+	uint32_t textureIndex = 0;
 	//ローカル座標
 	Transform2D transform2D_ = {
 		.size = { 640.0f,360.0f },

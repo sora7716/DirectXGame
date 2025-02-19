@@ -213,13 +213,6 @@ public://メンバ関数
 
 public://静的メンバ関数
 	/// <summary>
-	/// Textureデータを読み込む
-	/// </summary>
-	/// <param name="filePath">ファイルパス</param>
-	/// <returns>テクスチャデータ</returns>
-	static DirectX::ScratchImage LoadTexture(const std::string& filePath);
-
-	/// <summary>
 	/// デスクリプターCPUハンドルのゲッター
 	/// </summary>
 	/// <param name="descriptorHeap">デスクリプターヒープ</param>
@@ -306,7 +299,9 @@ private://メンバ関数
 	/// 実行を停止する(エラー・警告の場合)
 	/// </summary>
 	void StopExecution();
-
+public://定数
+	//最大SRV数(最大テクスチャ枚数)
+	static const uint32_t kMaxSRVCount;
 private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
 	WinApi* winApi_ = nullptr;//ウィンドウズAPI
@@ -342,4 +337,3 @@ public://あとで消す
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvHandles_ = {};//RTVを2つ作るのでディスクリプタを2つ用意
 	ComPtr<IDXGISwapChain4> swapChain_ = nullptr;//スワップチェーン
 };
-

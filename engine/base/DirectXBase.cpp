@@ -6,6 +6,7 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 using namespace Microsoft::WRL;
+const uint32_t DirectXBase::kMaxSRVCount = 512;
 
 // DirectX12の初期化
 void DirectXBase::Initialize() {
@@ -84,7 +85,7 @@ void DirectXBase::CreateDescriptorHeap() {
 	//RTV
 	rtvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 	//SRV用のヒープでデスクリプタの数が128。SRVはShaderを触るものなので、ShaderVisibleはtrue
-	srvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	srvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount, true);
 	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触れるものではないので、ShaderVisibleはfalse
 	dsvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 }
@@ -485,23 +486,6 @@ ID3D12Device* DirectXBase::GetDevice() const {
 //コマンドリストのゲッター
 ID3D12GraphicsCommandList* DirectXBase::GetCommandList() const {
 	return commandList_.Get();
-}
-
-// Textureデータを読み込む
-DirectX::ScratchImage DirectXBase::LoadTexture(const std::string& filePath) {
-	//テクスチャファイルを読み込んでプログラムを扱えるようにする
-	DirectX::ScratchImage image{};
-	std::wstring filePathW = Log::ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
-	assert(SUCCEEDED(hr));
-
-	//ミップマップの作成
-	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	assert(SUCCEEDED(hr));
-
-	//ミップマップ付きのデータを返す
-	return mipImages;
 }
 
 // デスクリプターCPUハンドルのゲッター
