@@ -3,19 +3,19 @@
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
 
-//テクスチャデータ
-typedef struct TextureData {
-	std::string filePath;//画像ファイルのパス
-	DirectX::TexMetadata metadata;//画像の幅や高さなどの情報
-	DirectXBase::ComPtr<ID3D12Resource>resourece;//テクスチャリソース
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;//SRV作成時に必要なCPUハンドル
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;//描画コマンドに必要なGPUハンドル
-}TextureData;
-
 /// <summary>
 /// テクスチャを管理する
 /// </summary>
 class TextureManager {
+private://構造体
+	//テクスチャデータ
+	typedef struct TextureData {
+		std::string filePath;//画像ファイルのパス
+		DirectX::TexMetadata metadata;//画像の幅や高さなどの情報
+		DirectXBase::ComPtr<ID3D12Resource>resourece;//テクスチャリソース
+		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;//SRV作成時に必要なCPUハンドル
+		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;//描画コマンドに必要なGPUハンドル
+	}TextureData;
 public://メンバ関数
 	/// <summary>
 	/// インスタンスのゲッター
@@ -53,16 +53,15 @@ public://メンバ関数
 	/// 終了処理
 	/// </summary>
 	void Finalize();
-
-	//コピーコンストラクタ禁止
-	TextureManager(const TextureManager&) = delete;
-	//代入演算子の禁止
-	const TextureManager& operator=(const TextureManager&) = delete;
 private://メンバ関数
 	//コンストラクタの封印
 	TextureManager() = default;
 	//デストラクタの封印
 	~TextureManager() = default;
+	//コピーコンストラクタ禁止
+	TextureManager(TextureManager&) = delete;
+	//代入演算子の禁止
+	TextureManager& operator=(TextureManager&) = delete;
 private://静的メンバ変数
 	//TextureManagerのインスタンス
 	static TextureManager* instance;
