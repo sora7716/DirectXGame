@@ -308,7 +308,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//カメラ
 	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f,},{0.0f,0.0f,-10.0f} };
-
+	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+	uint32_t textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData.material.textureFilePath);
 	//// Textureを呼んで転送する
 	//DirectX::ScratchImage mipImages = DirectXBase::LoadTexture("engine/resources/texture/uvChecker.png");
 	//const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
@@ -473,13 +474,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平行光源CBufferの場所を設定
 		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
 		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
-		//directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndexx));
+		directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
 		//描画!(DrawCall/ドローコール)。
-		//directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
+		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {
-			sprite->Draw();
+			//sprite->Draw();
 		}
 
 		//実際のcommandListのImGuiの描画コマンドを積む
@@ -498,7 +499,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	for (auto sprite : sprites) {
 		delete sprite;
 	}
-	sprites.clear(); 
+	sprites.clear();
 	//テクスチャマネージャーの終了処理
 	TextureManager::GetInstance()->Finalize();
 	return 0;
