@@ -474,13 +474,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平行光源CBufferの場所を設定
 		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
 		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
-		directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
-		//描画!(DrawCall/ドローコール)。
-		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
+		//directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
+		////描画!(DrawCall/ドローコール)。
+		//directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {
-			//sprite->Draw();
+			sprite->Draw();
 		}
 
 		//実際のcommandListのImGuiの描画コマンドを積む

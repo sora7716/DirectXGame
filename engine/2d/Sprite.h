@@ -189,11 +189,13 @@ private://メンバ変数
 	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点
 	ComPtr<ID3D12Resource>indexResource_ = nullptr;//インデックス
 	ComPtr<ID3D12Resource>materialResource_ = nullptr;//マテリアル
-	ComPtr<ID3D12Resource>transformationMatrixResoruce_ = nullptr;//座標変換行列1
+	ComPtr<ID3D12Resource>transformationMatrixResoruce_ = nullptr;//座標変換行列
+	ComPtr<ID3D12Resource>directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
 	VertexData* vertexData_ = nullptr;//頂点
 	uint32_t* indexData_ = nullptr;//インデックス
 	Material* materialData_ = nullptr;//マテリアル
+	DirectionalLight* directionalLightData_ = nullptr;
 	TransformationMatrix* transformationMatrixData_ = nullptr;
 	//バッファリソースの使い道を補足するバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点

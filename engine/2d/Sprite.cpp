@@ -47,6 +47,14 @@ void Sprite::Initialize(SpriteGeneral* spriteGeneral, std::string textureFilePat
 
 	//座標変換行列リソースを作成する
 	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
+
+	//光源
+	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+
 	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
 	//書き込むためのアドレス
 	transformationMatrixResoruce_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
@@ -98,6 +106,7 @@ void Sprite::Draw() {
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
 	//座標変換行列CBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruce_->GetGPUVirtualAddress());//wvp
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
