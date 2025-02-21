@@ -21,7 +21,7 @@ void TextureManager::Initialize(DirectXBase* directXBase) {
 	assert(directXBase);//Nullチェック
 	directXBase_ = directXBase;
 	//SRVの数と同数
-	textureDatas_.resize(DirectXBase::kMaxSRVCount);
+	textureDatas_.reserve(DirectXBase::kMaxSRVCount);
 }
 
 //テクスチャファイルの読み込み
