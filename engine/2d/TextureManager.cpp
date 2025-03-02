@@ -4,6 +4,8 @@
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
+
+using namespace Microsoft::WRL;
 //初期化
 TextureManager* TextureManager::instance = nullptr;
 //ImGuiで0番目を使用するため、1番目から使用
@@ -49,6 +51,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	//CPU・GPUのSRVハンドルを取得
 	textureData.srvHandleCPU = directXBase_->GetSRVCPUDescriptorHandle(srvIndex);
 	textureData.srvHandleGPU = directXBase_->GetSRVGPUDescriptorHandle(srvIndex);
+	ComPtr intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが出る
 	//SRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = textureData.metadata.format;
