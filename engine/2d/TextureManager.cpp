@@ -43,7 +43,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	//追加したテクスチャデータの参照を取得する
 	TextureData& textureData = textureDatas_.back();
 	textureData.filePath = filePath;
-	textureData.metadata = image.GetMetadata();
+	textureData.metadata = mipImages.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
 	ComPtr<ID3D12Resource>intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが起きる
 	//テクスチャデータの要素数番号をSRVのインデックスとする
