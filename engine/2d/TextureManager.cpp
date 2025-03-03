@@ -65,12 +65,12 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 		textureDatas_.end(),
 		[&](TextureData& textureData) {return textureData.filePath == filePath; }
 	);
+	//テクスチャ枚数上限チェック
+	assert(textureDatas_.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
 	if (it != textureDatas_.end()) {
 		//読み込み済みなら早期return
 		return;
 	}
-	//テクスチャ枚数上限チェック
-	assert(textureDatas_.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
 }
 
 //ファイルパス
