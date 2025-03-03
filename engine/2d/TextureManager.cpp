@@ -4,6 +4,7 @@
 #pragma comment(lib,"dxgi.lib")
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
+using namespace Microsoft::WRL;
 //初期化
 TextureManager* TextureManager::instance = nullptr;
 //ImGuiで0番目を使用するため、1番目から使用
@@ -44,6 +45,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.filePath = filePath;
 	textureData.metadata = image.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
+	ComPtr<ID3D12Resource>intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);
 	//テクスチャデータの要素数番号をSRVのインデックスとする
 	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1) + kSRVIndexTop;
 	//CPU・GPUのSRVハンドルを取得
@@ -96,6 +98,10 @@ D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureInde
 	assert(textureIndex < textureDatas_.size());
 	TextureData& textureData = textureDatas_[textureIndex];
 	return textureData.srvHandleGPU;
+}
+
+std::vector<TextureManager::TextureData> TextureManager::GetTextureData() const{
+	return textureDatas_;
 }
 
 //終了処理

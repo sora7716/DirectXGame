@@ -319,7 +319,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX::ScratchImage mipImages2 = DirectXBase::LoadTexture(modelData.material.textureFilePath);
 	//const DirectX::TexMetadata& metadata2 = mipImages2.GetMetadata();
 	//Microsoft::WRL::ComPtr<ID3D12Resource> textureResource2 = directXBase->CreateTextureResource(metadata2);
-	//Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource2 = directXBase->UploadTextureData(textureResource2.Get(), mipImages2);
+	/*Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource2 = directXBase->UploadTextureData(TextureManager::GetInstance()->GetTextureData()[textureIndex].resourece.Get(), mipImages2);*/
 
 	////metaDataを基にSRVの設定
 	//D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};

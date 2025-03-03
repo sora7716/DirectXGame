@@ -27,7 +27,7 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
-	void Initialize(DirectXBase*directXBase);
+	void Initialize(DirectXBase* directXBase);
 
 	/// <summary>
 	/// テクスチャファイルの読み込み
@@ -48,6 +48,8 @@ public://メンバ関数
 	/// <param name="textureIndex">テクスチャ番号</param>
 	/// <returns>GPUハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureIndex);
+
+	std::vector<TextureData> GetTextureData()const;
 
 	/// <summary>
 	/// 終了処理
