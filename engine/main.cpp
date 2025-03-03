@@ -294,12 +294,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::vector<Sprite*>sprites;
 	for (uint32_t i = 0; i < 5; i++) {
 		Sprite* sprite = new Sprite();
-		if (i % 2 == 0) {
-			sprite->Initialize(spriteGeneral.get(), "engine/resources/texture/uvChecker.png");
-		}
-		else {
-			sprite->Initialize(spriteGeneral.get(), "engine/resources/texture/monsterBall.png");
-		}
+		sprite->Initialize(spriteGeneral.get(), "engine/resources/texture/uvChecker.png");
 		pos.push_back(Vector2(120.0f, 0.0f) * (float)i);
 		sprite->SetPosition(pos[i]);
 		sprite->SetSize({ 100.0f,180.0f });
@@ -381,6 +376,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//スプイライト用の更新
 		for (uint32_t i = 0; i < sprites.size(); i++) {
+			if (i % 2 == 0) {
+				sprites[i]->ChangeTexture("engine/resources/texture/uvChecker.png");
+			}
+			else {
+				sprites[i]->ChangeTexture("engine/resources/texture/monsterBall.png");
+			}
 			sprites[i]->SetPosition(pos[i]);
 			sprites[i]->Update();
 		}
@@ -415,7 +416,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("sprite");
 		//ImGui::DragFloat3("scale", &size.x, 0.1f, 0.0f, 5.0f);
 		//ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
-		ImGui::DragFloat2("translate", &pos[0].x, 0.1f);
+		ImGui::DragFloat2("translate[0]", &pos[0].x, 0.1f);
+		ImGui::DragFloat2("translate[1]", &pos[1].x, 0.1f);
 		ImGui::End();
 
 		/*	ImGui::Begin("UV:sprite");

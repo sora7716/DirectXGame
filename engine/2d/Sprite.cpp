@@ -114,6 +114,11 @@ void Sprite::Draw() {
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
+//テクスチャの変更
+void Sprite::ChangeTexture(std::string textureFilePath){
+	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+}
+
 //サイズのゲッター
 const Vector2& Sprite::GetSize() const{
 	// TODO: return ステートメントをここに挿入します
