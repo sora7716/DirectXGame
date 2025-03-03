@@ -45,7 +45,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.filePath = filePath;
 	textureData.metadata = image.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
-	ComPtr<ID3D12Resource>intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);
+	ComPtr<ID3D12Resource>intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが起きる
 	//テクスチャデータの要素数番号をSRVのインデックスとする
 	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1) + kSRVIndexTop;
 	//CPU・GPUのSRVハンドルを取得
