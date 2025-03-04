@@ -1,14 +1,15 @@
 #include "Sprite.h"
-#include "SpriteGeneral.h"
+#include "SpriteManager.h"
 #include <cassert>
 #include "engine/math/func/Math.h"
 #include "TextureManager.h"
+#include "engine/base/DirectXBase.h"
 
 //初期化
-void Sprite::Initialize(SpriteGeneral* spriteGeneral, std::string textureFilePath) {
-	assert(spriteGeneral);//Nullチェック
-	spriteGeneral_ = spriteGeneral;//共通部分を受け取る
-	directXBase_ = spriteGeneral_->GetDirectXBase();//DirectXの基盤部分を受け取る
+void Sprite::Initialize(SpriteManager* spriteManager, std::string textureFilePath) {
+	assert(spriteManager);//Nullチェック
+	spriteManager_ = spriteManager;//共通部分を受け取る
+	directXBase_ = spriteManager_->GetDirectXBase();//DirectXの基盤部分を受け取る
 	//VertexResourceを作成する
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
 	//IndexResourceを作成する

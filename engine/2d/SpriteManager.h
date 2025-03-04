@@ -1,22 +1,24 @@
 #pragma once
-#include "engine/base/DirectXBase.h"
-
+#include <wrl.h>
+#include <d3d12.h>
+//前方宣言
+class DirectXBase;
 /// <summary>
 /// スプライトの共通部分
 /// </summary>
-class SpriteGeneral {
-public://エイリアステンプレート
+class SpriteManager {
+private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	SpriteGeneral() = default;
+	SpriteManager() = default;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~SpriteGeneral() = default;
+	~SpriteManager() = default;
 
 	/// <summary>
 	/// 初期化

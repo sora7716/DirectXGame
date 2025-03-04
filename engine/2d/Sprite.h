@@ -9,7 +9,7 @@
 #include <string>
 
 //前方宣言
-class SpriteGeneral;
+class SpriteManager;
 class DirectXBase;
 
 // 2次元用の座標変換
@@ -39,9 +39,9 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="spriteGeneral">スプライトの共通部分</param>
+	/// <param name="spriteManager">スプライトの共通部分</param>
 	/// <param name="textureFilePath">テクスチャのファイルパス</param>
-	void Initialize(SpriteGeneral* spriteGeneral,std::string textureFilePath);
+	void Initialize(SpriteManager* spriteManager,std::string textureFilePath);
 
 	/// <summary>
 	/// 更新処理
@@ -189,7 +189,7 @@ private://メンバ変数
 	};
 	Transform transform_ = {};//トランスフォームの情報
 	Transform uvTransform_ = {};//UVトランスフォームの情報
-	SpriteGeneral* spriteGeneral_ = nullptr;//スプライトの共通部分
+	SpriteManager* spriteManager_ = nullptr;//スプライトの共通部分
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//バッファリソース
 	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点

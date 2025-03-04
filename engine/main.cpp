@@ -1,10 +1,12 @@
+#include "base/DirectXBase.h"
 #include "2d/TextureManager.h"
 #include "math/func/Math.h"
 #include "audio/Audio.h"
 #include "input/Input.h"
 #include "base/D3DResourceLeakChecker.h"
-#include "2d/SpriteGeneral.h"
+#include "2d/SpriteManager.h"
 #include "2d/Sprite.h"
+#include "3d/Object3DManager.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -144,7 +146,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApi* winApi = WinApi::GetInstance();
 	//DirectXCommon
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
-	std::unique_ptr<SpriteGeneral>spriteGeneral = std::make_unique<SpriteGeneral>();
+	//スプライトの共通部分
+	std::unique_ptr<SpriteManager>spriteManager = std::make_unique<SpriteManager>();
+	//3Dオブジェクトの共通部分
+	std::unique_ptr<Object3DManager>object3DManager = std::make_unique<Object3DManager>();
 	//ウィンドウの作成
 	winApi->Initialize();
 	//DirectX12の初期化
@@ -214,7 +219,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	graphicsPipelineStateDesc.DepthStencilState = directXBase->depthStencilDesc_;
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-	spriteGeneral->Initialize(directXBase.get(), graphicsPipelineStateDesc);
+	//スプライトの共通部分の初期化
+	spriteManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
+	//3Dオブジェクトの共通部分の初期化
+	object3DManager->Initialize();
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
@@ -294,7 +302,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::vector<Sprite*>sprites;
 	for (uint32_t i = 0; i < 5; i++) {
 		Sprite* sprite = new Sprite();
-		sprite->Initialize(spriteGeneral.get(), "engine/resources/texture/uvChecker.png");
+		sprite->Initialize(spriteManager.get(), "engine/resources/texture/uvChecker.png");
 		pos.push_back(Vector2(120.0f, 0.0f) * (float)i);
 		sprite->SetPosition(pos[i]);
 		sprite->SetSize({ 100.0f,180.0f });
@@ -434,7 +442,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXBase->PreDraw();
 		//描画するコマンドを積む
 		//スプライトの描画準備
-		spriteGeneral->DrawSetting();
+		spriteManager->DrawSetting();
 		//RootSignatureを設定。PSOに設定しているけど別途設定が必要
 		directXBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
 		directXBase->GetCommandList()->IASetIndexBuffer(&indexBufferView);//IBVを設定

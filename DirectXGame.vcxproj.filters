@@ -102,7 +102,7 @@
     <ClCompile Include="engine\2d\Sprite.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\2d\SpriteGeneral.cpp">
+    <ClCompile Include="engine\2d\SpriteManager.cpp">
       <Filter>2d</Filter>
     </ClCompile>
     <ClCompile Include="engine\math\Vector2.cpp">
@@ -116,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="engine\2d\TextureManager.cpp">
       <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\Object3DManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\Object3D.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -197,11 +203,17 @@
     <ClInclude Include="engine\2d\Sprite.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\2d\SpriteGeneral.h">
+    <ClInclude Include="engine\2d\SpriteManager.h">
       <Filter>2d</Filter>
     </ClInclude>
     <ClInclude Include="engine\2d\TextureManager.h">
       <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Object3DManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Object3D.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
