@@ -126,10 +126,10 @@
     <ClCompile Include="engine\objectManager\SpriteManager.cpp">
       <Filter>objectManager</Filter>
     </ClCompile>
-    <ClCompile Include="engine\objectManager\Object3DManager.cpp">
+    <ClCompile Include="engine\objectManager\Object3dManager.cpp">
       <Filter>objectManager</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\Object3D.cpp">
+    <ClCompile Include="engine\3d\Object3d.cpp">
       <Filter>3d</Filter>
     </ClCompile>
   </ItemGroup>
@@ -215,7 +215,7 @@
     <ClInclude Include="engine\2d\TextureManager.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\objectManager\Object3DManager.h">
+    <ClInclude Include="engine\objectManager\Object3dManager.h">
       <Filter>objectManager</Filter>
     </ClInclude>
     <ClInclude Include="engine\objectManager\SpriteManager.h">
@@ -224,7 +224,7 @@
     <ClInclude Include="engine\objectManager\BaseObjectManager.h">
       <Filter>objectManager</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\Object3D.h">
+    <ClInclude Include="engine\3d\Object3d.h">
       <Filter>3d</Filter>
     </ClInclude>
   </ItemGroup>

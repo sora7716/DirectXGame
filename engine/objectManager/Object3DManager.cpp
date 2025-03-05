@@ -1,4 +1,4 @@
-#include "Object3DManager.h"
+#include "Object3dManager.h"
 #include "engine/base/DirectXBase.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
