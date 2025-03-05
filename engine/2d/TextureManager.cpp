@@ -45,7 +45,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.filePath = filePath;
 	textureData.metadata = mipImages.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
-	ComPtr<ID3D12Resource>intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが起きる
+	textureData.intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが起きる
 	//テクスチャデータの要素数番号をSRVのインデックスとする
 	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1) + kSRVIndexTop;
 	//CPU・GPUのSRVハンドルを取得
@@ -88,7 +88,7 @@ uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath) 
 		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textureDatas_.begin(), it));
 		return textureIndex;
 	}
-	assert(0);
+	assert(false&&"Texture Not Found!");
 	return 0;
 }
 

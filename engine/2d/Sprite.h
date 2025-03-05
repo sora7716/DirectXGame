@@ -54,6 +54,12 @@ public://メンバ関数
 	void Draw();
 
 	/// <summary>
+	/// テクスチャの変更
+	/// </summary>
+	/// <param name="textureFilePath">テクスチャファイルパス</param>
+	void ChangeTexture(std::string textureFilePath);
+
+	/// <summary>
 	/// サイズのゲッター
 	/// </summary>
 	/// <returns>サイズ</returns>
