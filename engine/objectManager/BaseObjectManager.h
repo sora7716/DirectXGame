@@ -4,40 +4,40 @@
 //前方宣言
 class DirectXBase;
 /// <summary>
-/// スプライトの共通部分
+/// オブジェクトの管理する基底クラス
 /// </summary>
-class SpriteManager {
+class BaseObjectManager{
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	SpriteManager() = default;
+	BaseObjectManager() = default;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~SpriteManager() = default;
+	virtual~BaseObjectManager() = default;
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
 	/// <param name="graphicsPiplineDesc">グラフィックスパイプラインデスク</param>
-	void Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc);
+	virtual void Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc);
 
 	/// <summary>
 	/// 共通描画設定
 	/// </summary>
-	void DrawSetting();
+	virtual void DrawSetting();
 
 	/// <summary>
 	/// DirectXの基盤のゲッター
 	/// </summary>
 	/// <returns>DirectXの基盤</returns>
 	DirectXBase* GetDirectXBase()const;
-private://メンバ関数
+protected://メンバ関数
 	/// <summary>
 	/// ルートシグネイチャの設定
 	/// </summary>
@@ -49,11 +49,11 @@ private://メンバ関数
 	void CreateRootSignature();
 
 	/// <summary>
-    /// グラフィックスパイプラインの生成
-    /// </summary>
+	/// グラフィックスパイプラインの生成
+	/// </summary>
 	/// <param name="graphicsPiplineDesc">グラフィックスパイプラインデスク</param>
 	void CreateGraphicsPipeline(D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc);
-private://メンバ変数
+protected://メンバ変数
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//Blob
 	ComPtr<ID3DBlob> signatureBlob_ = nullptr;

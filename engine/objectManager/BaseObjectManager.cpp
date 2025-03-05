@@ -1,4 +1,4 @@
-#include "SpriteManager.h"
+#include "BaseObjectManager.h"
 #include "engine/base/DirectXBase.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
@@ -8,7 +8,7 @@
 using namespace Microsoft::WRL;
 
 //初期化
-void SpriteManager::Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc) {
+void BaseObjectManager::Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc) {
 	assert(directXBase);//Nullチェック
 	directXBase_ = directXBase;//DirectXの基盤を受け取る
 	//ルートシグネイチャの設定
@@ -20,7 +20,7 @@ void SpriteManager::Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE
 }
 
 //共通描画設定
-void SpriteManager::DrawSetting() {
+void BaseObjectManager::DrawSetting() {
 	//ルートシグネイチャをセットするコマンド
 	directXBase_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 	//グラフィックスパイプラインをセットするコマンド
@@ -30,12 +30,13 @@ void SpriteManager::DrawSetting() {
 }
 
 // DirectXの基盤のゲッター
-DirectXBase* SpriteManager::GetDirectXBase() const {
+DirectXBase* BaseObjectManager::GetDirectXBase() const {
 	return directXBase_;
 }
 
+
 // ルートシグネイチャの設定
-void SpriteManager::InitializeRootSigneture() {
+void BaseObjectManager::InitializeRootSigneture() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -94,14 +95,14 @@ void SpriteManager::InitializeRootSigneture() {
 }
 
 // ルートシグネイチャの生成
-void SpriteManager::CreateRootSignature() {
+void BaseObjectManager::CreateRootSignature() {
 	HRESULT result = S_FALSE;
 	result = directXBase_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(result));
 }
 
 // グラフィックスパイプラインの生成
-void SpriteManager::CreateGraphicsPipeline(D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc) {
+void BaseObjectManager::CreateGraphicsPipeline(D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc) {
 	HRESULT result = S_FALSE;
 	graphicsPiplineDesc.pRootSignature = rootSignature_.Get();
 	//実際に生成

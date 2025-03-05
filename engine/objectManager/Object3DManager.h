@@ -1,9 +1,11 @@
 #pragma once
-
+#include "BaseObjectManager.h"
 /// <summary>
 /// 3Dオブジェクトの共通部分
 /// </summary>
-class Object3DManager{
+class Object3DManager:public BaseObjectManager{
+private://エイリアステンプレート
+	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
@@ -14,11 +16,5 @@ public://メンバ関数
 	/// デストラクタ
 	/// </summary>
 	~Object3DManager() = default;
-
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
-private://メンバ変数
 };
 

@@ -4,9 +4,9 @@
 #include "audio/Audio.h"
 #include "input/Input.h"
 #include "base/D3DResourceLeakChecker.h"
-#include "2d/SpriteManager.h"
+#include "objectManager/SpriteManager.h"
 #include "2d/Sprite.h"
-#include "3d/Object3DManager.h"
+#include "objectManager/Object3DManager.h"
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -222,7 +222,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//スプライトの共通部分の初期化
 	spriteManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 	//3Dオブジェクトの共通部分の初期化
-	object3DManager->Initialize();
+	object3DManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 
 	//マテリアル用のリソースを作る
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
@@ -453,9 +453,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//平行光源CBufferの場所を設定
 		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
 		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
-		//directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
-		////描画!(DrawCall/ドローコール)。
-		//directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
+		directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
+		//描画!(DrawCall/ドローコール)。
+		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {
