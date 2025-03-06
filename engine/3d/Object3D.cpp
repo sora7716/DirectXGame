@@ -1,14 +1,31 @@
 #include "Object3d.h"
 #include "engine/objectManager/Object3dManager.h"
+#include "engine/2d/TextureManager.h"
+#include "engine/base/DirectXBase.h"
+#include "engine/math/func/Math.h"
 #include <fstream>
 #include <sstream>
 #include <cassert>
 //初期化
-void Object3d::Initialize(Object3dManager* object3dManager){
+void Object3d::Initialize(Object3dManager* object3dManager, const std::string& directoryPath, const std::string& filename){
 	//引数を受け取ってメンバ変数に記録
 	object3dManager_ = object3dManager;
+	//DirectXの基盤部分を受け取る
+	directXBase_ = object3dManager_->GetDirectXBase();
 	//モデルデータの読み込み
-	modelData_ = LoadObjFile("engine/resources/cube", "cube.obj")
+	modelData_ = LoadObjFile(directoryPath, filename);
+	//頂点データの生成
+	CreateVertexData();
+	//マテリアルデータの生成
+	CreateMaterialData();
+	//座標変換行列の生成
+	CreateTransformationMatrixData();
+	//光源の生成
+	CreateDirectionLight();
+	//.Objの参照しているテクスチャファイルの読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
+	//読み込んだテクスチャの番号を取得
+	modelData_.material.textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData_.material.textureFilePath);
 }
 
 // .mtlファイルの読み取り	
@@ -111,7 +128,56 @@ ModelData Object3d::LoadObjFile(const std::string& directoryPath, const std::str
 	return modelData;
 }
 
-//頂点データの初期化
-void Object3d::InitialilzeVertexData(){
+//頂点データの生成
+void Object3d::CreateVertexData(){
+	//頂点リソースを生成
+	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	//VertexBufferViewを作成する(頂点バッファービュー)
+	//リソースの先頭アドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
+	//頂点リソースにデータを書き込む
+	VertexData* vertexData = nullptr;
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());//頂点データをリソースにコピー
 }
+
+// マテリアルデータの生成
+void Object3d::CreateMaterialData(){
+	//マテリアル用のリソースを作る
+	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
+	//書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//色を書き込む
+	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	materialData_->enableLighting = true;
+	materialData_->uvTransform = Math::MakeIdentity4x4();
+}
+
+// 座標変換行列データの生成
+void Object3d::CreateTransformationMatrixData(){
+	//WVP用のリソースを作る
+	wvpResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
+	//書き込むためのアドレスを取得
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
+	//単位行列を書き込んでおく
+	wvpData_->WVP = Math::MakeIdentity4x4();
+	wvpData_->World = Math::MakeIdentity4x4();
+}
+
+//光源の生成
+void Object3d::CreateDirectionLight(){
+	//光源のリソースを作成
+	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
+	//光源データの書きこみ
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+}
+

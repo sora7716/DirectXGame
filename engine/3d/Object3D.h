@@ -3,13 +3,17 @@
 #include "engine/math/rendering/Rendering.h"
 #include <vector>
 #include <string>
+#include <wrl.h>
+#include <d3d12.h>
 
 //前方宣言
 class Object3dManager;
+class DirectXBase;
 
 //マテリアルデータ
 typedef struct MaterialData {
 	std::string textureFilePath;
+	uint32_t textureIndex = 0;
 }MaterialData;
 
 
@@ -40,7 +44,9 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="object3dManager">3Dオブジェクトの共通部分</param>
-	void Initialize(Object3dManager* object3dManager);
+	/// <param name="directoryPath">ディレクトリファイル</param>
+	/// <param name="filename">ファイル名</param>
+	void Initialize(Object3dManager* object3dManager, const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// .mtlファイルの読み取り	
@@ -60,44 +66,48 @@ public://メンバ関数
 
 private://メンバ関数
 	/// <summary>
-	/// 頂点データの初期化
+	/// 頂点データの生成
 	/// </summary>
-	void InitialilzeVertexData();
+	void CreateVertexData();
+
+	///// <summary>
+	///// インデックスの初期化
+	///// </summary>
+	//void InitializeIndexData();
 
 	/// <summary>
-	/// インデックスの初期化
+	/// マテリアルデータの生成
 	/// </summary>
-	void InitializeIndexData();
+	void CreateMaterialData();
 
 	/// <summary>
-	/// マテリアルデータの初期化
+	/// 座標変換行列データの生成
 	/// </summary>
-	void InitialilzeMaterialData();
+	void CreateTransformationMatrixData();
 
 	/// <summary>
-	/// 座標変換行列の初期化
+	/// 光源の生成
 	/// </summary>
-	void InitializeTransformationMatrixData();
+	void CreateDirectionLight();
 
 private://メンバ変数
+	//DirectXの基盤部分
+	DirectXBase* directXBase_ = nullptr;
 	//3Dオブジェクトの共通部分
 	Object3dManager* object3dManager_ = nullptr;	
 	//Objファイルのデータ
 	ModelData modelData_;
 	//バッファリソース
 	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点
-	ComPtr<ID3D12Resource>indexResource_ = nullptr;//インデックス
 	ComPtr<ID3D12Resource>materialResource_ = nullptr;//マテリアル
-	ComPtr<ID3D12Resource>transformationMatrixResoruce_ = nullptr;//座標変換行列
-	ComPtr<ID3D12Resource>directionalLightResource_ = nullptr;//光源
+	ComPtr<ID3D12Resource> wvpResource_ = nullptr;//座標変換行列
+	ComPtr<ID3D12Resource> directionalLightResource_;//光源
 	//バッファリソース内のデータを指すポインタ
 	VertexData* vertexData_ = nullptr;//頂点
-	uint32_t* indexData_ = nullptr;//インデックス
 	Material* materialData_ = nullptr;//マテリアル
-	DirectionalLight* directionalLightData_ = nullptr;
-	TransformationMatrix* transformationMatrixData_ = nullptr;
+	TransformationMatrix* wvpData_ = nullptr;//座標変換行列
+	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//バッファリソースの使い道を補足するバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
 };
 

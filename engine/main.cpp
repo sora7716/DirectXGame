@@ -210,29 +210,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//3Dオブジェクトの共通部分の初期化
 	object3dManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 
-	//マテリアル用のリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
-	//マテリアルにデータを書き込む
-	Material* materialData = nullptr;
-	//書き込むためのアドレスを取得
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	//色を書き込む
-	materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	materialData->enableLighting = true;
-	materialData->uvTransform = Math::MakeIdentity4x4();
+	////マテリアル用のリソースを作る
+	//Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
+	////マテリアルにデータを書き込む
+	//Material* materialData = nullptr;
+	////書き込むためのアドレスを取得
+	//materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	////色を書き込む
+	//materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//materialData->enableLighting = true;
+	//materialData->uvTransform = Math::MakeIdentity4x4();
 
-	//WVP用のリソースを作る
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = directXBase->CreateBufferResource(sizeof(TransformationMatrix));
-	//データを書き込む
-	TransformationMatrix* wvpData = nullptr;
-	//書き込むためのアドレスを取得
-	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	//単位行列を書き込んでおく
-	wvpData->WVP = Math::MakeIdentity4x4();
-	wvpData->World = Math::MakeIdentity4x4();
+	////WVP用のリソースを作る
+	//Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = directXBase->CreateBufferResource(sizeof(TransformationMatrix));
+	////データを書き込む
+	//TransformationMatrix* wvpData = nullptr;
+	////書き込むためのアドレスを取得
+	//wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+	////単位行列を書き込んでおく
+	//wvpData->WVP = Math::MakeIdentity4x4();
+	//wvpData->World = Math::MakeIdentity4x4();
 
-	const int kSubdivision = 16;
-	const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
+	//const int kSubdivision = 16;
+	//const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
 
 	//モデルデータの読み込み
 	ModelData modelData = Object3d::LoadObjFile("engine/resources/cube", "cube.obj");
@@ -251,38 +251,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	uint32_t* indexData = nullptr;
 	indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
 
-	//頂点リソースを生成
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = directXBase->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
-	//VertexBufferViewを作成する(頂点バッファービュー)
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//リソースの先頭アドレスから使う
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点3つ分のサイズ
-	vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	//1頂点当たりのサイズ
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
+	////頂点リソースを生成
+	//Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = directXBase->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	////VertexBufferViewを作成する(頂点バッファービュー)
+	//D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	////リソースの先頭アドレスから使う
+	//vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	////使用するリソースのサイズは頂点3つ分のサイズ
+	//vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	////1頂点当たりのサイズ
+	//vertexBufferView.StrideInBytes = sizeof(VertexData);
 
-	//頂点リソースにデータを書き込む
-	VertexData* vertexData = nullptr;
-	//書き込むためのアドレスを取得
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
-	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());//頂点データをリソースにコピー
+	////頂点リソースにデータを書き込む
+	//VertexData* vertexData = nullptr;
+	////書き込むためのアドレスを取得
+	//vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	//std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());//頂点データをリソースにコピー
 
 	for (int i = 0; i < modelData.vertices.size(); i++) {
 		indexData[i] = i; indexData[i + 1] = i + 1; indexData[i + 2] = i + 2;
 		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
 	}
 
-	//光源のリソースを作成
-	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource = directXBase->CreateBufferResource(sizeof(DirectionalLight));
-	DirectionalLight* directionalLightData = nullptr;
-	directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
-	directionalLightData->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData->intensity = 1.0f;
+	////光源のリソースを作成
+	//Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource = directXBase->CreateBufferResource(sizeof(DirectionalLight));
+	//DirectionalLight* directionalLightData = nullptr;
+	//directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
+	//directionalLightData->color = { 1.0f,1.0f,1.0f,1.0f };
+	//directionalLightData->direction = { 0.0f,-1.0f,0.0f };
+	//directionalLightData->intensity = 1.0f;
 
-	TextureManager::GetInstance()->LoadTexture("engine/resources/texture/uvChecker.png");
-	TextureManager::GetInstance()->LoadTexture("engine/resources/texture/monsterBall.png");
+	//TextureManager::GetInstance()->LoadTexture("engine/resources/texture/uvChecker.png");
+	//TextureManager::GetInstance()->LoadTexture("engine/resources/texture/monsterBall.png");
 	//スプライト
 	std::vector<Vector2> pos;
 	std::vector<Sprite*>sprites;

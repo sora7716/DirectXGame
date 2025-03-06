@@ -149,19 +149,44 @@ private://メンバ関数
 	void InitialilzeVertexData();
 
 	/// <summary>
-	/// インデックスの初期化
+	/// 頂点データの生成
+	/// </summary>
+	void CreateVertexData();
+
+	/// <summary>
+	/// インデックスデータの初期化
 	/// </summary>
 	void InitializeIndexData();
 
 	/// <summary>
-	/// マテリアルデータの初期化
+	/// インデックスデータの生成
 	/// </summary>
-	void InitialilzeMaterialData();
+	void CreateIndexData();
 
 	/// <summary>
-	/// 座標変換行列の初期化
+	/// マテリアルデータの初期化
+	/// </summary>
+	void InitializeMaterialData();
+
+	/// <summary>
+	/// マテリアルデータの生成
+	/// </summary>
+	void CreateMaterialData();
+
+	/// <summary>
+	/// 座標変換行列データの初期化
 	/// </summary>
 	void InitializeTransformationMatrixData();
+
+	/// <summary>
+	/// 座標変換行列データの生成
+	/// </summary>
+	void CreateTransformationMatrixData();
+
+	/// <summary>
+	/// 光源の生成
+	/// </summary>
+	void CreateDirectionLight();
 
 	/// <summary>
 	/// 座標変換の更新

@@ -10,56 +10,16 @@ void Sprite::Initialize(SpriteManager* spriteManager, std::string textureFilePat
 	assert(spriteManager);//Nullチェック
 	spriteManager_ = spriteManager;//共通部分を受け取る
 	directXBase_ = spriteManager_->GetDirectXBase();//DirectXの基盤部分を受け取る
-	//VertexResourceを作成する
-	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
-	//IndexResourceを作成する
-	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * 6);
-	//VertexBufferViewを作成する
-	//リソースの先頭アドレスから使う
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズは頂点6つ分のサイズ
-	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
-	//1頂点当たりのサイズ
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-
-	//IndexBufferViewを作成する
-	//リソースの先頭のアドレスから使う
-	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
-	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
-	//インデックスはuint32_tとする
-	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
-
-	//VertexResorceにデータを書き込むためのアドレスを取得してvertexDataに割り当てる
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	InitialilzeVertexData();
-
-	//IndexResourceにデータを書き込むためのアドレスを取得してindexDataに割り当てる
-	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
-	InitializeIndexData();
-
-	//マテリアルリソースを作る
-	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
-	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる
-	//書き込むためのアドレスを取得
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//マテリアルデータの初期値を書き込む
-	InitialilzeMaterialData();
-
-	//座標変換行列リソースを作成する
-	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
-
-	//光源
-	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
-
-	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
-	//書き込むためのアドレス
-	transformationMatrixResoruce_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
-	InitializeTransformationMatrixData();
+	//頂点データの生成
+	CreateVertexData();
+	//インデックスデータの生成
+	CreateIndexData();
+	//マテリアルデータの生成
+	CreateMaterialData();
+	//座標変換行列データの生成
+	CreateTransformationMatrixData();
+	//光源の生成
+	CreateDirectionLight();
 
 	//Transformの情報の初期化
 	transform_ = {
@@ -74,6 +34,7 @@ void Sprite::Initialize(SpriteManager* spriteManager, std::string textureFilePat
 		.rotate = {},
 		.translate{}
 	};
+	TextureManager::GetInstance()->LoadTexture(textureFilePath);
 	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
@@ -81,13 +42,13 @@ void Sprite::Initialize(SpriteManager* spriteManager, std::string textureFilePat
 void Sprite::Update() {
 	//頂点リソースにデータを書き込む(4点分)
 	//インデックスリソースにデータを書き込む(6個分)
-	
+
 	//メンバ変数の値を見た目に反映
 	transform_.translate = { transform2D_.translation.x,transform2D_.translation.y,0.0f };
-	transform_.rotate = { 0.0f,0.0f,transform2D_.rotation};
+	transform_.rotate = { 0.0f,0.0f,transform2D_.rotation };
 	transform_.scale = { transform2D_.size.x,transform2D_.size.y,1.0f };
 	//メンバ変数の値を見た目に反映UV
-	uvTransform_.translate = {uvTransform2D_.translation.x,uvTransform2D_.translation.y,0.0f };
+	uvTransform_.translate = { uvTransform2D_.translation.x,uvTransform2D_.translation.y,0.0f };
 	uvTransform_.rotate = { 0.0f,0.0f,uvTransform2D_.rotation };
 	uvTransform_.scale = { uvTransform2D_.size.x,uvTransform2D_.size.y,1.0f };
 	//Transform情報を作成する
@@ -116,12 +77,12 @@ void Sprite::Draw() {
 }
 
 //テクスチャの変更
-void Sprite::ChangeTexture(std::string textureFilePath){
+void Sprite::ChangeTexture(std::string textureFilePath) {
 	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
 //サイズのゲッター
-const Vector2& Sprite::GetSize() const{
+const Vector2& Sprite::GetSize() const {
 	// TODO: return ステートメントをここに挿入します
 	return transform2D_.size;
 }
@@ -138,36 +99,36 @@ const Vector2& Sprite::GetPosition() const {
 }
 
 //UVのサイズのゲッター
-const Vector2& Sprite::GetUVSize() const{
+const Vector2& Sprite::GetUVSize() const {
 	// TODO: return ステートメントをここに挿入します
 	return uvTransform2D_.size;
 }
 
 //UVの回転のセッター
-float Sprite::GetUVRotation() const{
+float Sprite::GetUVRotation() const {
 	return uvTransform2D_.rotation;
 }
 
 //UVの位置のゲッター
-const Vector2& Sprite::GetUVPosition() const{
+const Vector2& Sprite::GetUVPosition() const {
 	// TODO: return ステートメントをここに挿入します
 	return uvTransform2D_.translation;
 }
 
 //色のゲッター
-const Vector4& Sprite::GetColor() const{
+const Vector4& Sprite::GetColor() const {
 	// TODO: return ステートメントをここに挿入します
 	return materialData_->color;
 }
 
 //サイズのセッター
-void Sprite::SetSize(const Vector2& size){
+void Sprite::SetSize(const Vector2& size) {
 	transform2D_.size = size;
 }
 
 //回転のセッター
 void Sprite::SetRotation(float rotation) {
-	transform2D_.rotation= rotation;
+	transform2D_.rotation = rotation;
 }
 
 // 位置のセッター
@@ -176,22 +137,22 @@ void Sprite::SetPosition(const Vector2& position) {
 }
 
 //UVのサイズのセッター
-void Sprite::SetUVSize(const Vector2& size){
+void Sprite::SetUVSize(const Vector2& size) {
 	uvTransform2D_.size = size;
 }
 
 //UVの回転のセッター
-void Sprite::SetUVRoation(float rotation){
+void Sprite::SetUVRoation(float rotation) {
 	uvTransform2D_.rotation = rotation;
 }
 
 //UVの位置のセッター
-void Sprite::SetUVPosition(const Vector2& position){
+void Sprite::SetUVPosition(const Vector2& position) {
 	uvTransform2D_.translation = position;
 }
 
 //色のセッター
-void Sprite::SetColor(const Vector4& color){
+void Sprite::SetColor(const Vector4& color) {
 	materialData_->color = color;
 }
 
@@ -200,11 +161,11 @@ void Sprite::InitialilzeVertexData() {
 	//1枚目の三角形
 	vertexData_[0].position = { 0.0f,1.0f,0.0f,1.0f };//左下
 	vertexData_[0].texcoord = { 0.0f,1.0f };
-	vertexData_[0].normal = {0.0f,0.0f,-1.0f};
+	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
 
 	vertexData_[1].position = { 0.0f,0.0f,0.0f,1.0f };//左上
 	vertexData_[1].texcoord = { 0.0f,0.0f };
-	vertexData_[1].normal = {0.0f,0.0f,-1.0f};
+	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
 
 	vertexData_[2].position = { 1.0f,1.0f,0.0f,1.0f };//右下
 	vertexData_[2].texcoord = { 1.0f,1.0f };
@@ -222,25 +183,90 @@ void Sprite::InitialilzeVertexData() {
 	vertexData_[5].normal = { 0.0f,0.0f,-1.0f };
 }
 
-//インデックスの初期化
+//頂点データの生成
+void Sprite::CreateVertexData() {
+	//VertexResourceを作成する
+	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
+	//IndexResourceを作成する
+	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * 6);
+	//VertexBufferViewを作成する
+	//リソースの先頭アドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点6つ分のサイズ
+	vertexBufferView_.SizeInBytes = sizeof(VertexData) * 6;
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	//VertexResorceにデータを書き込むためのアドレスを取得してvertexDataに割り当てる
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	InitialilzeVertexData();
+}
+
+//インデックスデータの初期化
 void Sprite::InitializeIndexData() {
 	indexData_[0] = 0; indexData_[1] = 1; indexData_[2] = 2;
 	indexData_[3] = 1; indexData_[4] = 4; indexData_[5] = 2;
 }
 
+//インデックスデータの生成
+void Sprite::CreateIndexData() {
+	//IndexBufferViewを作成する
+	//リソースの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferView_.SizeInBytes = sizeof(uint32_t) * 6;
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+
+	//IndexResourceにデータを書き込むためのアドレスを取得してindexDataに割り当てる
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+	InitializeIndexData();
+}
+
 //マテリアルデータの初期化
-void Sprite::InitialilzeMaterialData() {
+void Sprite::InitializeMaterialData() {
 	//色を書き込む
 	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	materialData_->enableLighting = false;
 	materialData_->uvTransform = Math::MakeIdentity4x4();
 }
 
-//座標変換行列の初期化
+//マテリアルデータの生成
+void Sprite::CreateMaterialData() {
+	//マテリアルリソースを作る
+	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
+	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる
+	//書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//マテリアルデータの初期値を書き込む
+	InitializeMaterialData();
+}
+
+//座標変換行列データの初期化
 void Sprite::InitializeTransformationMatrixData() {
 	//単位行列を書き込んでおく
 	transformationMatrixData_->WVP = Math::MakeIdentity4x4();
 	transformationMatrixData_->World = Math::MakeIdentity4x4();
+}
+
+//座標変換行列データの生成
+void Sprite::CreateTransformationMatrixData(){
+	//座標変換行列リソースを作成する
+	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
+	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
+	//書き込むためのアドレス
+	transformationMatrixResoruce_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
+	InitializeTransformationMatrixData();
+}
+
+//光源の生成
+void Sprite::CreateDirectionLight(){
+	//光源
+	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
 }
 
 // 座標変換の更新
