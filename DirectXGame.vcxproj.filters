@@ -120,17 +120,23 @@
     <ClCompile Include="engine\2d\TextureManager.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\objectManager\BaseObjectManager.cpp">
-      <Filter>objectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\objectManager\SpriteManager.cpp">
-      <Filter>objectManager</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\objectManager\Object3dManager.cpp">
-      <Filter>objectManager</Filter>
-    </ClCompile>
     <ClCompile Include="engine\3d\Object3d.cpp">
       <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\Model.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\ModelCommon.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\objectCommon\Object3dCommon.cpp">
+      <Filter>objectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp">
+      <Filter>objectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp">
+      <Filter>objectManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,17 +221,23 @@
     <ClInclude Include="engine\2d\TextureManager.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\objectManager\Object3dManager.h">
-      <Filter>objectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\objectManager\SpriteManager.h">
-      <Filter>objectManager</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\objectManager\BaseObjectManager.h">
-      <Filter>objectManager</Filter>
-    </ClInclude>
     <ClInclude Include="engine\3d\Object3d.h">
       <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\ModelCommon.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Model.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\objectCommon\BaseObjectCommon.h">
+      <Filter>objectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\objectCommon\Object3dCommon.h">
+      <Filter>objectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\objectCommon\SpriteCommon.h">
+      <Filter>objectManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

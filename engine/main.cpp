@@ -4,10 +4,12 @@
 #include "audio/Audio.h"
 #include "input/Input.h"
 #include "base/D3DResourceLeakChecker.h"
-#include "objectManager/SpriteManager.h"
+#include "objectCommon/SpriteCommon.h"
 #include "2d/Sprite.h"
-#include "objectManager/Object3dManager.h"
+#include "objectCommon/Object3dCommon.h"
 #include "3d/Object3d.h"
+#include "3d/ModelCommon.h"
+#include "3d/Model.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -23,9 +25,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectXCommon
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
 	//スプライトの共通部分
-	std::unique_ptr<SpriteManager>spriteManager = std::make_unique<SpriteManager>();
+	std::unique_ptr<SpriteCommon>spriteCommon = std::make_unique<SpriteCommon>();
 	//3Dオブジェクトの共通部分
-	std::unique_ptr<Object3dManager>object3dManager = std::make_unique<Object3dManager>();
+	std::unique_ptr<Object3dCommon>object3dCommon = std::make_unique<Object3dCommon>();
+	//モデルの共通部分
+	std::unique_ptr<ModelCommon>modelCommon = std::make_unique<ModelCommon>();
 	//ウィンドウの作成
 	winApi->Initialize();
 	//DirectX12の初期化
@@ -96,9 +100,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	//スプライトの共通部分の初期化
-	spriteManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
+	spriteCommon->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 	//3Dオブジェクトの共通部分の初期化
-	object3dManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
+	object3dCommon->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture("engine/resources/texture/monsterBall.png");
@@ -107,15 +111,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::vector<Sprite*>sprites;
 	for (uint32_t i = 0; i < 5; i++) {
 		Sprite* sprite = new Sprite();
-		sprite->Initialize(spriteManager.get(), "engine/resources/texture/uvChecker.png");
+		sprite->Initialize(spriteCommon.get(), "engine/resources/texture/uvChecker.png");
 		pos.push_back(Vector2(120.0f, 0.0f) * (float)i);
 		sprite->SetPosition(pos[i]);
 		sprite->SetSize({ 100.0f,180.0f });
 		sprites.push_back(sprite);
 	}
-
+	Model* model = new Model();
+	model->Initialize(modelCommon.get(), "engine/resources/cube", "cube.obj");
 	Object3d* object3d = new Object3d();
-	object3d->Initialize(object3dManager.get(), "engine/resources/cube", "cube.obj");
+	object3d->Initialize(object3dCommon.get());
 
 	//音
 	Audio* audio_ = Audio::GetInstance();
@@ -187,9 +192,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		directXBase->PreDraw();
 		//描画するコマンドを積む
 		//スプライトの描画準備
-		spriteManager->DrawSetting();
+		spriteCommon->DrawSetting();
 		//3Dオブジェクトの描画準備
-		object3dManager->DrawSetting();
+		object3dCommon->DrawSetting();
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {
@@ -215,6 +220,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 	sprites.clear();
 	delete object3d;
+	delete  model;
 	//テクスチャマネージャーの終了処理
 	TextureManager::GetInstance()->Finalize();
 	return 0;
