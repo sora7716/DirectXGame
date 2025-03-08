@@ -16,6 +16,8 @@ void Object3d::Initialize(Object3dManager* object3dManager, const std::string& d
 	modelData_ = LoadObjFile(directoryPath, filename);
 	//頂点データの生成
 	CreateVertexData();
+	//インデックスの生成
+	CreateIndexData();
 	//マテリアルデータの生成
 	CreateMaterialData();
 	//座標変換行列の生成
@@ -26,6 +28,42 @@ void Object3d::Initialize(Object3dManager* object3dManager, const std::string& d
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 	//読み込んだテクスチャの番号を取得
 	modelData_.material.textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData_.material.textureFilePath);
+	//Transform変数を作る
+	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	cameraTransform_ = { {1.0f,1.0f,1.0f},{0.3f,0.0f,0.0f},{0.0f,4.0f,-10.0f} };
+}
+
+//更新
+void Object3d::Update(){
+	//ワールドマトリックスの生成
+	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//カメラワールドマトリックスの生成
+	Matrix4x4 cameraWorldMatrix = Rendering::MakeAffineMatrix(cameraTransform_.scale, cameraTransform_.rotate, cameraTransform_.translate);
+	//viewマトリックスの生成
+	Matrix4x4 viewMatrix = ~cameraWorldMatrix;
+	//透視投影行列を生成
+	Matrix4x4 projectionMatrix = Rendering::MakePerspectiveFovMatrix(0.45f, float(WinApi::kClientWidth) / float(WinApi::kClientHeight), 0.1f, 100.0f);
+	//wvpの書き込み
+	wvpData_->WVP = worldMatrix * viewMatrix * projectionMatrix;
+	//worldTransformの書き込み
+	wvpData_->World = worldMatrix;
+}
+
+//描画
+void Object3d::Draw(){
+	//VertexBufferViewの設定
+	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+	directXBase_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定
+	//マテリアルCBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
+	//座標変換行列CBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	//SRVのDescriptorTableの先頭を設定
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material.textureIndex));
+	//平光源CBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	//描画
+	directXBase_->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.vertices.size()), 1, 0, 0, 0);
 }
 
 // .mtlファイルの読み取り	
@@ -147,6 +185,25 @@ void Object3d::CreateVertexData(){
 	std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());//頂点データをリソースにコピー
 }
 
+// インデックスデータの生成
+void Object3d::CreateIndexData() {
+	//Index用(3dGameObject)
+	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * modelData_.vertices.size());
+	//リソースの先頭のアドレスから使う
+	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズはインデックス6つ分のサイズ
+	indexBufferView_.SizeInBytes = UINT(sizeof(uint32_t) * modelData_.vertices.size());
+	//インデックスはuint32_tとする
+	indexBufferView_.Format = DXGI_FORMAT_R32_UINT;
+	//IndexResourceにデータを書き込む
+	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
+	for (int i = 0; i < modelData_.vertices.size(); i++) {
+		indexData_[i] = i; indexData_[i + 1] = i + 1; indexData_[i + 2] = i + 2;
+		indexData_[i + 3] = i + 1; indexData_[i + 4] = i + 3; indexData_[i + 5] = i + 2;
+	}
+}
+
+
 // マテリアルデータの生成
 void Object3d::CreateMaterialData(){
 	//マテリアル用のリソースを作る
@@ -180,4 +237,3 @@ void Object3d::CreateDirectionLight(){
 	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData_->intensity = 1.0f;
 }
-

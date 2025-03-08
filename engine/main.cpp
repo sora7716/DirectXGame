@@ -14,116 +14,6 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 
-///// <summary>
-///// LoadMaterialTemplateFile
-///// </summary>
-///// <param name="directoryPath">ディレクトリ名</param>
-///// <param name="filename">ファイル名</param>
-///// <returns>マテリアのファイル名</returns>
-//MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
-//	//1.中で必要となる変数の宣言
-//	MaterialData materialData;//構築するMaterialData
-//	std::string line;//ファイルから読んだ1行を格納するもの
-//	//2.ファイルを開く
-//	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
-//	assert(file.is_open());//とりあえず開かなかったら止める
-//	//3.実際にファイルを読み込み、MaterialDataを構築していく
-//	while (std::getline(file, line)) {
-//		std::string identifier;
-//		std::istringstream s(line);
-//		s >> identifier;
-//		//identifilerに応じた処理
-//		if (identifier == "map_Kd") {
-//			std::string textureFilename;
-//			s >> textureFilename;
-//			//連結してファイルパスにする
-//			materialData.textureFilePath = directoryPath + "/" + textureFilename;
-//		}
-//	}
-//	//4.MaterialDataを返す
-//	return materialData;
-//}
-//
-///// <summary>
-///// objファイルの読み込み
-///// </summary>
-///// <param name="directoryPath"></param>
-///// <param name="filename">ファイル名</param>
-///// <returns>obj</returns>
-//ModelData LoadObjeFile(const std::string& directoryPath, const std::string& filename) {
-//	//1.中で必要な変数を宣言
-//	ModelData modelData;//構築するModelData
-//	std::vector<Vector4>positions;//位置
-//	std::vector<Vector3>normals;//法線
-//	std::vector<Vector2>texcoords;//テクスチャ座標
-//	std::string line;//ファイルから呼んだ1桁を格納するもの
-//	//2.ファイルを開く
-//	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
-//	assert(file.is_open());//とりあえず開かなかったら止める
-//	//3.実際にファイルを読み込み、ModelDataを構築していく
-//	while (std::getline(file, line)) {
-//		std::string identifier;
-//		std::istringstream s(line);
-//		s >> identifier;//先頭の識別子を読む
-//		//identifierに応じた処理
-//		if (identifier == "v") {
-//			Vector4 position;
-//			s >> position.x >> position.y >> position.z;
-//			position.x *= -1.0f;
-//			position.w = 1.0f;
-//			positions.push_back(position);
-//		}
-//		else if (identifier == "vt") {
-//			Vector2 texcoord;
-//			s >> texcoord.x >> texcoord.y;
-//			texcoord.y = 1.0f - texcoord.y;
-//			texcoords.push_back(texcoord);
-//		}
-//		else if (identifier == "vn") {
-//			Vector3 normal;
-//			s >> normal.x >> normal.y >> normal.z;
-//			normal.x *= -1.0f;
-//			normals.push_back(normal);
-//		}
-//		else if (identifier == "f") {
-//			VertexData triangle[3];
-//			//面は三角形限定。そのほかは未対応
-//			for (int32_t faceVertex = 0; faceVertex < 3; ++faceVertex) {
-//				std::string vertexDefinition;
-//				s >> vertexDefinition;
-//				//頂点の要素へのIndexは「位置/UV/法線」で格納されているので、分解してIndexを取得する
-//				std::istringstream v(vertexDefinition);
-//				uint32_t elementIndices[3]{};
-//				for (int32_t element = 0; element < 3; ++element) {
-//					std::string index;
-//					std::getline(v, index, '/');// /区切りで読み込んでいく
-//					elementIndices[element] = std::stoi(index);
-//				}
-//				//要素へのIndexから、実際の要素の値を取得して、頂点を構築する
-//				Vector4 position = positions[elementIndices[0] - 1];
-//				Vector2 texcoord = texcoords[elementIndices[1] - 1];
-//				Vector3 normal = normals[elementIndices[2] - 1];
-//				/*VertexData vertex = { position,texcoord,normal };
-//				modelData.vertices.push_back(vertex);*/
-//				triangle[faceVertex] = { position,texcoord,normal };
-//			}
-//			//頂点を逆順で登録することで、周りを逆にする
-//			modelData.vertices.push_back(triangle[2]);
-//			modelData.vertices.push_back(triangle[1]);
-//			modelData.vertices.push_back(triangle[0]);
-//		}
-//		else if (identifier == "mtllib") {
-//			//materialTemplateLibraryファイルの名前を取得する
-//			std::string materialFilename;
-//			s >> materialFilename;
-//			//基本的にobjファイルと同一の階層にmtlは存在させるので、ディレクトリ名とファイル名を返す
-//			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
-//		}
-//	}
-//	//4.ModelDataを返す
-//	return modelData;
-//}
-
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	HRESULT hr = S_FALSE;
@@ -210,79 +100,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//3Dオブジェクトの共通部分の初期化
 	object3dManager->Initialize(directXBase.get(), graphicsPipelineStateDesc);
 
-	////マテリアル用のリソースを作る
-	//Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = directXBase->CreateBufferResource(sizeof(Material));
-	////マテリアルにデータを書き込む
-	//Material* materialData = nullptr;
-	////書き込むためのアドレスを取得
-	//materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	////色を書き込む
-	//materialData->color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//materialData->enableLighting = true;
-	//materialData->uvTransform = Math::MakeIdentity4x4();
-
-	////WVP用のリソースを作る
-	//Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = directXBase->CreateBufferResource(sizeof(TransformationMatrix));
-	////データを書き込む
-	//TransformationMatrix* wvpData = nullptr;
-	////書き込むためのアドレスを取得
-	//wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	////単位行列を書き込んでおく
-	//wvpData->WVP = Math::MakeIdentity4x4();
-	//wvpData->World = Math::MakeIdentity4x4();
-
-	//const int kSubdivision = 16;
-	//const int kSphereVertexNum = kSubdivision * kSubdivision * 6;
-
-	//モデルデータの読み込み
-	ModelData modelData = Object3d::LoadObjFile("engine/resources/cube", "cube.obj");
-
-	//Index用(3dGameObject)
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource = directXBase->CreateBufferResource(sizeof(uint32_t) * modelData.vertices.size());
-	//Indexに対応したViewを作成するIndexBufferView(IBV)
-	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
-	//リソースの先頭のアドレスから使う
-	indexBufferView.BufferLocation = indexResource->GetGPUVirtualAddress();
-	//使用するリソースのサイズはインデックス6つ分のサイズ
-	indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * modelData.vertices.size());
-	//インデックスはuint32_tとする
-	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
-	//IndexResourceにデータを書き込む
-	uint32_t* indexData = nullptr;
-	indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
-
-	////頂点リソースを生成
-	//Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = directXBase->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
-	////VertexBufferViewを作成する(頂点バッファービュー)
-	//D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	////リソースの先頭アドレスから使う
-	//vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	////使用するリソースのサイズは頂点3つ分のサイズ
-	//vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	////1頂点当たりのサイズ
-	//vertexBufferView.StrideInBytes = sizeof(VertexData);
-
-	////頂点リソースにデータを書き込む
-	//VertexData* vertexData = nullptr;
-	////書き込むためのアドレスを取得
-	//vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
-	//std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());//頂点データをリソースにコピー
-
-	for (int i = 0; i < modelData.vertices.size(); i++) {
-		indexData[i] = i; indexData[i + 1] = i + 1; indexData[i + 2] = i + 2;
-		indexData[i + 3] = i + 1; indexData[i + 4] = i + 3; indexData[i + 5] = i + 2;
-	}
-
-	////光源のリソースを作成
-	//Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource = directXBase->CreateBufferResource(sizeof(DirectionalLight));
-	//DirectionalLight* directionalLightData = nullptr;
-	//directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
-	//directionalLightData->color = { 1.0f,1.0f,1.0f,1.0f };
-	//directionalLightData->direction = { 0.0f,-1.0f,0.0f };
-	//directionalLightData->intensity = 1.0f;
-
-	//TextureManager::GetInstance()->LoadTexture("engine/resources/texture/uvChecker.png");
-	//TextureManager::GetInstance()->LoadTexture("engine/resources/texture/monsterBall.png");
+	//テクスチャの読み込み
+	TextureManager::GetInstance()->LoadTexture("engine/resources/texture/monsterBall.png");
 	//スプライト
 	std::vector<Vector2> pos;
 	std::vector<Sprite*>sprites;
@@ -295,28 +114,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprites.push_back(sprite);
 	}
 
-	//GameObjectの初期化
-	//Transform変数を作成
-	Transform transform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{1.7f,-1.0f,0.0f} };
-	//テクスチャの切り替え用
-	bool useMonsterBall = true;
-
-	//カメラ
-	Transform cameraTransform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f,},{0.0f,0.0f,-10.0f} };
-	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-	uint32_t textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData.material.textureFilePath);
-
-	DirectionalLight directionalLight;
-	directionalLight.color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLight.direction = { 0.0f,-1.0f,0.0f };
-	directionalLight.intensity = 1.0f;
-
-	//UVTransform用の変数
-	Transform uvTransform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
+	Object3d* object3d = new Object3d();
+	object3d->Initialize(object3dManager.get(), "engine/resources/cube", "cube.obj");
 
 	//音
 	Audio* audio_ = Audio::GetInstance();
@@ -345,7 +144,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		input->Update();
 
-		if (input->PressKey(DIK_W)) {
+		/*if (input->PressKey(DIK_W)) {
 			transform.translate.y += 0.01f;
 		}
 		else if (input->PressKey(DIK_S)) {
@@ -356,17 +155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else if (input->PressKey(DIK_A)) {
 			transform.translate.x -= 0.01f;
-		}
-		//更新処理
-		//transform.rotate.y += 0.001f;
-		TransformationMatrix sphereWvpData;
-		sphereWvpData.World = Rendering::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-		Matrix4x4 cameraMatrix = Rendering::MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
-		Matrix4x4 viewMatrix = ~cameraMatrix;
-		Matrix4x4 projectionMatrix = Rendering::MakePerspectiveFovMatrix(0.45f, float(WinApi::kClientWidth) / float(WinApi::kClientHeight), 0.1f, 100.0f);
-		sphereWvpData.WVP = sphereWvpData.World * viewMatrix * projectionMatrix;
-		*wvpData = sphereWvpData;
-
+		}*/
 
 		//スプイライト用の更新
 		for (uint32_t i = 0; i < sprites.size(); i++) {
@@ -379,46 +168,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			sprites[i]->SetPosition(pos[i]);
 			sprites[i]->Update();
 		}
-		//ライト
-		directionalLight.direction = Math::Normalize(directionalLight.direction);
-		*directionalLightData = directionalLight;
-		//開発用のUIの処理
-		/*ImGui::ShowDemoWindow();*/
-		ImGui::Begin("3dObject");
-		ImGui::DragFloat3("scale", &transform.scale.x, 0.1f, 0.0f, 5.0f);
-		ImGui::DragFloat3("rotate", &transform.rotate.x, 0.1f);
-		ImGui::DragFloat3("translate", &transform.translate.x, 0.1f);
-		ImGui::Checkbox("useMonsterBall", &useMonsterBall);
-		ImGui::End();
-
-		ImGui::Begin("light");
-		ImGui::ColorEdit4("color", &directionalLight.color.x);
-		ImGui::DragFloat3("direction", &directionalLight.direction.x, 0.1f);
-		ImGui::DragFloat("intensity", &directionalLight.intensity, 0.1f, 0.0f, 10.0f);
-		ImGui::End();
-
-		ImGui::Begin("UV:sphere");
-		ImGui::DragFloat2("scale", &uvTransform.scale.x, 0.01f, -10.0f, 10.0f);
-		ImGui::SliderAngle("rotate", &uvTransform.rotate.z);
-		ImGui::DragFloat2("translate", &uvTransform.translate.x, 0.01f, -10.0f, 10.0f);
-		ImGui::End();
+		object3d->Update();
 
 		ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
 		ImGui::End();
 
 		ImGui::Begin("sprite");
-		//ImGui::DragFloat3("scale", &size.x, 0.1f, 0.0f, 5.0f);
-		//ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
 		ImGui::DragFloat2("translate[0]", &pos[0].x, 0.1f);
 		ImGui::DragFloat2("translate[1]", &pos[1].x, 0.1f);
 		ImGui::End();
-
-		/*	ImGui::Begin("UV:sprite");
-			ImGui::DragFloat2("scale", &uvTransform_.scale.x, 0.01f, -10.0f, 10.0f);
-			ImGui::SliderAngle("rotate", &uvTransform_.rotate.z);
-			ImGui::DragFloat2("translate", &uvTransform_.translate.x, 0.01f, -10.0f, 10.0f);
-			ImGui::End();*/
 
 		audio_->SetVolume(0, volume);
 
@@ -429,25 +188,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//描画するコマンドを積む
 		//スプライトの描画準備
 		spriteManager->DrawSetting();
-		//RootSignatureを設定。PSOに設定しているけど別途設定が必要
-		directXBase->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);//VBVを設定
-		directXBase->GetCommandList()->IASetIndexBuffer(&indexBufferView);//IBVを設定
-		//マテリアルCBufferの場所を設定
-		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
-		//wvp用のCBufferの場所を設定
-		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-		//平行光源CBufferの場所を設定
-		directXBase->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
-		//SRVのDescriptorTableの先頭を設定	。2はrootParameter[2]のこと
-		directXBase->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
-		//描画!(DrawCall/ドローコール)。
-		directXBase->GetCommandList()->DrawIndexedInstanced(UINT(modelData.vertices.size()), 1, 0, 0, 0);
+		//3Dオブジェクトの描画準備
+		object3dManager->DrawSetting();
 
 		//スプライトの描画するコマンドを積む
 		for (auto sprite : sprites) {
 			sprite->Draw();
 		}
-
+		//3Dオブジェクトの描画するコマンドを積む
+		object3d->Draw();
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());
 		//描画の終了
@@ -465,6 +214,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		delete sprite;
 	}
 	sprites.clear();
+	delete object3d;
 	//テクスチャマネージャーの終了処理
 	TextureManager::GetInstance()->Finalize();
 	return 0;

@@ -49,6 +49,16 @@ public://メンバ関数
 	void Initialize(Object3dManager* object3dManager, const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
+	/// 更新
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
+
+	/// <summary>
 	/// .mtlファイルの読み取り	
 	/// </summary>
 	/// <param name="directoryPath">ディレクトリファイルパス</param>
@@ -70,10 +80,10 @@ private://メンバ関数
 	/// </summary>
 	void CreateVertexData();
 
-	///// <summary>
-	///// インデックスの初期化
-	///// </summary>
-	//void InitializeIndexData();
+	/// <summary>
+    /// インデックスデータの生成
+    /// </summary>
+	void CreateIndexData();
 
 	/// <summary>
 	/// マテリアルデータの生成
@@ -91,6 +101,10 @@ private://メンバ関数
 	void CreateDirectionLight();
 
 private://メンバ変数
+	//ローカル座標
+	Transform transform_ = {};
+	// カメラ座標
+	Transform cameraTransform_ = {};
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//3Dオブジェクトの共通部分
@@ -101,13 +115,16 @@ private://メンバ変数
 	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点
 	ComPtr<ID3D12Resource>materialResource_ = nullptr;//マテリアル
 	ComPtr<ID3D12Resource> wvpResource_ = nullptr;//座標変換行列
-	ComPtr<ID3D12Resource> directionalLightResource_;//光源
+	ComPtr<ID3D12Resource> directionalLightResource_=nullptr;//光源
+	ComPtr<ID3D12Resource>indexResource_ = nullptr;//インデックス
 	//バッファリソース内のデータを指すポインタ
 	VertexData* vertexData_ = nullptr;//頂点
 	Material* materialData_ = nullptr;//マテリアル
 	TransformationMatrix* wvpData_ = nullptr;//座標変換行列
 	DirectionalLight* directionalLightData_ = nullptr;//光源
+	uint32_t* indexData_ = nullptr;//インデックス
 	//バッファリソースの使い道を補足するバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
 };
 
