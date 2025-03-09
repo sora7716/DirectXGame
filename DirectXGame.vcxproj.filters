@@ -138,6 +138,9 @@
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp">
       <Filter>objectManager</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\ModelManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="engine\objectCommon\SpriteCommon.h">
       <Filter>objectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\ModelManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
