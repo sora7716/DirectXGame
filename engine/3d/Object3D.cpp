@@ -37,6 +37,9 @@ void Object3d::Update(){
 	wvpData_->WVP = worldMatrix * viewMatrix * projectionMatrix;
 	//worldTransformの書き込み
 	wvpData_->World = worldMatrix;
+	if (model_) {
+		model_->UVTransform(uvTransform_);
+	}
 }
 
 //描画
@@ -54,6 +57,72 @@ void Object3d::Draw(){
 //モデルのセッター
 void Object3d::SetModel(Model* model){
 	model_ = model;
+}
+
+// スケールのセッター
+void Object3d::SetScale(const Vector3& scale){
+	transform_.scale = scale;
+}
+
+// 回転のセッター
+void Object3d::SetRotate(const Vector3& rotate){
+	transform_.rotate = rotate;
+}
+
+// 平行移動のセッター
+void Object3d::SetTranslate(const Vector3& translate){
+	transform_.translate = translate;
+}
+
+// uvスケールのセッター
+void Object3d::SetUVScale(const Vector2& uvScale){
+	uvTransform_.scale = uvScale;
+}
+
+// uv回転のセッター
+void Object3d::SetUVRotate(const float uvRotate){
+	uvTransform_.rotate = uvRotate;
+}
+
+// uv平行移動のセッター
+void Object3d::SetUVTranslate(const Vector2& uvTranslate){
+	uvTransform_.translate = uvTranslate;
+}
+
+// スケールのゲッター
+const Vector3& Object3d::GetScale() const{
+	// TODO: return ステートメントをここに挿入します
+	return transform_.scale;
+}
+
+// 回転のゲッター
+const Vector3& Object3d::GetRotate() const{
+	// TODO: return ステートメントをここに挿入します
+	return transform_.rotate;
+}
+
+// 平行移動のゲッター
+const Vector3& Object3d::GetTranslate() const{
+	// TODO: return ステートメントをここに挿入します
+	return transform_.translate;
+}
+
+// uvスケールのゲッター
+const Vector2& Object3d::GetUVScale() const{
+	// TODO: return ステートメントをここに挿入します
+	return uvTransform_.scale;
+}
+
+// uv回転のゲッター
+const float Object3d::GetUVRotate() const{
+	// TODO: return ステートメントをここに挿入します
+	return uvTransform_.rotate;
+}
+
+// uv平行移動のゲッター
+const Vector2& Object3d::GetUVTranslate() const{
+	// TODO: return ステートメントをここに挿入します
+	return uvTransform_.translate;
 }
 
 // 座標変換行列データの生成

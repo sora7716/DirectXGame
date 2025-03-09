@@ -8,7 +8,7 @@
 #include <sstream>
 
 //初期化
-void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPath, const std::string& filename){
+void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPath, const std::string& filename) {
 	//Nullチェック
 	assert(modelCommon);
 	//ModelCommonのポインタを引数からメンバ変数を記録する
@@ -29,7 +29,7 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 }
 
 //描画
-void Model::Draw(){
+void Model::Draw() {
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	directXBase_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定
@@ -39,6 +39,11 @@ void Model::Draw(){
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material.textureIndex));
 	//描画
 	directXBase_->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.vertices.size()), 1, 0, 0, 0);
+}
+
+//uv変換
+void Model::UVTransform(Transform2D uvTransform) {
+	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform.scale.x,uvTransform.scale.y,1.0f }, uvTransform.rotate, { uvTransform.translate.x,uvTransform.translate.y,1.0f });
 }
 
 // .mtlファイルの読み取り	
@@ -143,7 +148,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 
 
 //頂点データの生成
-void Model::CreateVertexData(){
+void Model::CreateVertexData() {
 	//頂点リソースを生成
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 	//VertexBufferViewを作成する(頂点バッファービュー)
@@ -162,7 +167,7 @@ void Model::CreateVertexData(){
 }
 
 //インデックスデータの生成
-void Model::CreateIndexData(){
+void Model::CreateIndexData() {
 	//Index用(3dGameObject)
 	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * modelData_.vertices.size());
 	//リソースの先頭のアドレスから使う
@@ -180,7 +185,7 @@ void Model::CreateIndexData(){
 }
 
 //マテリアルデータの生成
-void Model::CreateMaterialData(){
+void Model::CreateMaterialData() {
 	//マテリアル用のリソースを作る
 	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレスを取得

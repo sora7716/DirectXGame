@@ -30,7 +30,7 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 
 	//uvTransformの情報の初期化
 	uvTransform_ = {
-		.scale = {1.0f,1.0f,1.0f},
+		.scale = {1.0f,1.0f},
 		.rotate = {},
 		.translate{}
 	};
@@ -44,13 +44,9 @@ void Sprite::Update() {
 	//インデックスリソースにデータを書き込む(6個分)
 
 	//メンバ変数の値を見た目に反映
-	transform_.translate = { transform2D_.translation.x,transform2D_.translation.y,0.0f };
-	transform_.rotate = { 0.0f,0.0f,transform2D_.rotation };
-	transform_.scale = { transform2D_.size.x,transform2D_.size.y,1.0f };
-	//メンバ変数の値を見た目に反映UV
-	uvTransform_.translate = { uvTransform2D_.translation.x,uvTransform2D_.translation.y,0.0f };
-	uvTransform_.rotate = { 0.0f,0.0f,uvTransform2D_.rotation };
-	uvTransform_.scale = { uvTransform2D_.size.x,uvTransform2D_.size.y,1.0f };
+	transform_.translate = { transform2D_.translate.x,transform2D_.translate.y,0.0f };
+	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
+	transform_.scale = { transform2D_.scale.x,transform2D_.scale.y,1.0f };
 	//Transform情報を作成する
 	UpdateTransform();
 	//UVTransform情報を作成する
@@ -82,37 +78,37 @@ void Sprite::ChangeTexture(std::string textureFilePath) {
 }
 
 //サイズのゲッター
-const Vector2& Sprite::GetSize() const {
+const Vector2& Sprite::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform2D_.size;
+	return transform2D_.scale;
 }
 
 //回転のゲッター
-float Sprite::GetRotation() const {
-	return transform2D_.rotation;
+float Sprite::GetRotate() const {
+	return transform2D_.rotate;
 }
 
 // 位置のゲッター
-const Vector2& Sprite::GetPosition() const {
+const Vector2& Sprite::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform2D_.translation;
+	return transform2D_.translate;
 }
 
 //UVのサイズのゲッター
-const Vector2& Sprite::GetUVSize() const {
+const Vector2& Sprite::GetUVScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return uvTransform2D_.size;
+	return uvTransform_.scale;
 }
 
 //UVの回転のセッター
-float Sprite::GetUVRotation() const {
-	return uvTransform2D_.rotation;
+float Sprite::GetUVRotate() const {
+	return uvTransform_.rotate;
 }
 
 //UVの位置のゲッター
-const Vector2& Sprite::GetUVPosition() const {
+const Vector2& Sprite::GetUVTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return uvTransform2D_.translation;
+	return uvTransform_.translate;
 }
 
 //色のゲッター
@@ -122,33 +118,33 @@ const Vector4& Sprite::GetColor() const {
 }
 
 //サイズのセッター
-void Sprite::SetSize(const Vector2& size) {
-	transform2D_.size = size;
+void Sprite::SetScale(const Vector2& scale) {
+	transform2D_.scale = scale;
 }
 
 //回転のセッター
-void Sprite::SetRotation(float rotation) {
-	transform2D_.rotation = rotation;
+void Sprite::SetRotate(float rotate) {
+	transform2D_.rotate = rotate;
 }
 
 // 位置のセッター
-void Sprite::SetPosition(const Vector2& position) {
-	transform2D_.translation = position;
+void Sprite::SetTranslate(const Vector2& translate) {
+	transform2D_.translate = translate;
 }
 
 //UVのサイズのセッター
-void Sprite::SetUVSize(const Vector2& size) {
-	uvTransform2D_.size = size;
+void Sprite::SetUVScale(const Vector2& scale) {
+	uvTransform_.scale = scale;
 }
 
 //UVの回転のセッター
-void Sprite::SetUVRoation(float rotation) {
-	uvTransform2D_.rotation = rotation;
+void Sprite::SetUVRotate(float rotate) {
+	uvTransform_.rotate = rotate;
 }
 
 //UVの位置のセッター
-void Sprite::SetUVPosition(const Vector2& position) {
-	uvTransform2D_.translation = position;
+void Sprite::SetUVTranslate(const Vector2& translate) {
+	uvTransform_.translate = translate;
 }
 
 //色のセッター
@@ -250,7 +246,7 @@ void Sprite::InitializeTransformationMatrixData() {
 }
 
 //座標変換行列データの生成
-void Sprite::CreateTransformationMatrixData(){
+void Sprite::CreateTransformationMatrixData() {
 	//座標変換行列リソースを作成する
 	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
 	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
@@ -260,7 +256,7 @@ void Sprite::CreateTransformationMatrixData(){
 }
 
 //光源の生成
-void Sprite::CreateDirectionLight(){
+void Sprite::CreateDirectionLight() {
 	//光源
 	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
@@ -283,5 +279,5 @@ void Sprite::UpdateTransform() {
 // UVの座標変換の更新
 void Sprite::UpdateUVTransform() {
 	//UVTransform
-	materialData_->uvTransform = Rendering::MakeUVAffineMatrix(uvTransform_.scale, uvTransform_.rotate.z, uvTransform_.translate);
+	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform_.scale.x,uvTransform_.scale.y,1.0f }, uvTransform_.rotate, { uvTransform_.translate.x,uvTransform_.translate.y,1.0f });
 }

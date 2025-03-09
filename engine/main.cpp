@@ -30,6 +30,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::unique_ptr<Object3dCommon>object3dCommon = std::make_unique<Object3dCommon>();
 	//モデルの共通部分
 	std::unique_ptr<ModelCommon>modelCommon = std::make_unique<ModelCommon>();
+	modelCommon->Initialize(directXBase.get());
 	//ウィンドウの作成
 	winApi->Initialize();
 	//DirectX12の初期化
@@ -113,15 +114,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Sprite* sprite = new Sprite();
 		sprite->Initialize(spriteCommon.get(), "engine/resources/texture/uvChecker.png");
 		pos.push_back(Vector2(120.0f, 0.0f) * (float)i);
-		sprite->SetPosition(pos[i]);
-		sprite->SetSize({ 100.0f,180.0f });
+		sprite->SetTranslate(pos[i]);
+		sprite->SetScale({ 100.0f,180.0f });
 		sprites.push_back(sprite);
 	}
 	Model* model = new Model();
 	model->Initialize(modelCommon.get(), "engine/resources/cube", "cube.obj");
-	Object3d* object3d = new Object3d();
-	object3d->Initialize(object3dCommon.get());
-
+	std::vector<Transform>object3dTransforms;
+	std::vector<Object3d*>object3ds;
+	for (uint32_t i = 0; i < 2; i++) {
+		Object3d* object3d = new Object3d();
+		object3d->Initialize(object3dCommon.get());
+		object3d->SetModel(model);
+		Transform transform;
+		transform.scale = { 1.0f,1.0f,1.0f };
+		transform.rotate = {};
+		transform.translate = { (float)i * -2.7f,0.0f,0.0f };
+		object3dTransforms.push_back(transform);
+		object3ds.push_back(object3d);
+	}
 	//音
 	Audio* audio_ = Audio::GetInstance();
 	//初期化
@@ -170,10 +181,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			else {
 				sprites[i]->ChangeTexture("engine/resources/texture/monsterBall.png");
 			}
-			sprites[i]->SetPosition(pos[i]);
+			sprites[i]->SetTranslate(pos[i]);
 			sprites[i]->Update();
 		}
-		object3d->Update();
+		for (uint32_t i = 0; i < object3ds.size(); i++) {
+			object3ds[i]->SetTranslate(object3dTransforms[i].translate);
+			object3dTransforms[i].rotate += 0.1f;
+			object3ds[i]->SetRotate(object3dTransforms[i].rotate);
+			object3ds[i]->Update();
+		}
 
 		ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
@@ -184,6 +200,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat2("translate[1]", &pos[1].x, 0.1f);
 		ImGui::End();
 
+		ImGui::Begin("object3d");
+		ImGui::DragFloat2("translate[0]", &object3dTransforms[0].translate.x, 0.1f);
+		ImGui::DragFloat2("translate[1]", &object3dTransforms[1].translate.x, 0.1f);
+		ImGui::End();
 		audio_->SetVolume(0, volume);
 
 		//ImGuiの内部コマンドを生成する
@@ -201,7 +221,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			sprite->Draw();
 		}
 		//3Dオブジェクトの描画するコマンドを積む
-		object3d->Draw();
+		for (auto object3d : object3ds) {
+			object3d->Draw();
+		}
 		//実際のcommandListのImGuiの描画コマンドを積む
 		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());
 		//描画の終了
@@ -219,7 +241,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		delete sprite;
 	}
 	sprites.clear();
-	delete object3d;
+	for (auto object3d : object3ds) {
+		delete object3d;
+	}
+	object3ds.clear();
 	delete  model;
 	//テクスチャマネージャーの終了処理
 	TextureManager::GetInstance()->Finalize();

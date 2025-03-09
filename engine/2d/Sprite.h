@@ -12,13 +12,6 @@
 class SpriteCommon;
 class DirectXBase;
 
-// 2次元用の座標変換
-typedef struct Transform2D {
-	Vector2 size;
-	float rotation;
-	Vector2 translation;
-}Transform2D;
-
 /// <summary>
 /// スプライト
 /// </summary>
@@ -63,37 +56,37 @@ public://メンバ関数
 	/// サイズのゲッター
 	/// </summary>
 	/// <returns>サイズ</returns>
-	const Vector2& GetSize()const;
+	const Vector2& GetScale()const;
 
 	/// <summary>
 	/// 回転のゲッター
 	/// </summary>
 	/// <returns>回転</returns>
-	float GetRotation()const;
+	float GetRotate()const;
 
 	/// <summary>
 	/// 位置のゲッター
 	/// </summary>
 	/// <returns>位置</returns>
-	const Vector2& GetPosition()const;
+	const Vector2& GetTranslate()const;
 
 	/// <summary>
 	/// UVのサイズのゲッター
 	/// </summary>
 	/// <returns>UVサイズ</returns>
-	const Vector2& GetUVSize()const;
+	const Vector2& GetUVScale()const;
 
 	/// <summary>
 	/// UVの回転のゲッター
 	/// </summary>
 	/// <returns>UVの回転</returns>
-	float GetUVRotation()const;
+	float GetUVRotate()const;
 
 	/// <summary>
 	/// UVの位置のゲッター
 	/// </summary>
 	/// <returns>UVの位置</returns>
-	const Vector2& GetUVPosition()const;
+	const Vector2& GetUVTranslate()const;
 
 	/// <summary>
 	/// 色のゲッター
@@ -104,38 +97,38 @@ public://メンバ関数
 	/// <summary>
 	/// サイズのセッター
 	/// </summary>
-	/// <param name="size">サイズ</param>
-	void SetSize(const Vector2& size);
+	/// <param name="scale">サイズ</param>
+	void SetScale(const Vector2& scale);
 
 	/// <summary>
 	/// 回転のセッター
 	/// </summary>
-	/// <param name="rotation">回転</param>
-	void SetRotation(float rotation);
+	/// <param name="rotate">回転</param>
+	void SetRotate(float rotate);
 
 	/// <summary>
 	/// 位置のセッター
 	/// </summary>
-	/// <param name="position">位置</param>
-	void SetPosition(const Vector2& position);
+	/// <param name="translate">位置</param>
+	void SetTranslate(const Vector2& translate);
 
 	/// <summary>
 	/// UVのサイズのセッター
 	/// </summary>
-	/// <param name="size">サイズ</param>
-	void SetUVSize(const Vector2& size);
+	/// <param name="scale">サイズ</param>
+	void SetUVScale(const Vector2& scale);
 
 	/// <summary>
 	/// UVの回転のセッター
 	/// </summary>
-	/// <param name="rotation">回転</param>
-	void SetUVRoation(float rotation);
+	/// <param name="rotate">回転</param>
+	void SetUVRotate(float rotate);
 
 	/// <summary>
 	/// UVの位置のゲッター
 	/// </summary>
-	/// <param name="position">位置</param>
-	void SetUVPosition(const Vector2& position);
+	/// <param name="translate">位置</param>
+	void SetUVTranslate(const Vector2& translate);
 
 	/// <summary>
 	/// 色のセッター
@@ -202,18 +195,17 @@ private://メンバ変数
 	uint32_t textureIndex = 0;
 	//ローカル座標
 	Transform2D transform2D_ = {
-		.size = { 640.0f,360.0f },
-		.rotation = 0.0f,
-		.translation = {0.0f,0.0f}
+		.scale = { 640.0f,360.0f },
+		.rotate = 0.0f,
+		.translate = {0.0f,0.0f}
 	};
 	//UV座標
-	Transform2D uvTransform2D_ = {
-		.size = { 1.0f,1.0f },
-		.rotation = 0.0f,
-		.translation = {0.0f,0.0f}
+	Transform2D uvTransform_ = {
+		.scale = { 1.0f,1.0f },
+		.rotate = 0.0f,
+		.translate = {0.0f,0.0f}
 	};
 	Transform transform_ = {};//トランスフォームの情報
-	Transform uvTransform_ = {};//UVトランスフォームの情報
 	SpriteCommon* spriteCommon_ = nullptr;//スプライトの共通部分
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//バッファリソース

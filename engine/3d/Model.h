@@ -4,6 +4,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "engine/math/ResourceData.h"
+#include "engine/math/rendering/Rendering.h"
 //マテリアルデータ
 typedef struct MaterialData {
 	std::string textureFilePath;
@@ -48,6 +49,12 @@ public://メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// uv変換
+	/// </summary>
+	/// <param name="uvTransform">uv座標</param>
+	void UVTransform(Transform2D uvTransform);
 
 	/// <summary>
     /// .mtlファイルの読み取り	
