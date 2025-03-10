@@ -3,6 +3,7 @@
 #include "engine/2d/TextureManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
+#include "ModelManager.h"
 #include <fstream>
 #include <sstream>
 #include <cassert>
@@ -55,6 +56,10 @@ void Object3d::Draw(){
 }
 
 //モデルのセッター
+void Object3d::SetModel(const std::string& filePath){
+	model_ = ModelManager::GetInstance()->FindModel(filePath);
+}
+
 void Object3d::SetModel(Model* model){
 	model_ = model;
 }

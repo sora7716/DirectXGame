@@ -23,7 +23,7 @@ class ModelCommon;
 class DirectXBase;
 
 //3dモデル
-class Model{
+class Model {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -36,14 +36,15 @@ public://メンバ関数
 	/// デストラクタ
 	/// </summary>
 	~Model() = default;
-	
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="modelCommon">モデルの共通部分</param>
-	/// <param name="directoryPath">ディレクトリパス</param>
-	/// <param name="filename">ファイル名</param>
-	void Initialize(ModelCommon*modelCommon, const std::string& directoryPath, const std::string& filename);
+    /// <param name="directoryPath">ディレクトリファイルパス(最後に"/"はいらない)</param>
+	/// <param name="storedFilePath">モデルを保管しているファイル名(最初と最後に"/"入らない)</param>
+	/// <param name="filename">ファイル名(最初に"/"入らない</param>
+	void Initialize(ModelCommon* modelCommon, const std::string& directoryPath, const std::string& storedFilePath, const std::string& filename);
 
 	/// <summary>
 	/// 描画
@@ -57,20 +58,22 @@ public://メンバ関数
 	void UVTransform(Transform2D uvTransform);
 
 	/// <summary>
-    /// .mtlファイルの読み取り	
-    /// </summary>
-    /// <param name="directoryPath">ディレクトリファイルパス</param>
-    /// <param name="filename">ファイル名</param>
-    /// <returns>マテリアルデータ</returns>
-	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-
-	/// <summary>
-	/// .objファイル読み取り
+	/// .mtlファイルの読み取り	
 	/// </summary>
 	/// <param name="directoryPath">ディレクトリファイルパス</param>
 	/// <param name="filename">ファイル名</param>
-	/// <returns>モデルデータ</returns>
-	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	/// <returns>マテリアルデータ</returns>
+	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
+
+
+	/// <summary>
+    /// .objファイル読み取り
+    /// </summary>
+	/// <param name="directoryPath">ディレクトリファイルパス(最後に"/"はいらない)</param>
+	/// <param name="storedFilePath">モデルを保管しているファイル名(最初と最後に"/"入らない)</param>
+	/// <param name="filename">ファイル名(最初に"/"入らない</param>
+    /// <returns>モデルデータ</returns>
+	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& storedFilePath, const std::string& filename);
 
 private://メンバ関数
 	/// <summary>

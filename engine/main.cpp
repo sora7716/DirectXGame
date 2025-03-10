@@ -8,8 +8,7 @@
 #include "2d/Sprite.h"
 #include "objectCommon/Object3dCommon.h"
 #include "3d/Object3d.h"
-#include "3d/ModelCommon.h"
-#include "3d/Model.h"
+#include "3d/ModelManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -28,9 +27,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::unique_ptr<SpriteCommon>spriteCommon = std::make_unique<SpriteCommon>();
 	//3Dオブジェクトの共通部分
 	std::unique_ptr<Object3dCommon>object3dCommon = std::make_unique<Object3dCommon>();
-	//モデルの共通部分
-	std::unique_ptr<ModelCommon>modelCommon = std::make_unique<ModelCommon>();
-	modelCommon->Initialize(directXBase.get());
+	////モデルの共通部分
+	/*std::unique_ptr<ModelCommon>modelCommon = std::make_unique<ModelCommon>();
+	modelCommon->Initialize(directXBase.get());*/
+	//ModelManagerの初期化
+	ModelManager::GetInstance()->Initialize(directXBase.get());
 	//ウィンドウの作成
 	winApi->Initialize();
 	//DirectX12の初期化
@@ -118,14 +119,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite->SetScale({ 100.0f,180.0f });
 		sprites.push_back(sprite);
 	}
-	Model* model = new Model();
-	model->Initialize(modelCommon.get(), "engine/resources/cube", "cube.obj");
+	/*Model* model = new Model();
+	model->Initialize(modelCommon.get(), "engine/resources/models", "cube", "cube.obj");*/
+	ModelManager::GetInstance()->LoadModel("base", "axis.obj");
 	std::vector<Transform>object3dTransforms;
 	std::vector<Object3d*>object3ds;
 	for (uint32_t i = 0; i < 2; i++) {
 		Object3d* object3d = new Object3d();
 		object3d->Initialize(object3dCommon.get());
-		object3d->SetModel(model);
+		object3d->SetModel("axis.obj");
 		Transform transform;
 		transform.scale = { 1.0f,1.0f,1.0f };
 		transform.rotate = {};
@@ -229,13 +231,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//描画の終了
 		directXBase->PostDraw();
 	}
-	//ImGuiの終了処理
+	//終了処理
+	//ImGuiの終了
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
-	//WindowsAPIの終了処理
+	//WindowsAPIの終了
 	winApi->Finalize();
-	//Audioの終了処理
+	//Audioの終了
 	audio_->Finalize();
 	for (auto sprite : sprites) {
 		delete sprite;
@@ -245,8 +248,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		delete object3d;
 	}
 	object3ds.clear();
-	delete  model;
-	//テクスチャマネージャーの終了処理
+	//テクスチャマネージャーの終了
 	TextureManager::GetInstance()->Finalize();
+	//モデルマネージャーの終了
+	ModelManager::GetInstance()->Finalize();
 	return 0;
 }

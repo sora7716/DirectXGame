@@ -1,11 +1,11 @@
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/math/rendering/Rendering.h"
+#include "Model.h"
 #include <vector>
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
-#include "Model.h"
 
 //前方宣言
 class Object3dCommon;
@@ -46,7 +46,9 @@ public://メンバ関数
 	/// <summary>
 	/// モデルのセッター
 	/// </summary>
-	/// <param name="model">モデル</param>
+	/// <param name="filePath">モデルファイルパス</param>
+	void SetModel(const std::string& filePath);
+
 	void SetModel(Model* model);
 
 	/// <summary>

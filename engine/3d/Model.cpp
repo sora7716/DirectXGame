@@ -8,14 +8,14 @@
 #include <sstream>
 
 //初期化
-void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPath, const std::string& filename) {
+void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPath, const std::string& storedFilePath, const std::string& filename) {
 	//Nullチェック
 	assert(modelCommon);
 	//ModelCommonのポインタを引数からメンバ変数を記録する
 	modelCommon_ = modelCommon;
 	directXBase_ = modelCommon_->GetDirectXBase();
 	//モデルの読み込み
-	modelData_ = LoadObjFile(directoryPath, filename);
+	modelData_ = LoadObjFile(directoryPath, storedFilePath,filename);
 	//頂点データの生成
 	CreateVertexData();
 	//インデックスデータの生成
@@ -72,7 +72,7 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 }
 
 // .objファイル読み取り
-ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename) {
+ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& storedFilePath, const std::string& filename) {
 	//1.中で必要な変数を宣言
 	ModelData modelData;//構築するModelData
 	std::vector<Vector4>positions;//位置
@@ -80,7 +80,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	std::vector<Vector2>texcoords;//テクスチャ座標
 	std::string line;//ファイルから呼んだ1桁を格納するもの
 	//2.ファイルを開く
-	std::ifstream file(directoryPath + "/" + filename);//ファイルを開く
+	std::ifstream file(directoryPath + "/" + storedFilePath + "/" + filename);//ファイルを開く
 	assert(file.is_open());//とりあえず開かなかったら止める
 	//3.実際にファイルを読み込み、ModelDataを構築していく
 	while (std::getline(file, line)) {
@@ -139,7 +139,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 			std::string materialFilename;
 			s >> materialFilename;
 			//基本的にobjファイルと同一の階層にmtlは存在させるので、ディレクトリ名とファイル名を返す
-			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+			modelData.material = LoadMaterialTemplateFile(directoryPath + "/"+storedFilePath, materialFilename);
 		}
 	}
 	//4.ModelDataを返す

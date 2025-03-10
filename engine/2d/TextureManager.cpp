@@ -13,6 +13,7 @@ uint32_t TextureManager::kSRVIndexTop = 1;
 
 //インスタンスのゲッター
 TextureManager* TextureManager::GetInstance() {
+	assert(!isFinalize && "GetInstance() called after Finalize()");
 	if (instance == nullptr) {
 		instance = new TextureManager();
 	}
@@ -109,4 +110,5 @@ std::vector<TextureManager::TextureData> TextureManager::GetTextureData() const{
 void TextureManager::Finalize() {
 	delete instance;
 	instance = nullptr;
+	isFinalize = true;
 }

@@ -1,6 +1,7 @@
 #pragma once
 //前方宣言
 class DirectXBase;
+
 //3dモデルの共通部分
 class ModelCommon{
 public://メンバ関数
