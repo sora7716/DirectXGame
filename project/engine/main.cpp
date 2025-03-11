@@ -193,7 +193,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			object3ds[i]->Update();
 		}
 
-		ImGui::Begin("sound");
+		/*ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
 		ImGui::End();
 
@@ -205,7 +205,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::Begin("object3d");
 		ImGui::DragFloat2("translate[0]", &object3dTransforms[0].translate.x, 0.1f);
 		ImGui::DragFloat2("translate[1]", &object3dTransforms[1].translate.x, 0.1f);
-		ImGui::End();
+		ImGui::End();*/
 		audio_->SetVolume(0, volume);
 
 		//ImGuiの内部コマンドを生成する
