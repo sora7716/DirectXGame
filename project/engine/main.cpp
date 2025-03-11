@@ -27,9 +27,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::unique_ptr<SpriteCommon>spriteCommon = std::make_unique<SpriteCommon>();
 	//3Dオブジェクトの共通部分
 	std::unique_ptr<Object3dCommon>object3dCommon = std::make_unique<Object3dCommon>();
-	////モデルの共通部分
-	/*std::unique_ptr<ModelCommon>modelCommon = std::make_unique<ModelCommon>();
-	modelCommon->Initialize(directXBase.get());*/
 	//ModelManagerの初期化
 	ModelManager::GetInstance()->Initialize(directXBase.get());
 	//ウィンドウの作成
@@ -119,8 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		sprite->SetScale({ 100.0f,180.0f });
 		sprites.push_back(sprite);
 	}
-	/*Model* model = new Model();
-	model->Initialize(modelCommon.get(), "engine/resources/models", "cube", "cube.obj");*/
+	//モデルの読み込み
 	ModelManager::GetInstance()->LoadModel("base", "axis.obj");
 	std::vector<Transform>object3dTransforms;
 	std::vector<Object3d*>object3ds;
