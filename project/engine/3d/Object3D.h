@@ -1,6 +1,5 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "engine/math/rendering/Rendering.h"
 #include "Model.h"
 #include <vector>
 #include <string>
@@ -9,6 +8,7 @@
 
 //前方宣言
 class Object3dCommon;
+class Camera;
 
 /// <summary>
 /// 3Dオブジェクト
@@ -49,7 +49,11 @@ public://メンバ関数
 	/// <param name="filePath">モデルファイルパス</param>
 	void SetModel(const std::string& filePath);
 
-	void SetModel(Model* model);
+	/// <summary>
+	/// カメラのセッター
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	void SetCamera(Camera* camera);
 
 	/// <summary>
 	/// スケールのセッター
@@ -135,14 +139,14 @@ private://メンバ関数
 private://メンバ変数
 	//ローカル座標
 	Transform transform_ = {};
-	// カメラ座標
-	Transform cameraTransform_ = {};
 	//UV座標
 	Transform2D uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
+	//カメラ
+	Camera* camera_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//3Dオブジェクトの共通部分

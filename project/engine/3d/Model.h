@@ -4,7 +4,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "engine/math/ResourceData.h"
-#include "engine/math/rendering/Rendering.h"
+#include "engine/math/func/Rendering.h"
 //マテリアルデータ
 typedef struct MaterialData {
 	std::string textureFilePath;
