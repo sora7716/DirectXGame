@@ -1,20 +1,22 @@
 #pragma once
-#include "BaseObjectManager.h"
+#include "BaseObjectCommon.h"
+//前方宣言
+class DirectXBase;
 /// <summary>
-/// 3Dオブジェクトの共通部分
+/// スプライトの共通部分
 /// </summary>
-class Object3DManager:public BaseObjectManager{
+class SpriteCommon :public BaseObjectCommon{
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Object3DManager() = default;
-	
+	SpriteCommon() = default;
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Object3DManager() = default;
+	~SpriteCommon() = default;
 };
 

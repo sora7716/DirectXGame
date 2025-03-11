@@ -6,19 +6,19 @@ class DirectXBase;
 /// <summary>
 /// オブジェクトの管理する基底クラス
 /// </summary>
-class BaseObjectManager{
+class BaseObjectCommon{
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	BaseObjectManager() = default;
+	BaseObjectCommon() = default;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	virtual~BaseObjectManager() = default;
+	virtual~BaseObjectCommon() = default;
 
 	/// <summary>
 	/// 初期化

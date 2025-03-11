@@ -13,7 +13,10 @@
   <ItemGroup>
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\2d\TextureManager.cpp" />
-    <ClCompile Include="engine\3d\Object3D.cpp" />
+    <ClCompile Include="engine\3d\Model.cpp" />
+    <ClCompile Include="engine\3d\ModelCommon.cpp" />
+    <ClCompile Include="engine\3d\ModelManager.cpp" />
+    <ClCompile Include="engine\3d\Object3d.cpp" />
     <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="engine\base\DirectXBase.cpp" />
@@ -29,9 +32,9 @@
     <ClCompile Include="engine\math\rendering\Rendering.cpp" />
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
-    <ClCompile Include="engine\objectManager\BaseObjectManager.cpp" />
-    <ClCompile Include="engine\objectManager\Object3DManager.cpp" />
-    <ClCompile Include="engine\objectManager\SpriteManager.cpp" />
+    <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
+    <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
+    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -43,7 +46,10 @@
   <ItemGroup>
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\2d\TextureManager.h" />
-    <ClInclude Include="engine\3d\Object3D.h" />
+    <ClInclude Include="engine\3d\Model.h" />
+    <ClInclude Include="engine\3d\ModelCommon.h" />
+    <ClInclude Include="engine\3d\ModelManager.h" />
+    <ClInclude Include="engine\3d\Object3d.h" />
     <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h" />
     <ClInclude Include="engine\base\DirectXBase.h" />
@@ -61,9 +67,9 @@
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\math\ResourceData.h" />
-    <ClInclude Include="engine\objectManager\BaseObjectManager.h" />
-    <ClInclude Include="engine\objectManager\Object3DManager.h" />
-    <ClInclude Include="engine\objectManager\SpriteManager.h" />
+    <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
+    <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
+    <ClInclude Include="engine\objectCommon\SpriteCommon.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -93,7 +99,7 @@
     <Text Include="externals\imgui\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+    <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
   </ItemGroup>

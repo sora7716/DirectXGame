@@ -1,4 +1,4 @@
-#include "SpriteManager.h"
+#include "Object3dCommon.h"
 #include "engine/base/DirectXBase.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
@@ -6,3 +6,4 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 using namespace Microsoft::WRL;
+

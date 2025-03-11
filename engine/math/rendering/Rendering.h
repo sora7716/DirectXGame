@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/math/Vector3.h"
+#include "engine/math/Vector2.h"
 #include "engine/math/Matrix4x4.h"
 
 //Transform情報
@@ -8,6 +9,13 @@ typedef struct Transform {
 	Vector3 rotate;
 	Vector3 translate;
 }Transform;
+
+//Transform2D情報
+typedef struct Transform2D {
+	Vector2 scale;
+	float rotate;
+	Vector2 translate;
+}Transform2D;
 
 //TransformationMatrix
 typedef struct TransformationMatrix {

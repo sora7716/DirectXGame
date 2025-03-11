@@ -74,6 +74,8 @@ private://静的メンバ変数
 	static TextureManager* instance;
 	//SRVインデックスの開始番号
 	static uint32_t kSRVIndexTop;
+	//Finalizeしたかのフラグ
+	static inline bool isFinalize = false;
 private://メンバ変数
 	//テクスチャデータ
 	std::vector<TextureData> textureDatas_;
