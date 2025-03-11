@@ -441,6 +441,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//描画処理
 		directXBase->PreDraw();
 		//描画するコマンドを積む
+		//3Dオブジェクトの描画準備
+		object3DManager->DrawSetting();
 		//スプライトの描画準備
 		spriteManager->DrawSetting();
 		//RootSignatureを設定。PSOに設定しているけど別途設定が必要
