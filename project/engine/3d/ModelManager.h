@@ -7,7 +7,7 @@
 /// <summary>
 /// モデルの管理
 /// </summary>
-class ModelManager{
+class ModelManager {
 public://メンバ関数
 	/// <summary>
 	/// インスタンスのゲッター
@@ -40,14 +40,10 @@ public://メンバ関数
 	/// </summary>
 	void Finalize();
 private://メンバ関数
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
+	//コンストラクタを封印
 	ModelManager() = default;
 
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
+	//デストラクタを封印
 	~ModelManager() = default;
 
 	//コピーコンストラクタ禁止

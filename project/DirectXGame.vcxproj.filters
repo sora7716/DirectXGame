@@ -19,9 +19,6 @@
     <Filter Include="engine">
       <UniqueIdentifier>{3f40db2f-e651-4102-b4aa-228e6db54a4a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\objectManager">
-      <UniqueIdentifier>{bcf43617-959a-4a3d-92a0-f33aac9bba70}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\2d">
       <UniqueIdentifier>{4d00935a-7f96-419d-af99-6e799300f223}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="application">
       <UniqueIdentifier>{b779c107-e531-4844-9928-b705d07604ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\objectCommon">
+      <UniqueIdentifier>{bcf43617-959a-4a3d-92a0-f33aac9bba70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,13 +133,13 @@
       <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClCompile>
     <ClCompile Include="engine\objectCommon\SpriteCommon.cpp">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClCompile>
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClCompile>
     <ClCompile Include="engine\3d\ModelManager.cpp">
       <Filter>engine\3d</Filter>
@@ -149,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="engine\math\func\Rendering.cpp">
       <Filter>engine\math\func</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\CameraManager.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,13 +243,13 @@
       <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\objectCommon\BaseObjectCommon.h">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClInclude>
     <ClInclude Include="engine\objectCommon\Object3dCommon.h">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClInclude>
     <ClInclude Include="engine\objectCommon\SpriteCommon.h">
-      <Filter>engine\objectManager</Filter>
+      <Filter>engine\objectCommon</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\ModelManager.h">
       <Filter>engine\3d</Filter>
@@ -256,6 +259,9 @@
     </ClInclude>
     <ClInclude Include="engine\math\func\Rendering.h">
       <Filter>engine\math\func</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\CameraManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@
 #include "objectCommon/Object3dCommon.h"
 #include "3d/Object3d.h"
 #include "3d/ModelManager.h"
-#include "3d/Camera.h"
+#include "3d/CameraManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -36,10 +36,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directXBase->Initialize();
 	//テクスチャマネージャーの初期化
 	TextureManager::GetInstance()->Initialize(directXBase.get());
+	//カメラマネージャーの追加
+	CameraManager::GetInstance()->AddCamera("defaultCamera");
+	CameraManager::GetInstance()->AddCamera("defaultCamera1");
 	//カメラ
-	Camera* camera = new Camera();
-	object3dCommon->SetDefaultCamera(camera);
+	object3dCommon->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
+	object3dCommon->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera1"));
 	Transform cameraTransform = { {},{},{0.0f,0.0f,-10.0f} };
+	Transform cameraTransform1 = { {},{},{0.0f,0.0f,-100.0f} };
 	//InputLayout
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 
@@ -194,10 +198,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			object3ds[i]->Update();
 		}
 		//カメラの更新
-		camera->Update();
-		camera->SetTranslate(cameraTransform.translate);
-		object3dCommon->SetDefaultCamera(camera);
-
+		CameraManager::GetInstance()->Update();
+		CameraManager::GetInstance()->FindCamera("defaultCamera")->SetTranslate(cameraTransform.translate);
+		CameraManager::GetInstance()->FindCamera("defaultCamera1")->SetTranslate(cameraTransform1.translate);
+		if (input->TriggerKey(DIK_W)) {
+			for (uint32_t i = 0; i < object3ds.size(); i++) {
+				object3ds[i]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
+			}
+		}
+		else if (input->TriggerKey(DIK_S)) {
+			for (uint32_t i = 0; i < object3ds.size(); i++) {
+				object3ds[i]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera1"));
+			}
+		}
 		ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
 		ImGui::End();
@@ -214,6 +227,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		ImGui::Begin("camera");
 		ImGui::DragFloat3("translate", &cameraTransform.translate.x, 0.1f);
+		ImGui::DragFloat3("translate1", &cameraTransform1.translate.x, 0.1f);
 		ImGui::End();
 		audio_->SetVolume(0, volume);
 
@@ -261,8 +275,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		delete object3d;
 	}
 	object3ds.clear();
-	//カメラの終了
-	delete camera;
+	//カメラマネージャーの終了
+	CameraManager::GetInstance()->Finalize();
 	//テクスチャマネージャーの終了
 	TextureManager::GetInstance()->Finalize();
 	//モデルマネージャーの終了
