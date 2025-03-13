@@ -1,9 +1,12 @@
 #pragma once
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
+#include <string>
+#include <unordered_map>
 
 //前方宣言
 class DirectXBase;
+class SRVManager;
 
 /// <summary>
 /// テクスチャを管理する
@@ -14,9 +17,9 @@ private://エイリアステンプレート
 private://構造体
 	//テクスチャデータ
 	typedef struct TextureData {
-		std::string filePath;//画像ファイルのパス
 		DirectX::TexMetadata metadata;//画像の幅や高さなどの情報
 		ComPtr<ID3D12Resource>resourece;//テクスチャリソース
+		uint32_t srvIndex;
 		ComPtr<ID3D12Resource>intermediateResource;//アップロードするリソース
 		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;//SRV作成時に必要なCPUハンドル
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;//描画コマンドに必要なGPUハンドル
@@ -32,7 +35,8 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
-	void Initialize(DirectXBase* directXBase);
+	/// <param name="srvManager">SRVの管理</param>
+	void Initialize(DirectXBase* directXBase,SRVManager*srvManager);
 
 	/// <summary>
 	/// テクスチャファイルの読み込み
@@ -48,13 +52,25 @@ public://メンバ関数
 	uint32_t GetTextureIndexByFilePath(const std::string& filePath);
 
 	/// <summary>
-	/// テクスチャ番号からGPUハンドルを取得
+	/// メタデータの取得
 	/// </summary>
-	/// <param name="textureIndex">テクスチャ番号</param>
-	/// <returns>GPUハンドル</returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(uint32_t textureIndex);
+	/// <param name="filePath">ファイルパス</param>
+	/// <returns>メタデータ</returns>
+	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 
-	std::vector<TextureData> GetTextureData()const;
+	/// <summary>
+	/// SRVインデックスの取得
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	/// <returns>SRVインデックス</returns>
+	uint32_t GetSRVIndex(const std::string& filePath);
+
+	/// <summary>
+	/// GPUハンドルの取得
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	/// <returns>GPUハンドル</returns>
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVHandleGPU(const std::string& filePath);
 
 	/// <summary>
 	/// 終了処理
@@ -78,7 +94,9 @@ private://静的メンバ変数
 	static inline bool isFinalize = false;
 private://メンバ変数
 	//テクスチャデータ
-	std::vector<TextureData> textureDatas_;
+	std::unordered_map<std::string, TextureData>textureDatas_;
 	//DirectX基盤
 	DirectXBase* directXBase_ = nullptr;
+	//SRVの管理
+	SRVManager* srvManager_ = nullptr;
 };

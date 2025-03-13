@@ -192,7 +192,7 @@ private://メンバ関数
 	void UpdateUVTransform();
 private://メンバ変数
 	//テクスチャ番号
-	uint32_t textureIndex = 0;
+	std::string filePath_ = {};
 	//ローカル座標
 	Transform2D transform2D_ = {
 		.scale = { 640.0f,360.0f },

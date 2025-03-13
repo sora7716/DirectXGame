@@ -1,5 +1,6 @@
 #include "TextureManager.h"
 #include "engine/base/DirectXBase.h"
+#include "engine/base/SRVManager.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -20,11 +21,11 @@ TextureManager* TextureManager::GetInstance() {
 	return instance;
 }
 
-void TextureManager::Initialize(DirectXBase* directXBase) {
+void TextureManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager) {
 	assert(directXBase);//Nullチェック
 	directXBase_ = directXBase;
 	//SRVの数と同数
-	textureDatas_.reserve(DirectXBase::kMaxSRVCount);
+	textureDatas_.reserve(SRVManager::kMaxSRVCount);
 }
 
 //テクスチャファイルの読み込み
@@ -41,18 +42,16 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	assert(SUCCEEDED(hr));
 
 	//テクスチャデータを追加
-	textureDatas_.resize(textureDatas_.size() + 1);
+	//textureDatas_.resize(textureDatas_.size() + 1);
 	//追加したテクスチャデータの参照を取得する
-	TextureData& textureData = textureDatas_.back();
-	textureData.filePath = filePath;
+	TextureData& textureData = textureDatas_[filePath];
 	textureData.metadata = mipImages.GetMetadata();
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
 	textureData.intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);//ここでエラーが起きる
-	//テクスチャデータの要素数番号をSRVのインデックスとする
-	uint32_t srvIndex = static_cast<uint32_t>(textureDatas_.size() - 1) + kSRVIndexTop;
-	//CPU・GPUのSRVハンドルを取得
-	textureData.srvHandleCPU = directXBase_->GetSRVCPUDescriptorHandle(srvIndex);
-	textureData.srvHandleGPU = directXBase_->GetSRVGPUDescriptorHandle(srvIndex);
+	//SRVの確保
+	textureData.srvIndex = srvManager_->Allocate();
+	textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
+	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	//SRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = textureData.metadata.format;
@@ -62,48 +61,40 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	//設定を元にSRVを生成
 	directXBase_->GetDevice()->CreateShaderResourceView(textureData.resourece.Get(), &srvDesc, textureData.srvHandleCPU);
 	//読み込み済みテクスチャを検索
-	auto it = std::find_if(
-		textureDatas_.begin(),
-		textureDatas_.end(),
-		[&](TextureData& textureData) {return textureData.filePath == filePath; }
-	);
-	//テクスチャ枚数上限チェック
-	assert(textureDatas_.size() + kSRVIndexTop < DirectXBase::kMaxSRVCount);
-	if (it != textureDatas_.end()) {
-		//読み込み済みなら早期return
+	if (textureDatas_.contains(filePath)) {
+		//早期リターン
 		return;
 	}
+	//テクスチャ枚数上限チェック
+	assert(srvManager_->AllocateCheck());
 }
 
 //ファイルパス
 uint32_t TextureManager::GetTextureIndexByFilePath(const std::string& filePath) {
-	//読み込み済みテクスチャデータを検索
-	auto it = std::find_if(
-		textureDatas_.begin(),
-		textureDatas_.end(),
-		[&](TextureData& textureData) {
-			return textureData.filePath == filePath;
-		}
-	);
+	//読み込み済みデータを検索
+	auto it = textureDatas_.find(filePath);
 	if (it != textureDatas_.end()) {
-		//読み込み済みなら要素番号を返す
-		uint32_t textureIndex = static_cast<uint32_t>(std::distance(textureDatas_.begin(), it));
-		return textureIndex;
+		// ハッシュ値を返す
+		return static_cast<uint32_t>(std::hash<std::string>{}(filePath));
 	}
-	assert(false&&"Texture Not Found!");
+	assert(false && "Texture Not Found!");
 	return 0;
 }
 
-//テクスチャ番号からGPUハンドルを取得
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(uint32_t textureIndex) {
-	//範囲外違反チェック
-	assert(textureIndex < textureDatas_.size());
-	TextureData& textureData = textureDatas_[textureIndex];
-	return textureData.srvHandleGPU;
+// メタデータの取得
+const DirectX::TexMetadata& TextureManager::GetMetaData(const std::string& filePath){
+	// TODO: return ステートメントをここに挿入します
+	return textureDatas_[filePath].metadata;
 }
 
-std::vector<TextureManager::TextureData> TextureManager::GetTextureData() const{
-	return textureDatas_;
+// SRVインデックスの取得
+uint32_t TextureManager::GetSRVIndex(const std::string& filePath){
+	return textureDatas_[filePath].srvIndex;
+}
+
+// GPUハンドルの取得
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSRVHandleGPU(const std::string& filePath){
+	return textureDatas_[filePath].srvHandleGPU;
 }
 
 //終了処理

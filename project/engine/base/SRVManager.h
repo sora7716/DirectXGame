@@ -54,6 +54,24 @@ public://メンバ関数
 	void CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource* resource, UINT numElements, UINT structureByteStride);
 
 	/// <summary>
+	/// 描画開始位置
+	/// </summary>
+	void PreDraw();
+
+	/// <summary>
+	/// rootDescriptorTableのセッター
+	/// </summary>
+	/// <param name="rootParameterIndex">rootParameterのインデックス</param>
+	/// <param name="srvIndex">srvインデックス</param>
+	void SetGrahicsRootDescriptorTable(UINT rootParameterIndex, uint32_t srvIndex);
+
+	/// <summary>
+	/// 最大テクスチャを超えて読み込もうとしてるかチェック
+	/// </summary>
+	/// <returns>最大テクスチャを超えて読み込もうとしてるか</returns>
+	bool AllocateCheck();
+
+	/// <summary>
 	/// CPUデスクリプタハンドルのゲッター
 	/// </summary>
 	/// <param name="index">インデックス</param>

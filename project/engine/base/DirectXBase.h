@@ -95,12 +95,12 @@ public://メンバ関数
 	void InitializeImGui();
 
 	/// <summary>
-	/// フレームの開始
+	/// 描画開始位置
 	/// </summary>
 	void PreDraw();
 
 	/// <summary>
-	/// フレームの終了
+	/// 描画終了位置
 	/// </summary>
 	void PostDraw();
 
@@ -156,20 +156,6 @@ public://メンバ関数
 	/// <returns>TextureResourceにデータを転送する</returns>
 	[[nodiscard]]//属性という機能(戻り値を破棄してはならない)むやみやたらとつけてはいけない
 	ComPtr<ID3D12Resource> UploadTextureData(ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
-
-	/// <summary>
-	/// SRVの指定番号のCPUデスクリプタハンドルを取得する
-	/// </summary>
-	/// <param name="index">検索番号</param>
-	/// <returns></returns>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetSRVCPUDescriptorHandle(uint32_t index);
-
-	/// <summary>
-	/// SRVの指定番号のGPUデスクリプタハンドルを取得する
-	/// </summary>
-	/// <param name="index">検索番号</param>
-	/// <returns></returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSRVGPUDescriptorHandle(uint32_t index);
 
 	/// <summary>
 	/// RTVの指定番号のCPUデスクリプタハンドルを取得する
@@ -299,9 +285,6 @@ private://メンバ関数
 	/// 実行を停止する(エラー・警告の場合)
 	/// </summary>
 	void StopExecution();
-public://定数
-	//最大SRV数(最大テクスチャ枚数)
-	static const uint32_t kMaxSRVCount;
 private://メンバ変数
 	D3D12_RESOURCE_BARRIER barrier_{};//TransitionBarrierの設定
 	WinApi* winApi_ = nullptr;//ウィンドウズAPI
@@ -331,8 +314,6 @@ private://メンバ変数
 public://あとで消す
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_{};
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;//DSV
-	ComPtr<ID3D12DescriptorHeap> srvDescriptorHeap_ = nullptr;//SRV
-	uint32_t descriptorSizeSRV_ = 0;
 	uint32_t descriptorSizeDSV_ = 0;
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvHandles_ = {};//RTVを2つ作るのでディスクリプタを2つ用意
 	ComPtr<IDXGISwapChain4> swapChain_ = nullptr;//スワップチェーン

@@ -25,7 +25,7 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 	//テクスチャ番号を取得して、メンバ変数に書き込む
-	modelData_.material.textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData_.material.textureFilePath);
+	//modelData_.material.textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData_.material.textureFilePath);
 }
 
 //描画
@@ -36,7 +36,7 @@ void Model::Draw() {
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material.textureIndex));
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
 	//描画
 	directXBase_->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.vertices.size()), 1, 0, 0, 0);
 }

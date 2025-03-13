@@ -35,7 +35,8 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 		.translate{}
 	};
 	TextureManager::GetInstance()->LoadTexture(textureFilePath);
-	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+	filePath_ = textureFilePath;
+	//textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
 //更新処理
@@ -67,14 +68,14 @@ void Sprite::Draw() {
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureIndex));
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(filePath_));
 	//描画(DrwaCall/ドローコール)
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
 //テクスチャの変更
 void Sprite::ChangeTexture(std::string textureFilePath) {
-	textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
+	filePath_ = textureFilePath;
 }
 
 //サイズのゲッター

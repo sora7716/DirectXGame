@@ -10,6 +10,7 @@
 #include "3d/Object3d.h"
 #include "3d/ModelManager.h"
 #include "3d/CameraManager.h"
+#include "base/SRVManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -24,6 +25,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApi* winApi = WinApi::GetInstance();
 	//DirectXCommon
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
+	//SRVマネージャー
+	std::unique_ptr<SRVManager>srvManager = std::make_unique<SRVManager>();
 	//スプライトの共通部分
 	std::unique_ptr<SpriteCommon>spriteCommon = std::make_unique<SpriteCommon>();
 	//3Dオブジェクトの共通部分
@@ -34,8 +37,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	winApi->Initialize();
 	//DirectX12の初期化
 	directXBase->Initialize();
+	//SRVマネージャーの初期化
+	srvManager->Initialize(directXBase.get());
 	//テクスチャマネージャーの初期化
-	TextureManager::GetInstance()->Initialize(directXBase.get());
+	TextureManager::GetInstance()->Initialize(directXBase.get(),srvManager.get());
 	//カメラマネージャーの追加
 	CameraManager::GetInstance()->AddCamera("defaultCamera");
 	CameraManager::GetInstance()->AddCamera("defaultCamera1");
@@ -161,9 +166,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 		//ImGuiの開始
-		ImGui_ImplDX12_NewFrame();
+		/*ImGui_ImplDX12_NewFrame();
 		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
+		ImGui::NewFrame();*/
 
 		input->Update();
 
@@ -211,9 +216,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 				object3ds[i]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera1"));
 			}
 		}
-		ImGui::Begin("sound");
+		/*ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
-		ImGui::End();
+		ImGui::End();*/
 
 		/*ImGui::Begin("sprite");
 		ImGui::DragFloat2("translate[0]", &pos[0].x, 0.1f);
@@ -225,16 +230,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat2("translate[1]", &object3dTransforms[1].translate.x, 0.1f);
 		ImGui::End();*/
 
-		ImGui::Begin("camera");
+		/*ImGui::Begin("camera");
 		ImGui::DragFloat3("translate", &cameraTransform.translate.x, 0.1f);
 		ImGui::DragFloat3("translate1", &cameraTransform1.translate.x, 0.1f);
-		ImGui::End();
+		ImGui::End();*/
 		audio_->SetVolume(0, volume);
 
 		//ImGuiの内部コマンドを生成する
 		ImGui::Render();
 		//描画処理
 		directXBase->PreDraw();
+		srvManager->PreDraw();
 		//描画するコマンドを積む
 		//3Dオブジェクトの描画準備
 		object3dCommon->DrawSetting();

@@ -1,6 +1,7 @@
 #include "SRVManager.h"
 #include "DirectXBase.h"
 #include <cassert>
+using namespace Microsoft::WRL;
 
 //初期化
 void SRVManager::Initialize(DirectXBase* directXBase) {
@@ -48,6 +49,23 @@ void SRVManager::CreateSRVforStructuredBuffer(uint32_t srvIndex, ID3D12Resource*
 	srvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE; // 必要なら RAW を設定
 	// 設定を元に SRV を生成
 	directXBase_->GetDevice()->CreateShaderResourceView(resource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
+}
+
+//描画開始位置
+void SRVManager::PreDraw() {
+	//描画用のDescriptorHeapの設定
+	ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { descriptorHeap_.Get() };
+	directXBase_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
+}
+
+// rootDescriptorTableのセッター
+void SRVManager::SetGrahicsRootDescriptorTable(UINT rootParameterIndex, uint32_t srvIndex) {
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(rootParameterIndex, GetGPUDescriptorHandle(srvIndex));
+}
+
+// 最大テクスチャを超えて読み込もうとしてるかチェック
+bool SRVManager::AllocateCheck() {
+	return useIndex_ < kMaxSRVCount;
 }
 
 // CPUデスクリプタハンドルのゲッター

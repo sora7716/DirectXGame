@@ -6,7 +6,6 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dxcompiler.lib")
 using namespace Microsoft::WRL;
-const uint32_t DirectXBase::kMaxSRVCount = 512;
 
 // DirectX12の初期化
 void DirectXBase::Initialize() {
@@ -79,13 +78,10 @@ void DirectXBase::CreateDepthBuffer() {
 void DirectXBase::CreateDescriptorHeap() {
 	//DescriptorSize
 	descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-	descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	//CreateDescriptorHeap
 	//RTV
 	rtvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
-	//SRV用のヒープでデスクリプタの数が128。SRVはShaderを触るものなので、ShaderVisibleはtrue
-	srvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount, true);
 	//DSV用のヒープでディスクリプタの数は1。DSVはShader内で触れるものではないので、ShaderVisibleはfalse
 	dsvDescriptorHeap_ = MakeDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 }
@@ -171,7 +167,7 @@ void DirectXBase::CreateDXCCompiler() {
 
 //ImGuiの初期化
 void DirectXBase::InitializeImGui() {
-	IMGUI_CHECKVERSION();
+	/*IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApi_->GetHwnd());
@@ -181,10 +177,10 @@ void DirectXBase::InitializeImGui() {
 		rtvDesc_.Format,
 		srvDescriptorHeap_.Get(),
 		GetSRVCPUDescriptorHandle(0),
-		GetSRVGPUDescriptorHandle(0));
+		GetSRVGPUDescriptorHandle(0));*/
 }
 
-// フレームの開始
+// 描画開始位置
 void DirectXBase::PreDraw() {
 	/*コマンドを積む*/
 	//これから書き込むバックバッファのインデックスを取得
@@ -211,16 +207,13 @@ void DirectXBase::PreDraw() {
 	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor, 0, nullptr);
 	//指定した深度で画面全体をクリアする
 	commandList_->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-	//描画用のDescriptorHeapの設定
-	ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { srvDescriptorHeap_.Get() };
-	commandList_->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
 	//ビューポート領域を設定する
 	commandList_->RSSetViewports(1, &viewport_);
 	//シザ－矩形の設定
 	commandList_->RSSetScissorRects(1, &scissorRect_);
 }
 
-// フレームの終了
+// 描画終了位置
 void DirectXBase::PostDraw() {
 	HRESULT result = S_FALSE;
 	//これから書き込むバックバッファのインデックスを取得
@@ -446,16 +439,6 @@ ComPtr<ID3D12Resource> DirectXBase::UploadTextureData(ComPtr<ID3D12Resource> tex
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
 	commandList_.Get()->ResourceBarrier(1, &barrier);
 	return intermediateResource;
-}
-
-// SRVの指定番号のCPUデスクリプタハンドルを取得する
-D3D12_CPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVCPUDescriptorHandle(uint32_t index) {
-	return GetCPUDescriptorHandle(srvDescriptorHeap_, descriptorSizeSRV_, index);
-}
-
-// SRVの指定番号のGPUデスクリプタハンドルを取得する
-D3D12_GPU_DESCRIPTOR_HANDLE DirectXBase::GetSRVGPUDescriptorHandle(uint32_t index) {
-	return GetGPUDescriptorHandle(srvDescriptorHeap_, descriptorSizeSRV_, index);
 }
 
 // RTVの指定番号のCPUデスクリプタハンドルを取得する
