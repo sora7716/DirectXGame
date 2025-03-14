@@ -237,7 +237,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		audio_->SetVolume(0, volume);
 
 		//ImGuiの内部コマンドを生成する
-		ImGui::Render();
+		//ImGui::Render();
 		//描画処理
 		directXBase->PreDraw();
 		srvManager->PreDraw();
@@ -258,15 +258,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			object3d->Draw();
 		}
 		//実際のcommandListのImGuiの描画コマンドを積む
-		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());
+		//ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());
 		//描画の終了
 		directXBase->PostDraw();
 	}
 	//終了処理
 	//ImGuiの終了
-	ImGui_ImplDX12_Shutdown();
+	/*ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	ImGui::DestroyContext();*/
 	//WindowsAPIの終了
 	winApi->Finalize();
 	//Audioの終了

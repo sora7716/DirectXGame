@@ -92,7 +92,7 @@ private://メンバ変数
 	//SRV用のデスクリプタサイズ
 	uint32_t descriptorSize_ = 0;
 	//SRV用のデスクリプタヒープ
-	ComPtr<ID3D12DescriptorHeap>descriptorHeap_ = {};
+	ComPtr<ID3D12DescriptorHeap>descriptorHeap_ = nullptr;
 	//次に使用するSRVインデックス
 	uint32_t useIndex_ = 0;
 };

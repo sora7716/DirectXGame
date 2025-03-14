@@ -16,7 +16,7 @@ void SRVManager::Initialize(DirectXBase* directXBase) {
 //確保
 uint32_t SRVManager::Allocate() {
 	//上限に達してないか？
-	assert(kMaxSRVCount < useIndex_);
+	assert(useIndex_ < kMaxSRVCount);
 	//returnする番号を一旦記録しておく
 	int index = useIndex_;
 	//次回のために番号を1進める
