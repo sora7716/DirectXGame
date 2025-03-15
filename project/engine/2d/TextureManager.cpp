@@ -21,6 +21,7 @@ TextureManager* TextureManager::GetInstance() {
 	return instance;
 }
 
+//初期化
 void TextureManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
