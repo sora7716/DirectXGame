@@ -36,7 +36,6 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 	};
 	TextureManager::GetInstance()->LoadTexture(textureFilePath);
 	filePath_ = textureFilePath;
-	//textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(textureFilePath);
 }
 
 //更新処理

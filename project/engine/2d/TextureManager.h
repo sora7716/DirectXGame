@@ -19,7 +19,7 @@ private://構造体
 	typedef struct TextureData {
 		DirectX::TexMetadata metadata;//画像の幅や高さなどの情報
 		ComPtr<ID3D12Resource>resourece;//テクスチャリソース
-		uint32_t srvIndex;
+		uint32_t srvIndex;//SRVインデックス
 		ComPtr<ID3D12Resource>intermediateResource;//アップロードするリソース
 		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;//SRV作成時に必要なCPUハンドル
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;//描画コマンドに必要なGPUハンドル
@@ -43,13 +43,6 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="filePath">テクスチャのファイルパス</param>
 	void LoadTexture(const std::string& filePath);
-
-	/// <summary>
-	/// SRVインデックスの開始番号
-	/// </summary>
-	/// <param name="filePath">ファイルパス</param>
-	/// <returns>テクスチャ番号</returns>
-	uint32_t GetTextureIndexByFilePath(const std::string& filePath);
 
 	/// <summary>
 	/// メタデータの取得
