@@ -7,7 +7,6 @@
 #include <vector>
 #include <array>
 #include "WinApi.h"
-#include "engine/debug/Log.h"
 #include "engine/math/Vector4.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"

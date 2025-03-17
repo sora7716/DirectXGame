@@ -1,6 +1,7 @@
 #include "TextureManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
+#include "StringUtility.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -35,7 +36,7 @@ void TextureManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager
 void TextureManager::LoadTexture(const std::string& filePath) {
 	//テクスチャファイルを読み込んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW = Log::ConvertString(filePath);
+	std::wstring filePathW = StringUtility::ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	assert(SUCCEEDED(hr));
 
@@ -50,16 +51,16 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.resourece = directXBase_->CreateTextureResource(textureData.metadata);
 	textureData.intermediateResource = directXBase_->UploadTextureData(textureData.resourece.Get(), mipImages);
 	//SRVの確保
-	textureData.srvIndex = srvManager_->Allocate();
+	textureData.srvIndex = srvManager_->Allocate() + kSRVIndexTop;
 	textureData.srvHandleCPU = srvManager_->GetCPUDescriptorHandle(textureData.srvIndex);
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	//SRVの設定
 	srvManager_->CreateSRVforTexture2D(textureData.srvIndex, textureData.resourece.Get(), textureData.metadata.format, UINT(textureData.metadata.mipLevels));
 	//テクスチャ枚数上限チェック
-	assert(srvManager_->AllocateCheck());
+	assert(srvManager_->AllocateCheck(kSRVIndexTop));
 	//読み込み済みテクスチャを検索
 	if (textureDatas_.contains(filePath)) {
-		//早期リターン
+		//読み込み済みなら早期リターン
 		return;
 	}
 }

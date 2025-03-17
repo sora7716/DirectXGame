@@ -64,8 +64,8 @@ void SRVManager::SetGrahicsRootDescriptorTable(UINT rootParameterIndex, uint32_t
 }
 
 // 最大テクスチャを超えて読み込もうとしてるかチェック
-bool SRVManager::AllocateCheck() {
-	return useIndex_ < kMaxSRVCount;
+bool SRVManager::AllocateCheck(uint32_t kSRVTop) {
+	return useIndex_+kSRVTop < kMaxSRVCount;
 }
 
 // CPUデスクリプタハンドルのゲッター

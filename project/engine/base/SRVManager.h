@@ -68,8 +68,9 @@ public://メンバ関数
 	/// <summary>
 	/// 最大テクスチャを超えて読み込もうとしてるかチェック
 	/// </summary>
+	/// <param name="kSRVTop">SRVの最初の値</param>
 	/// <returns>最大テクスチャを超えて読み込もうとしてるか</returns>
-	bool AllocateCheck();
+	bool AllocateCheck(uint32_t kSRVTop);
 
 	/// <summary>
 	/// CPUデスクリプタハンドルのゲッター

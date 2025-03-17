@@ -1,5 +1,7 @@
 #include "BaseObjectCommon.h"
 #include "engine/base/DirectXBase.h"
+#include "engine/debug/Log.h"
+#include "StringUtility.h"
 #include <cassert>
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
