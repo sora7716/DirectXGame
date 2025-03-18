@@ -34,6 +34,11 @@ void TextureManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager
 
 //テクスチャファイルの読み込み
 void TextureManager::LoadTexture(const std::string& filePath) {
+	//読み込み済みテクスチャを検索
+	if (textureDatas_.contains(filePath)) {
+		//読み込み済みなら早期リターン
+		return;
+	}
 	//テクスチャファイルを読み込んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = StringUtility::ConvertString(filePath);
@@ -44,6 +49,9 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	DirectX::ScratchImage mipImages{};
 	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
 	assert(SUCCEEDED(hr));
+
+	//テクスチャ枚数上限チェック
+	assert(srvManager_->AllocateCheck(kSRVIndexTop));
 
 	//追加したテクスチャデータの参照を取得する
 	TextureData& textureData = textureDatas_[filePath];
@@ -56,13 +64,6 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	//SRVの設定
 	srvManager_->CreateSRVforTexture2D(textureData.srvIndex, textureData.resourece.Get(), textureData.metadata.format, UINT(textureData.metadata.mipLevels));
-	//テクスチャ枚数上限チェック
-	assert(srvManager_->AllocateCheck(kSRVIndexTop));
-	//読み込み済みテクスチャを検索
-	if (textureDatas_.contains(filePath)) {
-		//読み込み済みなら早期リターン
-		return;
-	}
 }
 
 // メタデータの取得

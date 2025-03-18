@@ -70,14 +70,10 @@ bool SRVManager::AllocateCheck(uint32_t kSRVTop) {
 
 // CPUデスクリプタハンドルのゲッター
 D3D12_CPU_DESCRIPTOR_HANDLE SRVManager::GetCPUDescriptorHandle(uint32_t index) {
-	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-	handleCPU.ptr += (descriptorSize_ * index);
-	return handleCPU;
+	return directXBase_->GetCPUDescriptorHandle(descriptorHeap_, descriptorSize_, index);
 }
 
 // GPUデスクリプタハンドルのゲッター
 D3D12_GPU_DESCRIPTOR_HANDLE SRVManager::GetGPUDescriptorHandle(uint32_t index) {
-	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap_->GetGPUDescriptorHandleForHeapStart();
-	handleGPU.ptr += (descriptorSize_ * index);
-	return handleGPU;
+	return directXBase_->GetGPUDescriptorHandle(descriptorHeap_, descriptorSize_, index);
 }
