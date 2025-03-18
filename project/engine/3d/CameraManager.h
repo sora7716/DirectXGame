@@ -50,7 +50,7 @@ private://メンバ関数
 	CameraManager operator=(const CameraManager&) = delete;
 private://静的メンバ変数
 	//カメラのインスタンス
-	static inline CameraManager* instance;
+	static inline CameraManager* instance = nullptr;
 	//終了処理をしたかのフラグ
 	static inline bool isFialize = false;
 private://メンバ変数

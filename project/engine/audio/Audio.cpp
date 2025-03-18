@@ -2,12 +2,6 @@
 #include <cassert>
 #pragma comment(lib,"xaudio2.lib")
 
-//インスタンスのゲッター
-Audio* Audio::GetInstance(){
-	static Audio instance;
-	return &instance;
-}
-
 //初期化
 void Audio::Initialize(const std::string& directoryPath) {
 	//ディレクトリ名を受け取る
@@ -20,49 +14,60 @@ void Audio::Initialize(const std::string& directoryPath) {
 }
 
 //サウンドデータのセッター
-void Audio::SetSoundData(int soundNumber, const std::string& filename) {
-	soundDatas_[soundNumber] = SoundLoadWave(filename);
+void Audio::SetSoundData(const std::string& filename) {
+	soundData_ = SoundLoadWave(filename);
 }
 
 //サウンドデータの再生
-void Audio::SoundPlayWave(int soundNumber, bool isLoop) {
-	SoundPlayWave(soundDatas_[soundNumber], isLoop, soundNumber);
-}
+void Audio::SoundPlayWave(bool isLoop) {
+	HRESULT result;
 
+	result = xAudio2_->CreateSourceVoice(&pSorceVoice_, &soundData_.wfex);
+	assert(SUCCEEDED(result));
+	//再生する波形データの設定
+	XAUDIO2_BUFFER buf{};
+	buf.pAudioData = soundData_.pBuffer;
+	buf.AudioBytes = soundData_.bufferSize;
+	buf.Flags = XAUDIO2_END_OF_STREAM;
+	buf.LoopCount = isLoop ? XAUDIO2_LOOP_INFINITE : 0;
+
+	//波形データの再生
+	result = pSorceVoice_->SubmitSourceBuffer(&buf);
+	result = pSorceVoice_->Start();
+	assert(SUCCEEDED(result));
+}
 //最後にやるやつ
 void Audio::Finalize() {
 	xAudio2_.Reset();
-	for (int i = 0; i < soundDatas_.size(); i++) {
-		SoundUnLoad(&soundDatas_[i]);
-	}
+	SoundUnLoad(&soundData_);
 }
 
 //音量のセッター
-void Audio::SetVolume(int soundNumber, float volume) {
+void Audio::SetVolume(float volume) {
 	HRESULT result = S_FALSE;
-	result = pSorceVoice_[soundNumber]->SetVolume(volume);
+	result = pSorceVoice_->SetVolume(volume);
 	assert(SUCCEEDED(result));
 }
 
 //再生
-void Audio::PlayAudio(int soundNumber){
+void Audio::PlayAudio() {
 	HRESULT result = S_FALSE;
-	result = pSorceVoice_[soundNumber]->Start();
+	result = pSorceVoice_->Start();
 	assert(SUCCEEDED(result));
 }
 
 //一時停止
-void Audio::PauseAudio(int soundNumber){
+void Audio::PauseAudio() {
 	HRESULT result = S_FALSE;
-	result = pSorceVoice_[soundNumber]->Stop();
+	result = pSorceVoice_->Stop();
 	assert(SUCCEEDED(result));
 }
 
 //完全停止
-void Audio::StopAudio(int soundNumber){
+void Audio::StopAudio() {
 	HRESULT result = S_FALSE;
-	result = pSorceVoice_[soundNumber]->Stop();
-	result = pSorceVoice_[soundNumber]->FlushSourceBuffers();
+	result = pSorceVoice_->Stop();
+	result = pSorceVoice_->FlushSourceBuffers();
 	assert(SUCCEEDED(result));
 }
 
@@ -132,23 +137,4 @@ void Audio::SoundUnLoad(SoundData* soundData) {
 	soundData->pBuffer = 0;
 	soundData->bufferSize = 0;
 	soundData->wfex = {};
-}
-
-//サウンドデータの再生
-void Audio::SoundPlayWave(const SoundData& soundData, bool isLoop, int soundNamber) {
-	HRESULT result;
-
-	result = xAudio2_->CreateSourceVoice(&pSorceVoice_[soundNamber], &soundData.wfex);
-	assert(SUCCEEDED(result));
-	//再生する波形データの設定
-	XAUDIO2_BUFFER buf{};
-	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.bufferSize;
-	buf.Flags = XAUDIO2_END_OF_STREAM;
-	buf.LoopCount = isLoop ? XAUDIO2_LOOP_INFINITE : 0;
-
-	//波形データの再生
-	result = pSorceVoice_[soundNamber]->SubmitSourceBuffer(&buf);
-	result = pSorceVoice_[soundNamber]->Start();
-	assert(SUCCEEDED(result));
 }

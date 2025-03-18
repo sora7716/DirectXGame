@@ -1,7 +1,7 @@
 #include "base/DirectXBase.h"
 #include "2d/TextureManager.h"
 #include "math/func/Math.h"
-#include "audio/Audio.h"
+#include "audio/AudioManager.h"
 #include "input/Input.h"
 #include "base/D3DResourceLeakChecker.h"
 #include "objectCommon/SpriteCommon.h"
@@ -145,14 +145,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		object3dTransforms.push_back(transform);
 		object3ds.push_back(object3d);
 	}
-	//音
-	Audio* audio_ = Audio::GetInstance();
-	//初期化
-	audio_->Initialize();
 	//音声読み込み
-	audio_->SetSoundData(0, "mokugyo.wav");
+	AudioManager::GetInstance()->LoadAudio("mokugyo", "mokugyo.wav");
 	//音声の再生
-	audio_->SoundPlayWave(0, true);
+	AudioManager::GetInstance()->FindAudio("mokugyo")->SoundPlayWave(true);
 	float volume = 1.0f;
 
 	//入力関数の初期化処理
@@ -234,7 +230,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::DragFloat3("translate", &cameraTransform.translate.x, 0.1f);
 		ImGui::DragFloat3("translate1", &cameraTransform1.translate.x, 0.1f);
 		ImGui::End();*/
-		audio_->SetVolume(0, volume);
+		AudioManager::GetInstance()->FindAudio("mokugyo")->SetVolume(volume);
 
 		//ImGuiの内部コマンドを生成する
 		//ImGui::Render();
@@ -270,7 +266,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//WindowsAPIの終了
 	winApi->Finalize();
 	//Audioの終了
-	audio_->Finalize();
+	AudioManager::GetInstance()->Finalize();
 	//スプライトの終了
 	for (auto sprite : sprites) {
 		delete sprite;

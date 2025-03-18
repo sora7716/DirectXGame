@@ -159,6 +159,9 @@
     <ClCompile Include="engine\base\StringUtility.cpp">
       <Filter>engine\base</Filter>
     </ClCompile>
+    <ClCompile Include="engine\audio\AudioManager.cpp">
+      <Filter>engine\audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="engine\base\StringUtility.h">
       <Filter>engine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\audio\AudioManager.h">
+      <Filter>engine\audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

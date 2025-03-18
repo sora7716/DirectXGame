@@ -3,14 +3,11 @@
 #include <fstream>
 #include <wrl.h>
 #include <string>
-#include <array>
 
 /// <summary>
 /// 音楽関係のクラス
 /// </summary>
-class Audio final{
-public://静的メンバ変数
-	static inline const int kSoundNum = 256;
+class Audio {
 public://構造体等
 	//チャンクヘッダ
 	typedef struct ChunkHeader {
@@ -38,12 +35,15 @@ public://構造体等
 	}SoundData;
 
 public://メンバ関数
+	/// <summary>
+    /// コンストラクタ
+    /// </summary>
+	Audio() = default;
 
 	/// <summary>
-	/// インスタンスのゲッター
+	/// デストラクタ
 	/// </summary>
-	/// <returns></returns>
-	static Audio* GetInstance();
+	~Audio() = default;
 
 	/// <summary>
 	/// 初期化
@@ -54,16 +54,14 @@ public://メンバ関数
 	/// <summary>
 	/// サウンドデータのセッター
 	/// </summary>
-	/// <param name="soundNumber">サウンドの番号</param>
 	/// <param name="filename">ファイル名</param>
-	void SetSoundData(int soundNumber, const std::string& filename);
+	void SetSoundData(const std::string& filename);
 
 	/// <summary>
 	/// サウンドデータの再生
 	/// </summary>
-	/// <param name="soundNumber">サウンドの番号</param>
 	/// <param name="isLoop">ループさせるかのフラグ</param>
-	void SoundPlayWave(int soundNumber, bool isLoop);
+	void SoundPlayWave(bool isLoop);
 
 	/// <summary>
 	/// 最後にやるやつ
@@ -73,44 +71,25 @@ public://メンバ関数
 	/// <summary>
 	/// 音量のセッター
 	/// </summary>
-	/// <param name="soundNumber">サウンド番号</param>
 	/// <param name="volume">音量</param>
-	void SetVolume(int soundNumber, float volume = 1.0f);
+	void SetVolume(float volume = 1.0f);
 
 	/// <summary>
 	/// 再生
 	/// </summary>
-	/// <param name="soundNumber">サウンド番号</param>
-	void PlayAudio(int soundNumber);
+	void PlayAudio();
 
 	/// <summary>
 	/// 一時停止
 	/// </summary>
-	/// <param name="soundNumber"></param>
-	void PauseAudio(int soundNumber);
+	void PauseAudio();
 
 	/// <summary>
 	/// 完全停止
 	/// </summary>
-	/// <param name="soundNumber"></param>
-	void StopAudio(int soundNumber);
-
-	//コピーコンストラクタ禁止
-	Audio(const Audio&) = delete;
-	//代入演算子禁止
-	Audio& operator=(const Audio&) = delete;
+	void StopAudio();
 
 private://メンバ関数
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Audio() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Audio() = default;
-
 	/// <summary>
 	/// サウンドデータのロード
 	/// </summary>
@@ -123,14 +102,6 @@ private://メンバ関数
 	/// </summary>
 	/// <param name="soundData">サウンドデータ</param>
 	void SoundUnLoad(SoundData* soundData);
-
-	/// <summary>
-	/// サウンドデータの再生
-	/// </summary>
-	/// <param name="soundData">サウンドデータ</param>
-	/// <param name="isLoop">ループするかのフラグ</param>
-	/// <param name="soundNamber">サウンド番号</param>
-	void SoundPlayWave(const SoundData& soundData, bool isLoop, int soundNamber);
 private://メンバ変数
 	//XAudio2
 	Microsoft::WRL::ComPtr<IXAudio2>xAudio2_;
@@ -139,8 +110,8 @@ private://メンバ変数
 	//ディレクトリ名
 	std::string directoryPath_ = "";
 	//サウンドデータ
-	std::array<SoundData, kSoundNum> soundDatas_ = {};
+	SoundData soundData_ = {};
 	//波形フォーマットを元にSourceVoiceの生成
-	std::array < IXAudio2SourceVoice*, kSoundNum> pSorceVoice_ = { nullptr };
+	IXAudio2SourceVoice* pSorceVoice_ = nullptr;
 };
 
