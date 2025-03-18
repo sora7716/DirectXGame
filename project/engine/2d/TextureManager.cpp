@@ -51,7 +51,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	assert(SUCCEEDED(hr));
 
 	//テクスチャ枚数上限チェック
-	assert(srvManager_->AllocateCheck(kSRVIndexTop));
+	assert(srvManager_->TextureLimitCheck(kSRVIndexTop));
 
 	//追加したテクスチャデータの参照を取得する
 	TextureData& textureData = textureDatas_[filePath];
@@ -64,6 +64,8 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	//SRVの設定
 	srvManager_->CreateSRVforTexture2D(textureData.srvIndex, textureData.resourece.Get(), textureData.metadata.format, UINT(textureData.metadata.mipLevels));
+	//SRVで確保したものを解放
+	srvManager_->Free(textureData.srvIndex);
 }
 
 // メタデータの取得

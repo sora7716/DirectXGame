@@ -15,14 +15,24 @@ void SRVManager::Initialize(DirectXBase* directXBase) {
 
 //確保
 uint32_t SRVManager::Allocate() {
-	//上限に達してないか？
+	//空きリストがあるなら取得
+	if (!freeList_.empty()) {
+		uint32_t index = freeList_.front();
+		freeList_.pop();
+		return index;
+	}
+	//上限チェック
 	assert(useIndex_ < kMaxSRVCount);
-	//returnする番号を一旦記録しておく
-	int index = useIndex_;
-	//次回のために番号を1進める
-	useIndex_++;
-	//上で記録した番号をreturn
-	return index;
+	//新しい番号を割り当て
+	return useIndex_;
+}
+
+//解放
+void SRVManager::Free(uint32_t index){
+	//範囲内のインデックスのみ会法
+	if (index >= 0 && index < useIndex_) {
+		freeList_.push(index);
+	}
 }
 
 // SRV生成(テクスチャ用)
@@ -64,7 +74,7 @@ void SRVManager::SetGrahicsRootDescriptorTable(UINT rootParameterIndex, uint32_t
 }
 
 // 最大テクスチャを超えて読み込もうとしてるかチェック
-bool SRVManager::AllocateCheck(uint32_t kSRVTop) {
+bool SRVManager::TextureLimitCheck(uint32_t kSRVTop) {
 	return useIndex_+kSRVTop < kMaxSRVCount;
 }
 

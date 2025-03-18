@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <wrl.h>
 #include <d3d12.h>
+#include <queue>
 
 //前方宣言
 class DirectXBase;
@@ -34,6 +35,12 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>インデックス</returns>
 	uint32_t Allocate();
+
+	/// <summary>
+	/// 解放
+	/// </summary>
+	/// <param name="index">インデックス</param>
+	void Free(uint32_t index);
 
 	/// <summary>
 	/// SRV生成(テクスチャ用)
@@ -70,7 +77,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="kSRVTop">SRVの最初の値</param>
 	/// <returns>最大テクスチャを超えて読み込もうとしてるか</returns>
-	bool AllocateCheck(uint32_t kSRVTop);
+	bool TextureLimitCheck(uint32_t kSRVTop);
 
 	/// <summary>
 	/// CPUデスクリプタハンドルのゲッター
@@ -96,5 +103,7 @@ private://メンバ変数
 	ComPtr<ID3D12DescriptorHeap>descriptorHeap_ = nullptr;
 	//次に使用するSRVインデックス
 	uint32_t useIndex_ = 0;
+	//空きリスト
+	std::queue<uint32_t>freeList_;
 };
 
