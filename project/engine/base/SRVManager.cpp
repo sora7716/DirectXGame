@@ -24,7 +24,7 @@ uint32_t SRVManager::Allocate() {
 	//上限チェック
 	assert(useIndex_ < kMaxSRVCount);
 	//新しい番号を割り当て
-	return useIndex_;
+	return useIndex_++;
 }
 
 //解放
