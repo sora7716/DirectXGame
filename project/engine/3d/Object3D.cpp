@@ -17,7 +17,7 @@ void Object3d::Initialize(Object3dCommon* object3dCommon) {
 	//DirectXの基盤部分を受け取る
 	directXBase_ = object3dCommon_->GetDirectXBase();
 	//座標変換行列の生成
-	CreateTransformationMatrixData();
+	CreateTransformationMatrixResource();
 	//光源の生成
 	CreateDirectionLight();
 	//Transform変数を作る
@@ -133,8 +133,8 @@ const Vector2& Object3d::GetUVTranslate() const {
 	return uvTransform_.translate;
 }
 
-// 座標変換行列データの生成
-void Object3d::CreateTransformationMatrixData() {
+// 座標変換行列リソースの生成
+void Object3d::CreateTransformationMatrixResource() {
 	//WVP用のリソースを作る
 	wvpResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
 	//書き込むためのアドレスを取得

@@ -139,12 +139,12 @@ private://メンバ関数
 	/// <summary>
 	/// 頂点データの初期化
 	/// </summary>
-	void InitialilzeVertexData();
+	void InitializeVertexData();
 
 	/// <summary>
-	/// 頂点データの生成
+	/// 頂点リソースの生成
 	/// </summary>
-	void CreateVertexData();
+	void CreateVertexResorce();
 
 	/// <summary>
 	/// インデックスデータの初期化
@@ -152,9 +152,9 @@ private://メンバ関数
 	void InitializeIndexData();
 
 	/// <summary>
-	/// インデックスデータの生成
+	/// インデックスリソースの生成
 	/// </summary>
-	void CreateIndexData();
+	void CreateIndexResorce();
 
 	/// <summary>
 	/// マテリアルデータの初期化
@@ -162,9 +162,9 @@ private://メンバ関数
 	void InitializeMaterialData();
 
 	/// <summary>
-	/// マテリアルデータの生成
+	/// マテリアルリソースの生成
 	/// </summary>
-	void CreateMaterialData();
+	void CreateMaterialResorce();
 
 	/// <summary>
 	/// 座標変換行列データの初期化
@@ -172,9 +172,9 @@ private://メンバ関数
 	void InitializeTransformationMatrixData();
 
 	/// <summary>
-	/// 座標変換行列データの生成
+	/// 座標変換行列リソースの生成
 	/// </summary>
-	void CreateTransformationMatrixData();
+	void CreateTransformationMatrixResorce();
 
 	/// <summary>
 	/// 光源の生成

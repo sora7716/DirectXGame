@@ -76,19 +76,19 @@ public://メンバ関数
 
 private://メンバ関数
 	/// <summary>
-	/// 頂点データの生成
+	/// 頂点リソースの生成
 	/// </summary>
-	void CreateVertexData();
+	void CreateVertexResource();
 
 	/// <summary>
-	/// インデックスデータの生成
+	/// インデックスリソースの生成
 	/// </summary>
-	void CreateIndexData();
+	void CreateIndexResource();
 
 	/// <summary>
-	/// マテリアルデータの生成
+	/// マテリアルリソースの生成
 	/// </summary>
-	void CreateMaterialData();
+	void CreateMaterialResource();
 private://メンバ変数
 	//ModelCommonのポインタ
 	ModelCommon* modelCommon_ = nullptr;

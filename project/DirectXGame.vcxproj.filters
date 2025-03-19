@@ -162,6 +162,9 @@
     <ClCompile Include="engine\audio\AudioManager.cpp">
       <Filter>engine\audio</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\ParticleManager.cpp">
+      <Filter>engine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="engine\audio\AudioManager.h">
       <Filter>engine\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\ParticleManager.h">
+      <Filter>engine\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

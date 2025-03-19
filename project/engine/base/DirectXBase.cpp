@@ -473,6 +473,11 @@ ID3D12GraphicsCommandList* DirectXBase::GetCommandList() const {
 	return commandList_.Get();
 }
 
+//深度ステンシルのゲッター
+D3D12_DEPTH_STENCIL_DESC DirectXBase::GetDepthStencil() const{
+	return depthStencilDesc_;
+}
+
 // デスクリプターCPUハンドルのゲッター
 D3D12_CPU_DESCRIPTOR_HANDLE  DirectXBase::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();

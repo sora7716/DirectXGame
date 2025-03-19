@@ -1,0 +1,93 @@
+#pragma once
+#include <random>
+#include <wrl.h>
+#include <d3d12.h>
+#include "engine/math/ResourceData.h"
+//前方宣言
+class DirectXBase;
+class SRVManager;
+class BaseObjectCommon;
+
+/// <summary>
+/// パーティクルの管理
+/// </summary>
+class ParticleManager {
+private://エイリアステンプレート
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr <T>;
+public://メンバ関数
+	/// <summary>
+	/// インスタンスのゲッター
+	/// </summary>
+	/// <returns>インスタンス</returns>
+	static ParticleManager* GetInstance();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="directXBase">DirectXの基盤部分</param>
+	/// <param name="srvManager">SRVの管理</param>
+	/// <param name="baseObjectCommon">オブジェクトの共通部分</param>
+	void Initialize(DirectXBase* directXBase, SRVManager* srvManager, BaseObjectCommon* baseObjectCommon);
+
+	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
+private://メンバ関数
+	//コンストラクタの封印
+	ParticleManager() = default;
+	//デストラクタの封印
+	~ParticleManager() = default;
+	//コピーコンストラクタ禁止
+	ParticleManager(const ParticleManager&) = delete;
+	//代入演算子禁止
+	ParticleManager operator=(const ParticleManager&) = delete;
+
+	/// <summary>
+	/// 頂点データの初期化
+	/// </summary>
+	void InitializeVertexData();
+
+	/// <summary>
+	/// インデックスデータの初期化
+	/// </summary>
+	void InitializeIndexData();
+
+	/// <summary>
+	/// 頂点リソースの生成
+	/// </summary>
+	void CreateVertexResource();
+
+	/// <summary>
+	/// インデックスリソースの生成
+	/// </summary>
+	void CreateIndexResource();
+private://静的メンバ変数
+	//インスタンス
+	static inline ParticleManager* instance = nullptr;
+	//Finalize()を読んだかどうか
+	static inline bool isFinalize = false;
+private://メンバ変数
+	//DirectXの基盤部分
+	DirectXBase* directXBase_ = nullptr;
+	//SRVの管理
+	SRVManager* srvManager_ = nullptr;
+	//ランダムデバイス
+	std::random_device randomDevice_;
+	//オブジェクトの共通部分
+	BaseObjectCommon* baseObjectCommon_ = nullptr;
+	//パイプラインステート
+	ComPtr<ID3D12PipelineState>graphicsPiplene_ = nullptr;
+	//頂点データ
+	VertexData* vertexData_ = nullptr;
+	//インデックスデータ
+	uint32_t* indexData_ = nullptr;
+	//頂点リソース
+	ComPtr<ID3D12Resource>vertexResource_ = nullptr;
+	//インデックスリソース
+	ComPtr<ID3D12Resource>indexResource_ = nullptr;
+	//バッファリソースの使い道を補足するバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
+};
+

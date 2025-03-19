@@ -17,11 +17,11 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 	//モデルの読み込み
 	modelData_ = LoadObjFile(directoryPath, storedFilePath,filename);
 	//頂点データの生成
-	CreateVertexData();
+	CreateVertexResource();
 	//インデックスデータの生成
-	CreateIndexData();
+	CreateIndexResource();
 	//マテリアルデータの生成
-	CreateMaterialData();
+	CreateMaterialResource();
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 	//テクスチャ番号を取得して、メンバ変数に書き込む
@@ -147,8 +147,8 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 }
 
 
-//頂点データの生成
-void Model::CreateVertexData() {
+//頂点リソースの生成
+void Model::CreateVertexResource() {
 	//頂点リソースを生成
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 	//VertexBufferViewを作成する(頂点バッファービュー)
@@ -166,8 +166,8 @@ void Model::CreateVertexData() {
 	std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());//頂点データをリソースにコピー
 }
 
-//インデックスデータの生成
-void Model::CreateIndexData() {
+//インデックスリソースの生成
+void Model::CreateIndexResource() {
 	//Index用(3dGameObject)
 	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * modelData_.vertices.size());
 	//リソースの先頭のアドレスから使う
@@ -184,8 +184,8 @@ void Model::CreateIndexData() {
 	}
 }
 
-//マテリアルデータの生成
-void Model::CreateMaterialData() {
+//マテリアルリソースの生成
+void Model::CreateMaterialResource() {
 	//マテリアル用のリソースを作る
 	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレスを取得

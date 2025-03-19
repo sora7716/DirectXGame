@@ -128,9 +128,9 @@ public://メンバ関数
 	const Vector2& GetUVTranslate()const;
 private://メンバ関数
 	/// <summary>
-	/// 座標変換行列データの生成
+	/// 座標変換行列リソースの生成
 	/// </summary>
-	void CreateTransformationMatrixData();
+	void CreateTransformationMatrixResource();
 
 	/// <summary>
 	/// 光源の生成

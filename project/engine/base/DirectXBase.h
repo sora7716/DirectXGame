@@ -196,6 +196,11 @@ public://メンバ関数
 	/// <returns></returns>
 	ID3D12GraphicsCommandList* GetCommandList()const;
 
+	/// <summary>
+	/// 深度ステンシルのゲッター
+	/// </summary>
+	/// <returns>深度ステンシル</returns>
+	D3D12_DEPTH_STENCIL_DESC GetDepthStencil()const;
 public://静的メンバ関数
 	/// <summary>
 	/// デスクリプターCPUハンドルのゲッター
@@ -310,7 +315,6 @@ private://メンバ変数
 	ComPtr<IDxcUtils> dxcUtils_ = nullptr;//DXCユーティリティ
 	ComPtr<IDxcCompiler3> dxcCompiler_ = nullptr;//DXCコンパイラ
 	ComPtr<IDxcIncludeHandler> includeHandler_ = nullptr;//デフォルトインクルードハンドラ
-public://あとで消す
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc_{};
 	ComPtr<ID3D12DescriptorHeap> dsvDescriptorHeap_ = nullptr;//DSV
 	uint32_t descriptorSizeDSV_ = 0;

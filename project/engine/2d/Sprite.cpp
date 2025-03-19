@@ -11,13 +11,13 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 	spriteCommon_ = spriteCommon;//共通部分を受け取る
 	directXBase_ = spriteCommon_->GetDirectXBase();//DirectXの基盤部分を受け取る
 	//頂点データの生成
-	CreateVertexData();
+	CreateVertexResorce();
 	//インデックスデータの生成
-	CreateIndexData();
+	CreateIndexResorce();
 	//マテリアルデータの生成
-	CreateMaterialData();
+	CreateMaterialResorce();
 	//座標変換行列データの生成
-	CreateTransformationMatrixData();
+	CreateTransformationMatrixResorce();
 	//光源の生成
 	CreateDirectionLight();
 
@@ -153,7 +153,7 @@ void Sprite::SetColor(const Vector4& color) {
 }
 
 //頂点データの初期化
-void Sprite::InitialilzeVertexData() {
+void Sprite::InitializeVertexData() {
 	//1枚目の三角形
 	vertexData_[0].position = { 0.0f,1.0f,0.0f,1.0f };//左下
 	vertexData_[0].texcoord = { 0.0f,1.0f };
@@ -180,11 +180,9 @@ void Sprite::InitialilzeVertexData() {
 }
 
 //頂点データの生成
-void Sprite::CreateVertexData() {
+void Sprite::CreateVertexResorce() {
 	//VertexResourceを作成する
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
-	//IndexResourceを作成する
-	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * 6);
 	//VertexBufferViewを作成する
 	//リソースの先頭アドレスから使う
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -195,7 +193,7 @@ void Sprite::CreateVertexData() {
 
 	//VertexResorceにデータを書き込むためのアドレスを取得してvertexDataに割り当てる
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	InitialilzeVertexData();
+	InitializeVertexData();
 }
 
 //インデックスデータの初期化
@@ -204,8 +202,10 @@ void Sprite::InitializeIndexData() {
 	indexData_[3] = 1; indexData_[4] = 4; indexData_[5] = 2;
 }
 
-//インデックスデータの生成
-void Sprite::CreateIndexData() {
+//インデックスリソースの生成
+void Sprite::CreateIndexResorce() {
+	//IndexResourceを作成する
+	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * 6);
 	//IndexBufferViewを作成する
 	//リソースの先頭のアドレスから使う
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -227,8 +227,8 @@ void Sprite::InitializeMaterialData() {
 	materialData_->uvTransform = Math::MakeIdentity4x4();
 }
 
-//マテリアルデータの生成
-void Sprite::CreateMaterialData() {
+//マテリアルリソースの生成
+void Sprite::CreateMaterialResorce() {
 	//マテリアルリソースを作る
 	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
 	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる
@@ -245,8 +245,8 @@ void Sprite::InitializeTransformationMatrixData() {
 	transformationMatrixData_->World = Math::MakeIdentity4x4();
 }
 
-//座標変換行列データの生成
-void Sprite::CreateTransformationMatrixData() {
+//座標変換行列リソースの生成
+void Sprite::CreateTransformationMatrixResorce() {
 	//座標変換行列リソースを作成する
 	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
 	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる

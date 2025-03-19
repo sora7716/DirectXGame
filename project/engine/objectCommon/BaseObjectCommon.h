@@ -24,8 +24,7 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
-	/// <param name="graphicsPiplineDesc">グラフィックスパイプラインデスク</param>
-	virtual void Initialize(DirectXBase* directXBase, D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc);
+	virtual void Initialize(DirectXBase* directXBase);
 
 	/// <summary>
 	/// 共通描画設定
@@ -37,6 +36,12 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>DirectXの基盤</returns>
 	DirectXBase* GetDirectXBase()const;
+
+	/// <summary>
+	/// パイプラインステートのゲッター
+	/// </summary>
+	/// <returns>パイプラインステート</returns>
+	ComPtr<ID3D12PipelineState> GetGraphicsPipelineState();
 protected://メンバ関数
 	/// <summary>
 	/// ルートシグネイチャの設定
@@ -51,8 +56,7 @@ protected://メンバ関数
 	/// <summary>
 	/// グラフィックスパイプラインの生成
 	/// </summary>
-	/// <param name="graphicsPiplineDesc">グラフィックスパイプラインデスク</param>
-	void CreateGraphicsPipeline(D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPiplineDesc);
+	void CreateGraphicsPipeline();
 protected://メンバ変数
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//Blob
