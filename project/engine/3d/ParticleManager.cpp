@@ -3,6 +3,7 @@
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
 #include "engine/objectCommon/BaseObjectCommon.h"
+#include "engine/2d/TextureManager.h"
 
 // インスタンスのゲッター
 ParticleManager* ParticleManager::GetInstance(){
@@ -103,4 +104,14 @@ void ParticleManager::CreateIndexResource() {
 	//IndexResourceにデータを書き込むためのアドレスを取得してindexDataに割り当てる
 	indexResource_->Map(0, nullptr, reinterpret_cast<void**>(&indexData_));
 	InitializeIndexData();
+}
+
+// パーティクルグループの生成
+void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath){
+	assert(particleGroup_.contains(name));
+	ParticleGroup particleGroup;
+	particleGroup.materialData.textureFilePath = textureFilePath;
+	TextureManager::GetInstance()->LoadTexture(particleGroup.materialData.textureFilePath);
+	particleGroup.materialData.srvIndex = TextureManager::GetInstance()->GetSRVIndex(particleGroup.materialData.textureFilePath);
+
 }

@@ -2,12 +2,33 @@
 #include <random>
 #include <wrl.h>
 #include <d3d12.h>
+#include <list>
+#include <unordered_map>
+#include <string>
+#include "Particle.h"
 #include "engine/math/ResourceData.h"
+#include "engine/math/func/Rendering.h"
+#include "Model.h"
 //前方宣言
 class DirectXBase;
 class SRVManager;
 class BaseObjectCommon;
 
+//インスタンシングデータ
+typedef struct InstanceData {
+	Transform transform;
+	Vector4 color;
+}InstanceData;
+
+//パーティクルグループ
+typedef struct ParticleGroup {
+	MaterialData materialData;
+	std::list<Particle>particleList;
+	uint32_t stvIndex;
+	Microsoft::WRL::ComPtr<ID3D12Resource>resource;
+	uint32_t instanceCount;
+	InstanceData* instancePtr;
+}ParticleGroup;
 /// <summary>
 /// パーティクルの管理
 /// </summary>
@@ -62,6 +83,14 @@ private://メンバ関数
 	/// インデックスリソースの生成
 	/// </summary>
 	void CreateIndexResource();
+
+	/// <summary>
+	/// パーティクルグループの生成
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="textureFilePath">テクスチャ</param>
+	void CreateParticleGroup(const std::string& name, const std::string& textureFilePath);
+
 private://静的メンバ変数
 	//インスタンス
 	static inline ParticleManager* instance = nullptr;
@@ -89,5 +118,7 @@ private://メンバ変数
 	//バッファリソースの使い道を補足するバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
+	//パーティクルグループコンテナ
+	std::unordered_map<std::string, ParticleGroup>particleGroup_;
 };
 
