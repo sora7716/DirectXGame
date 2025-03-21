@@ -52,6 +52,9 @@
     <Filter Include="engine\objectCommon">
       <UniqueIdentifier>{bcf43617-959a-4a3d-92a0-f33aac9bba70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\particle">
+      <UniqueIdentifier>{74a5fc19-3416-4892-aa63-de0e504292bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -162,11 +165,11 @@
     <ClCompile Include="engine\audio\AudioManager.cpp">
       <Filter>engine\audio</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\ParticleManager.cpp">
-      <Filter>engine\3d</Filter>
+    <ClCompile Include="engine\particle\ParticleManager.cpp">
+      <Filter>engine\particle</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\Particle.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="engine\particle\Particle.cpp">
+      <Filter>engine\particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,11 +290,11 @@
     <ClInclude Include="engine\audio\AudioManager.h">
       <Filter>engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\ParticleManager.h">
-      <Filter>engine\3d</Filter>
+    <ClInclude Include="engine\particle\ParticleManager.h">
+      <Filter>engine\particle</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\Particle.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="engine\particle\Particle.h">
+      <Filter>engine\particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

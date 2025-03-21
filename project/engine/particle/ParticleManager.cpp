@@ -4,6 +4,7 @@
 #include "engine/base/SRVManager.h"
 #include "engine/objectCommon/BaseObjectCommon.h"
 #include "engine/2d/TextureManager.h"
+#include "engine/3d/Camera.h"
 
 // インスタンスのゲッター
 ParticleManager* ParticleManager::GetInstance(){
@@ -30,6 +31,11 @@ void ParticleManager::Initialize(DirectXBase* directXBase, SRVManager* srvManage
 	CreateVertexResource();
 	//インデックスリソースの生成
 	CreateIndexResource();
+}
+
+//更新
+void ParticleManager::Update(Camera* camera){
+	
 }
 
 //終了
@@ -108,10 +114,12 @@ void ParticleManager::CreateIndexResource() {
 
 // パーティクルグループの生成
 void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath){
-	assert(particleGroup_.contains(name));
+	assert(particleGroups_.contains(name));
 	ParticleGroup particleGroup;
 	particleGroup.materialData.textureFilePath = textureFilePath;
 	TextureManager::GetInstance()->LoadTexture(particleGroup.materialData.textureFilePath);
 	particleGroup.materialData.srvIndex = TextureManager::GetInstance()->GetSRVIndex(particleGroup.materialData.textureFilePath);
-
+	particleGroup.resource = directXBase_->CreateBufferResource(particleGroup.materialData.srvIndex);
+	particleGroup.srvIndex = srvManager_->Allocate();
+	srvManager_->CreateSRVforStructuredBuffer(particleGroup.srvIndex,particleGroup.resource.Get(),particleGroup.instanceCount,sizeof(InstanceData));
 }

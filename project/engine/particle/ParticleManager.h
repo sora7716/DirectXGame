@@ -8,11 +8,12 @@
 #include "Particle.h"
 #include "engine/math/ResourceData.h"
 #include "engine/math/func/Rendering.h"
-#include "Model.h"
+#include "engine/3d/Model.h"
 //前方宣言
 class DirectXBase;
 class SRVManager;
 class BaseObjectCommon;
+class Camera;
 
 //インスタンシングデータ
 typedef struct InstanceData {
@@ -24,7 +25,7 @@ typedef struct InstanceData {
 typedef struct ParticleGroup {
 	MaterialData materialData;
 	std::list<Particle>particleList;
-	uint32_t stvIndex;
+	uint32_t srvIndex;
 	Microsoft::WRL::ComPtr<ID3D12Resource>resource;
 	uint32_t instanceCount;
 	InstanceData* instancePtr;
@@ -49,6 +50,12 @@ public://メンバ関数
 	/// <param name="srvManager">SRVの管理</param>
 	/// <param name="baseObjectCommon">オブジェクトの共通部分</param>
 	void Initialize(DirectXBase* directXBase, SRVManager* srvManager, BaseObjectCommon* baseObjectCommon);
+
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	void Update(Camera*camera);
 
 	/// <summary>
 	/// 終了
@@ -119,6 +126,6 @@ private://メンバ変数
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
 	//パーティクルグループコンテナ
-	std::unordered_map<std::string, ParticleGroup>particleGroup_;
+	std::unordered_map<std::string, ParticleGroup>particleGroups_;
 };
 
