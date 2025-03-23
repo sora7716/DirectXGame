@@ -11,6 +11,7 @@
 #include "3d/ModelManager.h"
 #include "3d/CameraManager.h"
 #include "base/SRVManager.h"
+#include"debug/ImGuiManager.h"
 
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
@@ -27,6 +28,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
 	//SRVマネージャー
 	SRVManager* srvManager = new SRVManager();
+	//ImGuiManagerの生成
+	std::unique_ptr<ImGuiManager>imguiManager = std::make_unique<ImGuiManager>();
 	//スプライトの共通部分
 	std::unique_ptr<SpriteCommon>spriteCommon = std::make_unique<SpriteCommon>();
 	//3Dオブジェクトの共通部分
@@ -39,6 +42,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directXBase->Initialize();
 	//SRVマネージャーの初期化
 	srvManager->Initialize(directXBase.get());
+	//ImGuiManagerの初期化
+	imguiManager->Initialize(winApi, directXBase.get(), srvManager);
 	//テクスチャマネージャーの初期化
 	TextureManager::GetInstance()->Initialize(directXBase.get(), srvManager);
 	//カメラマネージャーの追加
@@ -100,9 +105,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 		//ImGuiの開始
-		/*ImGui_ImplDX12_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();*/
+		imguiManager->PreDraw();
 
 		input->Update();
 
@@ -192,15 +195,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			object3d->Draw();
 		}
 		//実際のcommandListのImGuiの描画コマンドを積む
-		//ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), directXBase->GetCommandList());
+		imguiManager->PostDraw();
 		//描画の終了
 		directXBase->PostDraw();
 	}
 	//終了処理
 	//ImGuiの終了
-	//ImGui_ImplDX12_Shutdown();
-	//ImGui_ImplWin32_Shutdown();
-	//ImGui::DestroyContext();
+	imguiManager->Finalize();
 	//WindowsAPIの終了
 	winApi->Finalize();
 	//Audioの終了

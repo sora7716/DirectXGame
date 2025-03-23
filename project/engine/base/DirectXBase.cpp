@@ -478,6 +478,16 @@ D3D12_DEPTH_STENCIL_DESC DirectXBase::GetDepthStencil() const{
 	return depthStencilDesc_;
 }
 
+// スワップチェーンデスクのゲッター
+DXGI_SWAP_CHAIN_DESC1 DirectXBase::GetSwapChainDesc() const{
+	return swapChainDesc_;
+}
+
+// RTVデスクのゲッター
+D3D12_RENDER_TARGET_VIEW_DESC DirectXBase::GetRtvDesc() const{
+	return rtvDesc_;
+}
+
 // デスクリプターCPUハンドルのゲッター
 D3D12_CPU_DESCRIPTOR_HANDLE  DirectXBase::GetCPUDescriptorHandle(ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index) {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();

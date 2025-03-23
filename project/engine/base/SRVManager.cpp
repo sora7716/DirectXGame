@@ -87,3 +87,8 @@ D3D12_CPU_DESCRIPTOR_HANDLE SRVManager::GetCPUDescriptorHandle(uint32_t index) {
 D3D12_GPU_DESCRIPTOR_HANDLE SRVManager::GetGPUDescriptorHandle(uint32_t index) {
 	return directXBase_->GetGPUDescriptorHandle(descriptorHeap_, descriptorSize_, index);
 }
+
+// デスクリプタヒープのゲッター
+ID3D12DescriptorHeap* SRVManager::GetDescriptorHeap() const{
+	return descriptorHeap_.Get();
+}

@@ -10,7 +10,7 @@ class DirectXBase;
 /// <summary>
 /// SRV管理
 /// </summary>
-class SRVManager{
+class SRVManager {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -28,8 +28,8 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXBaseの基盤部分</param>
-	void Initialize(DirectXBase*directXBase);
-	
+	void Initialize(DirectXBase* directXBase);
+
 	/// <summary>
 	/// 確保
 	/// </summary>
@@ -92,6 +92,12 @@ public://メンバ関数
 	/// <param name="index">インデックス</param>
 	/// <returns>GPUデスクリプタハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
+
+	/// <summary>
+	/// デスクリプタヒープのゲッター
+	/// </summary>
+	/// <returns>デスクリプタヒープ</returns>
+	ID3D12DescriptorHeap* GetDescriptorHeap()const;
 public://静的メンバ変数
 	static inline const uint32_t kMaxSRVCount = 512;
 private://メンバ変数

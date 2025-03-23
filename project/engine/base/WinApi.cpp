@@ -1,4 +1,5 @@
 #include "WinApi.h"
+#include "ImGuiManager.h"
 #pragma comment(lib,"winmm.lib")
 
 //インスタンスのゲッター

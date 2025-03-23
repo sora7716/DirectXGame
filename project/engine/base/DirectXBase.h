@@ -201,6 +201,18 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>深度ステンシル</returns>
 	D3D12_DEPTH_STENCIL_DESC GetDepthStencil()const;
+
+	/// <summary>
+	/// スワップチェーンデスクのゲッター
+	/// </summary>
+	/// <returns>スワップチェーンデスク</returns>
+	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const;
+
+	/// <summary>
+	/// RTVデスクのゲッター
+	/// </summary>
+	/// <returns>rtvデスク</returns>
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc()const;
 public://静的メンバ関数
 	/// <summary>
 	/// デスクリプターCPUハンドルのゲッター
