@@ -27,7 +27,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectXCommon
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
 	//SRVマネージャー
-	SRVManager* srvManager = new SRVManager();
+	std::unique_ptr<SRVManager> srvManager = std::make_unique<SRVManager>();
 	//ImGuiManagerの生成
 	std::unique_ptr<ImGuiManager>imguiManager = std::make_unique<ImGuiManager>();
 	//スプライトの共通部分
@@ -43,9 +43,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//SRVマネージャーの初期化
 	srvManager->Initialize(directXBase.get());
 	//ImGuiManagerの初期化
-	imguiManager->Initialize(winApi, directXBase.get(), srvManager);
+	imguiManager->Initialize(winApi, directXBase.get(), srvManager.get());
 	//テクスチャマネージャーの初期化
-	TextureManager::GetInstance()->Initialize(directXBase.get(), srvManager);
+	TextureManager::GetInstance()->Initialize(directXBase.get(), srvManager.get());
 	//カメラマネージャーの追加
 	CameraManager::GetInstance()->AddCamera("defaultCamera");
 	CameraManager::GetInstance()->AddCamera("defaultCamera1");
@@ -222,6 +222,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	TextureManager::GetInstance()->Finalize();
 	//モデルマネージャーの終了
 	ModelManager::GetInstance()->Finalize();
-	delete srvManager;
 	return 0;
 }

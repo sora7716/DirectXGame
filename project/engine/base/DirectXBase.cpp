@@ -478,14 +478,9 @@ D3D12_DEPTH_STENCIL_DESC DirectXBase::GetDepthStencil() const{
 	return depthStencilDesc_;
 }
 
-// スワップチェーンデスクのゲッター
-DXGI_SWAP_CHAIN_DESC1 DirectXBase::GetSwapChainDesc() const{
-	return swapChainDesc_;
-}
-
-// RTVデスクのゲッター
-D3D12_RENDER_TARGET_VIEW_DESC DirectXBase::GetRtvDesc() const{
-	return rtvDesc_;
+// スワップチェーンのリソース数のゲッター
+size_t DirectXBase::GetSwapChainResourceNum() const{
+	return swapChainResources_.size();
 }
 
 // デスクリプターCPUハンドルのゲッター
