@@ -97,6 +97,13 @@ void Object3d::SetUVTranslate(const Vector2& uvTranslate) {
 	uvTransform_.translate = uvTranslate;
 }
 
+//色のセッター
+void Object3d::SetColor(const Vector4& color) {
+	if (model_) {
+		model_->SetColor(color);
+	}
+}
+
 // スケールのゲッター
 const Vector3& Object3d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
@@ -131,6 +138,16 @@ const float Object3d::GetUVRotate() const {
 const Vector2& Object3d::GetUVTranslate() const {
 	// TODO: return ステートメントをここに挿入します
 	return uvTransform_.translate;
+}
+
+//色のゲッター
+const Vector4& Object3d::GetColor() const {
+	// TODO: return ステートメントをここに挿入します
+	static const Vector4 defaultColor(0, 0, 0, 0);
+	if (model_) {
+		return model_->GetColor();
+	}
+	return defaultColor;
 }
 
 // 座標変換行列リソースの生成

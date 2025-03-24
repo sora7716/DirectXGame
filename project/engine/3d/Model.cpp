@@ -15,7 +15,7 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 	modelCommon_ = modelCommon;
 	directXBase_ = modelCommon_->GetDirectXBase();
 	//モデルの読み込み
-	modelData_ = LoadObjFile(directoryPath, storedFilePath,filename);
+	modelData_ = LoadObjFile(directoryPath, storedFilePath, filename);
 	//頂点データの生成
 	CreateVertexResource();
 	//インデックスデータの生成
@@ -44,6 +44,17 @@ void Model::Draw() {
 //uv変換
 void Model::UVTransform(Transform2D uvTransform) {
 	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform.scale.x,uvTransform.scale.y,1.0f }, uvTransform.rotate, { uvTransform.translate.x,uvTransform.translate.y,1.0f });
+}
+
+// 色を変更
+void Model::SetColor(const Vector4& color) {
+	materialData_->color = color;
+}
+
+// 色を取得
+const Vector4& Model::GetColor() const {
+	// TODO: return ステートメントをここに挿入します
+	return materialData_->color;
 }
 
 // .mtlファイルの読み取り	
@@ -139,7 +150,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 			std::string materialFilename;
 			s >> materialFilename;
 			//基本的にobjファイルと同一の階層にmtlは存在させるので、ディレクトリ名とファイル名を返す
-			modelData.material = LoadMaterialTemplateFile(directoryPath + "/"+storedFilePath, materialFilename);
+			modelData.material = LoadMaterialTemplateFile(directoryPath + "/" + storedFilePath, materialFilename);
 		}
 	}
 	//4.ModelDataを返す

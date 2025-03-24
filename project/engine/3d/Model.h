@@ -58,6 +58,18 @@ public://メンバ関数
 	void UVTransform(Transform2D uvTransform);
 
 	/// <summary>
+	/// 色を変更
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4&color);
+
+	/// <summary>
+	/// 色を取得
+	/// </summary>
+	/// <returns>色</returns>
+	const Vector4& GetColor()const;
+
+	/// <summary>
 	/// .mtlファイルの読み取り	
 	/// </summary>
 	/// <param name="directoryPath">ディレクトリファイルパス</param>

@@ -1,8 +1,10 @@
 #pragma once
 #include "SRVManager.h"
+#ifdef USE_IMGUI
 #include "imgui/imgui.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+#include "imgui/imgui_impl_dx12.h"
+#include "imgui/imgui_impl_win32.h"
+#endif // USE_IMGUI
 //前方宣言
 class DirectXBase;
 class SRVManager;
@@ -31,14 +33,19 @@ public://メンバ関数
 	void Initialize(WinApi*winApi,DirectXBase* directXBase, SRVManager* srvManager);
 
 	/// <summary>
-	/// 描画開始
+	/// ImGuiの受付開始
 	/// </summary>
-	void PreDraw();
+	void Begin();
 
 	/// <summary>
-	/// 描画終了
+	/// ImGuiの受付終了
 	/// </summary>
-	void PostDraw();
+	void End();
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw();
 
 	/// <summary>
 	/// 終了

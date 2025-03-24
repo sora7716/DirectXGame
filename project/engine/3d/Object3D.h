@@ -92,6 +92,12 @@ public://メンバ関数
 	void SetUVTranslate(const Vector2& uvTranslate);
 
 	/// <summary>
+	/// 色のセッター
+	/// </summary>
+	/// <param name="color">色</param>
+	void SetColor(const Vector4& color);
+
+	/// <summary>
 	/// スケールのゲッター
 	/// </summary>
 	/// <returns>スケール</returns>
@@ -126,6 +132,12 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>uv平行移動</returns>
 	const Vector2& GetUVTranslate()const;
+
+	/// <summary>
+	/// 色のゲッター
+	/// </summary>
+	/// <returns>色</returns>
+	const Vector4& GetColor()const;
 private://メンバ関数
 	/// <summary>
 	/// 座標変換行列リソースの生成

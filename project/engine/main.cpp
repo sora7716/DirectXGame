@@ -105,7 +105,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 		//ImGuiの開始
-		imguiManager->PreDraw();
+		imguiManager->Begin();
 
 		input->Update();
 
@@ -143,7 +143,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		CameraManager::GetInstance()->Update();
 		CameraManager::GetInstance()->FindCamera("defaultCamera")->SetTranslate(cameraTransform.translate);
 		CameraManager::GetInstance()->FindCamera("defaultCamera1")->SetTranslate(cameraTransform1.translate);
-		if (input->TriggerKey(DIK_W)) {
+		object3ds[0]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera1"));
+		object3ds[1]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
+		/*if (input->TriggerKey(DIK_W)) {
 			for (uint32_t i = 0; i < object3ds.size(); i++) {
 				object3ds[i]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 			}
@@ -152,10 +154,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			for (uint32_t i = 0; i < object3ds.size(); i++) {
 				object3ds[i]->SetCamera(CameraManager::GetInstance()->FindCamera("defaultCamera1"));
 			}
-		}
-		/*ImGui::Begin("sound");
+		}*/
+#ifdef USE_IMGUI
+		ImGui::Begin("sound");
 		ImGui::DragFloat("volume", &volume, 0.01f, 0.0f, 2.0f);
-		ImGui::End();*/
+		ImGui::End();
+#endif // USE_IMGUI
 
 		/*ImGui::Begin("sprite");
 		ImGui::DragFloat2("translate[0]", &pos[0].x, 0.1f);
@@ -174,7 +178,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		AudioManager::GetInstance()->FindAudio("mokugyo")->SetVolume(volume);
 
 		//ImGuiの内部コマンドを生成する
-		//ImGui::Render();
+		imguiManager->End();
 		//描画処理
 		directXBase->PreDraw();
 		srvManager->PreDraw();
@@ -195,7 +199,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			object3d->Draw();
 		}
 		//実際のcommandListのImGuiの描画コマンドを積む
-		imguiManager->PostDraw();
+		imguiManager->Draw();
 		//描画の終了
 		directXBase->PostDraw();
 	}
