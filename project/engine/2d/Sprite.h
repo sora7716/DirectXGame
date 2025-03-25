@@ -195,7 +195,7 @@ private://メンバ変数
 	std::string filePath_ = {};
 	//ローカル座標
 	Transform2D transform2D_ = {
-		.scale = { 640.0f,360.0f },
+		.scale = { 90.0f,90.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};

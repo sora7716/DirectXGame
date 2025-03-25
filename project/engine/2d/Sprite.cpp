@@ -44,9 +44,9 @@ void Sprite::Update() {
 	//インデックスリソースにデータを書き込む(6個分)
 
 	//メンバ変数の値を見た目に反映
-	transform_.translate = { transform2D_.translate.x,transform2D_.translate.y,0.0f };
-	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
 	transform_.scale = { transform2D_.scale.x,transform2D_.scale.y,1.0f };
+	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
+	transform_.translate = { transform2D_.translate.x,transform2D_.translate.y,0.0f };
 	//Transform情報を作成する
 	UpdateTransform();
 	//UVTransform情報を作成する
