@@ -1,30 +1,12 @@
-#include "base/DirectXBase.h"
-#include "2d/TextureManager.h"
-#include "math/func/Math.h"
-#include "audio/AudioManager.h"
-#include "input/Input.h"
+#include "GameSystem.h"
 #include "base/D3DResourceLeakChecker.h"
-#include "objectCommon/SpriteCommon.h"
-#include "2d/Sprite.h"
-#include "objectCommon/Object3dCommon.h"
-#include "3d/Object3d.h"
-#include "3d/ModelManager.h"
-#include "3d/CameraManager.h"
-#include "base/SRVManager.h"
-#include"debug/ImGuiManager.h"
-
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
-#pragma comment(lib,"dxguid.lib")
-#pragma comment(lib,"dxcompiler.lib")
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
-	HRESULT hr = S_FALSE;
 	D3DResourceLeakChecker leakChacker;//メモリーリークをチェック
 	//ウィンドウズアプリケーション
 	WinApi* winApi = WinApi::GetInstance();
-	//DirectXCommon
+	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase = std::make_unique<DirectXBase>();
 	//SRVマネージャー
 	std::unique_ptr<SRVManager> srvManager = std::make_unique<SRVManager>();

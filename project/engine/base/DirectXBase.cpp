@@ -1,4 +1,5 @@
 #include "DirectXBase.h"
+#include "WinApi.h"
 #include "engine/base/FixFPS.h"
 #include "engine/debug/Log.h"
 #include "StringUtility.h"

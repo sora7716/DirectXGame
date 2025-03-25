@@ -6,15 +6,17 @@
 #include <wrl.h>
 #include <vector>
 #include <array>
-#include "WinApi.h"
 #include "engine/math/Vector4.h"
 #include "externals/DirectXTex/DirectXTex.h"
 #include "externals/DirectXTex/d3dx12.h"
 
+//前方宣言
+class WinApi;
+
 /// <summary>
 /// DirectXコモン
 /// </summary>
-class DirectXBase final{
+class DirectXBase {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -226,11 +228,11 @@ public://静的メンバ関数
 	/// <returns>デスクリプターGPUハンドル</returns>
 	static D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 
+private://メンバ関数
 	//コピーコンストラクタ禁止
 	DirectXBase(const DirectXBase&) = delete;
 	//代入演算子を禁止
 	const DirectXBase operator=(const DirectXBase&) = delete;
-private://メンバ関数
 	/// <summary>
 	/// IDXIファクトリーの生成
 	/// </summary>

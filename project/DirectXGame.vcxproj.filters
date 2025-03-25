@@ -150,8 +150,11 @@
     <ClCompile Include="engine\particle\Particle.cpp">
       <Filter>engine\particle</Filter>
     </ClCompile>
-    <ClCompile Include="engine\debug\ImGuiManager.cpp">
+    <ClCompile Include="engine\GameSystem.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\debug\ImGuiManager.cpp">
+      <Filter>engine\debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,8 +257,11 @@
     <ClInclude Include="engine\particle\Particle.h">
       <Filter>engine\particle</Filter>
     </ClInclude>
-    <ClInclude Include="engine\debug\ImGuiManager.h">
+    <ClInclude Include="engine\GameSystem.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\debug\ImGuiManager.h">
+      <Filter>engine\debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
