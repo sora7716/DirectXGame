@@ -38,14 +38,14 @@ void GameSystem::Draw() {
 	directXBase_->PreDraw();
     //SRVの管理
 	srvManager_->PreDraw();
-    //ImGuiの管理
-	imguiManager_->Draw();
     //スプライトの共通部分
 	spriteCommon_->DrawSetting();
     //3Dオブジェクトの共通部分
 	object3dCommon_->DrawSetting();
 	//スプライト
 	sprite_->Draw();
+	//ImGuiの管理
+	imguiManager_->Draw();
 	//描画終了位置
 	directXBase_->PostDraw();
 }
