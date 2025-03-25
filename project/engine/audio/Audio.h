@@ -75,9 +75,9 @@ public://メンバ関数
 	void SetVolume(float volume = 1.0f);
 
 	/// <summary>
-	/// 再生
+	/// 再度再生
 	/// </summary>
-	void PlayAudio();
+	void ReplayAudio();
 
 	/// <summary>
 	/// 一時停止

@@ -49,8 +49,8 @@ void Audio::SetVolume(float volume) {
 	assert(SUCCEEDED(result));
 }
 
-//再生
-void Audio::PlayAudio() {
+//再度再生
+void Audio::ReplayAudio() {
 	HRESULT result = S_FALSE;
 	result = pSorceVoice_->Start();
 	assert(SUCCEEDED(result));
