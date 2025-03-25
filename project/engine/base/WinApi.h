@@ -71,6 +71,11 @@ public://定数
 	static inline const int32_t kClientWidth = 1280;//画面の横幅
 	static inline const int32_t kClientHeight = 720;//画面の縦幅
 	static inline const std::wstring label = L"CG2";//タイトル名
+private://静的メンバ変数
+	//インスタンス
+	static inline WinApi* instance = nullptr;
+	//Finalizeを読んだかどうか
+	static inline bool isFinalize = false;
 private://メンバ変数
 	WNDCLASS wndClass_{};	//ウィンドウクラス
 	HWND hwnd_ = nullptr;	//ウィンドウハンドル

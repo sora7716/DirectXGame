@@ -91,11 +91,6 @@ public://メンバ関数
 	void CreateDXCCompiler();
 
 	/// <summary>
-	/// ImGuiの初期化
-	/// </summary>
-	void InitializeImGui();
-
-	/// <summary>
 	/// 描画開始位置
 	/// </summary>
 	void PreDraw();

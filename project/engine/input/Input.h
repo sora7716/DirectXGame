@@ -33,6 +33,11 @@ public://メンバ関数
 	void Update();
 
 	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// キーの押下をチェック
 	/// </summary>
 	/// <param name="keyNumber">キー番号</param>
@@ -52,21 +57,20 @@ public://メンバ関数
 	/// <param name="keyNumber"></param>
 	/// <returns>離した瞬間</returns>
 	bool ReleaseTriggerKey(BYTE keyNumber);
-
+private://メンバ関数
+	//コンストラクタの封印
+	Input() = default;
+	//デストラクタの封印
+	~Input() = default;
 	//コピーコンストラクタを禁止
 	Input(const Input&) = delete;
 	//代入演算子を禁止
 	const Input& operator=(const Input&) = delete;
-private://メンバ関数
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Input() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Input() = default;
+private://静的メンバ変数
+	//インスタンス
+	static inline Input* instance = nullptr;
+	//Finalizeを読んだかどうか
+	static inline bool isFinalize = false;
 private://メンバ変数
 	//ウィンドウズAPI
 	WinApi* winApi_ = nullptr;

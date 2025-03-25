@@ -6,8 +6,11 @@
 
 //インスタンスのゲッター
 Input* Input::GetInstance(){
-	static Input instance;
-	return &instance;
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new Input();
+	}
+	return instance;
 }
 
 //初期化
@@ -38,6 +41,13 @@ void Input::Update() {
 	//キーボード情報の取得開始
 	result = keyboard_->Acquire();
 	result = keyboard_->GetDeviceState(sizeof(key), key);
+}
+
+//終了
+void Input::Finalize(){
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
 }
 
 // キーの押下をチェック

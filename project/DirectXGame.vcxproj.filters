@@ -55,6 +55,9 @@
     <Filter Include="engine\particle">
       <UniqueIdentifier>{74a5fc19-3416-4892-aa63-de0e504292bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="framwork">
+      <UniqueIdentifier>{4ac48d9b-28cd-4b88-b0e4-12be62ae53eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -150,11 +153,14 @@
     <ClCompile Include="engine\particle\Particle.cpp">
       <Filter>engine\particle</Filter>
     </ClCompile>
-    <ClCompile Include="engine\GameSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="engine\debug\ImGuiManager.cpp">
       <Filter>engine\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\framework\GameSystem.cpp">
+      <Filter>framwork</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\framework\Framework.cpp">
+      <Filter>framwork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,11 +263,14 @@
     <ClInclude Include="engine\particle\Particle.h">
       <Filter>engine\particle</Filter>
     </ClInclude>
-    <ClInclude Include="engine\GameSystem.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engine\debug\ImGuiManager.h">
       <Filter>engine\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\GameSystem.h">
+      <Filter>framwork</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\framework\Framework.h">
+      <Filter>framwork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

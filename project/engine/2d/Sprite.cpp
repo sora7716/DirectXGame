@@ -4,6 +4,7 @@
 #include "engine/math/func/Math.h"
 #include "TextureManager.h"
 #include "engine/base/DirectXBase.h"
+#include "WinApi.h"
 
 //初期化
 void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath) {

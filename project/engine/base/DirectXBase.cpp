@@ -38,8 +38,6 @@ void DirectXBase::Initialize() {
 	InitializeScissorRect();
 	//DXCコンパイラの生成
 	CreateDXCCompiler();
-	//ImGuiの初期化
-	InitializeImGui();
 }
 
 //デバイスの初期化
@@ -166,21 +164,6 @@ void DirectXBase::CreateDXCCompiler() {
 	//デフォルトインクルードハンドラの生成
 	result = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
 	assert(SUCCEEDED(result));
-}
-
-//ImGuiの初期化
-void DirectXBase::InitializeImGui() {
-	/*IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winApi_->GetHwnd());
-	ImGui_ImplDX12_Init(
-		device_.Get(),
-		swapChainDesc_.BufferCount,
-		rtvDesc_.Format,
-		srvDescriptorHeap_.Get(),
-		GetSRVCPUDescriptorHandle(0),
-		GetSRVGPUDescriptorHandle(0));*/
 }
 
 // 描画開始位置

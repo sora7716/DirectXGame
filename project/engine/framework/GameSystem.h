@@ -1,17 +1,18 @@
 #pragma once
-#include <memory>
-//前方宣言
-class WinApi;
-class DirectXBase;
-class Input;
-class SRVManager;
-class ImGuiManager;
-class AudioManager;
-class Object3dCommon;
-class SpriteCommon;
-class CameraManager;
-class TextureManager;
-class ModelManager;
+#include "WinApi.h"
+#include "base/DirectXBase.h"
+#include "2d/TextureManager.h"
+#include "math/func/Math.h"
+#include "audio/AudioManager.h"
+#include "input/Input.h"
+#include "objectCommon/SpriteCommon.h"
+#include "2d/Sprite.h"
+#include "objectCommon/Object3dCommon.h"
+#include "3d/Object3d.h"
+#include "3d/ModelManager.h"
+#include "3d/CameraManager.h"
+#include "base/SRVManager.h"
+#include"debug/ImGuiManager.h"
 
 /// <summary>
 /// ゲーム全体
