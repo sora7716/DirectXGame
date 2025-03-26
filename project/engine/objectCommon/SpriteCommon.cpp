@@ -1,8 +1,24 @@
 #include "SpriteCommon.h"
-#include "engine/base/DirectXBase.h"
+#include "engine/2d/TextureManager.h"
 #include <cassert>
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
-#pragma comment(lib,"dxguid.lib")
-#pragma comment(lib,"dxcompiler.lib")
-using namespace Microsoft::WRL;
+
+//インスタンスのゲッター
+SpriteCommon* SpriteCommon::GetInstance(){
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new SpriteCommon();
+	}
+	return instance;
+}
+
+//テクスチャの読み込み
+void SpriteCommon::LoadTexture(const std::string& filename) {
+	TextureManager::GetInstance()->LoadTexture(filename);
+}
+
+//終了
+void SpriteCommon::Finalize(){
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
+}

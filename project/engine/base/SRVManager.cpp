@@ -3,6 +3,15 @@
 #include <cassert>
 using namespace Microsoft::WRL;
 
+//インスタンスのゲッター
+SRVManager* SRVManager::GetInstance(){
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new SRVManager();
+	}
+	return instance;
+}
+
 //初期化
 void SRVManager::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記憶する
@@ -66,6 +75,13 @@ void SRVManager::PreDraw() {
 	//描画用のDescriptorHeapの設定
 	ComPtr<ID3D12DescriptorHeap> descriptorHeaps[] = { descriptorHeap_.Get() };
 	directXBase_->GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps->GetAddressOf());
+}
+
+//終了
+void SRVManager::Finalize(){
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
 }
 
 // rootDescriptorTableのセッター

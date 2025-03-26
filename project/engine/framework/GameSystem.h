@@ -1,7 +1,6 @@
 #pragma once
 #include "Framework.h"
-#include "engine/2d/Sprite.h"
-#include "engine/3d/Object3D.h"
+#include "engine/scene/GameScene.h"
 
 /// <summary>
 /// ゲームシステム
@@ -38,9 +37,7 @@ public://メンバ関数
 	/// </summary>
 	void Finalize()override;
 private://メンバ変数
-	//スプライト
-	std::unique_ptr<Sprite>sprite_ = nullptr;
-	//スプライトの位置
-	Transform2D worldTransform_ = {};
+	//ゲームシーン
+	std::unique_ptr<GameScene>gameScene_ = nullptr;
 };
 

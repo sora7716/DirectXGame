@@ -35,9 +35,8 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
-	/// <param name="srvManager">SRVの管理</param>
 	/// <param name="directoryPath">ディレクトリファイルパス</param>
-	void Initialize(DirectXBase* directXBase, SRVManager* srvManager,const std::string& directoryPath="engine/resources/texture");
+	void Initialize(DirectXBase* directXBase,const std::string& directoryPath="engine/resources/texture");
 
 	/// <summary>
 	/// テクスチャファイルの読み込み

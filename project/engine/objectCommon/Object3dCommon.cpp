@@ -1,12 +1,22 @@
 #include "Object3dCommon.h"
-#include "engine/base/DirectXBase.h"
 #include "engine/3d/Camera.h"
 #include <cassert>
-#pragma comment(lib,"d3d12.lib")
-#pragma comment(lib,"dxgi.lib")
-#pragma comment(lib,"dxguid.lib")
-#pragma comment(lib,"dxcompiler.lib")
-using namespace Microsoft::WRL;
+
+//インスタンスのゲッター
+Object3dCommon* Object3dCommon::GetInstance(){
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new Object3dCommon();
+	}
+	return instance;
+}
+
+//終了
+void Object3dCommon::Finalize(){
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
+}
 
 // デフォルトカメラのセッター
 void Object3dCommon::SetDefaultCamera(Camera* camera){

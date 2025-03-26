@@ -3,20 +3,18 @@
 #include "SRVManager.h"
 #include "WinApi.h"
 //初期化
-void ImGuiManager::Initialize(WinApi* winApi, DirectXBase* directXBase, SRVManager* srvManager) {
+void ImGuiManager::Initialize(DirectXBase* directXBase) {
 #ifdef USE_IMGUI
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//SRVの管理を記録する
-	srvManager_ = srvManager;
-	//WinApiを記録する
-	winApi_ = winApi;
+	srvManager_ = SRVManager::GetInstance();
 	IMGUI_CHECKVERSION();
 	//ImGuiのコンテキストを生成
 	ImGui::CreateContext();
 	//ImGuiのスタイルを設定
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(winApi_->GetHwnd());
+	ImGui_ImplWin32_Init(WinApi::GetInstance()->GetHwnd());
 	//srvの確保
 	srvManager_->Allocate();
 	ImGui_ImplDX12_Init(

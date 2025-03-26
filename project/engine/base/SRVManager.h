@@ -15,14 +15,10 @@ private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	SRVManager() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~SRVManager() = default;
+	/// <returns>インスタンス</returns>
+	static SRVManager* GetInstance();
 
 	/// <summary>
 	/// 初期化
@@ -66,6 +62,11 @@ public://メンバ関数
 	void PreDraw();
 
 	/// <summary>
+	/// 終了
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// rootDescriptorTableのセッター
 	/// </summary>
 	/// <param name="rootParameterIndex">rootParameterのインデックス</param>
@@ -98,8 +99,22 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>デスクリプタヒープ</returns>
 	ID3D12DescriptorHeap* GetDescriptorHeap()const;
-public://静的メンバ変数
+private://メンバ関数
+	//コンストラクタの封印
+	SRVManager() = default;
+	//デストラクタの封印
+	~SRVManager() = default;
+	//コピーコンストラクタ禁止
+	SRVManager(const SRVManager&) = delete;
+	//代入演算子の禁止
+	SRVManager operator=(const SRVManager&) = delete;
+public://定数
 	static inline const uint32_t kMaxSRVCount = 512;
+private://静的メンバ変数
+	//インスタンス
+	static inline SRVManager* instance = nullptr;
+	//Finalizeをしたかどうか
+	static inline bool isFinalize = false;
 private://メンバ変数
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;

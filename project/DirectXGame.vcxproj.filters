@@ -34,9 +34,6 @@
     <Filter Include="engine\debug">
       <UniqueIdentifier>{c793e6da-f161-41c5-ba48-ad2073df3575}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\imgui">
-      <UniqueIdentifier>{2b075082-5396-4ea8-bfe2-58318d5b4b96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\input">
       <UniqueIdentifier>{cd3a8eaa-58ec-49cd-bb11-0d6a68b13df8}</UniqueIdentifier>
     </Filter>
@@ -55,7 +52,10 @@
     <Filter Include="engine\particle">
       <UniqueIdentifier>{74a5fc19-3416-4892-aa63-de0e504292bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="framwork">
+    <Filter Include="engine\scene">
+      <UniqueIdentifier>{247103c9-90aa-480e-ad7d-9f128487e9be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\framwork">
       <UniqueIdentifier>{4ac48d9b-28cd-4b88-b0e4-12be62ae53eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -157,10 +157,13 @@
       <Filter>engine\debug</Filter>
     </ClCompile>
     <ClCompile Include="engine\framework\GameSystem.cpp">
-      <Filter>framwork</Filter>
+      <Filter>engine\framwork</Filter>
     </ClCompile>
     <ClCompile Include="engine\framework\Framework.cpp">
-      <Filter>framwork</Filter>
+      <Filter>engine\framwork</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameScene.cpp">
+      <Filter>engine\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -267,10 +270,13 @@
       <Filter>engine\debug</Filter>
     </ClInclude>
     <ClInclude Include="engine\framework\GameSystem.h">
-      <Filter>framwork</Filter>
+      <Filter>engine\framwork</Filter>
     </ClInclude>
     <ClInclude Include="engine\framework\Framework.h">
-      <Filter>framwork</Filter>
+      <Filter>engine\framwork</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameScene.h">
+      <Filter>engine\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

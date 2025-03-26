@@ -9,7 +9,6 @@
 #include <string>
 
 //前方宣言
-class SpriteCommon;
 class DirectXBase;
 
 /// <summary>
@@ -32,9 +31,8 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="spriteCommon">スプライトの共通部分</param>
 	/// <param name="textureFilePath">テクスチャのファイルパス</param>
-	void Initialize(SpriteCommon* spriteCommon,std::string textureFilePath);
+	void Initialize(std::string textureFilePath);
 
 	/// <summary>
 	/// 更新処理
@@ -206,7 +204,6 @@ private://メンバ変数
 		.translate = {0.0f,0.0f}
 	};
 	Transform transform_ = {};//トランスフォームの情報
-	SpriteCommon* spriteCommon_ = nullptr;//スプライトの共通部分
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//バッファリソース
 	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点

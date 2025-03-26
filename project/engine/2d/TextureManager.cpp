@@ -23,11 +23,11 @@ TextureManager* TextureManager::GetInstance() {
 }
 
 //初期化
-void TextureManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager, const std::string& directoryPath) {
+void TextureManager::Initialize(DirectXBase* directXBase,const std::string& directoryPath) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//SRVの管理を記録する
-	srvManager_ = srvManager;
+	srvManager_ = SRVManager::GetInstance();
 	//SRVの数と同数
 	textureDatas_.reserve(SRVManager::kMaxSRVCount);
 	//ディレクトリファイルパスを記録

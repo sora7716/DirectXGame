@@ -7,7 +7,6 @@
 //前方宣言
 class DirectXBase;
 class SRVManager;
-class WinApi;
 /// <summary>
 /// ImGuiの管理
 /// </summary>
@@ -26,10 +25,8 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="winApi">WinApi</param>
 	/// <param name="directXBase">DirectXの基盤部分</param>
-	/// <param name="srvManager">SRVの管理</param>
-	void Initialize(WinApi*winApi,DirectXBase* directXBase, SRVManager* srvManager);
+	void Initialize(DirectXBase* directXBase);
 
 	/// <summary>
 	/// ImGuiの受付開始
@@ -55,7 +52,5 @@ private://メンバ変数
 	DirectXBase* directXBase_ = nullptr;
 	//SRVの管理
 	SRVManager* srvManager_ = nullptr;
-	//WinApi
-	WinApi* winApi_ = nullptr;
 };
 

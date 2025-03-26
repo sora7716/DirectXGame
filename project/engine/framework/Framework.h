@@ -1,7 +1,6 @@
 #pragma once
 #include "WinApi.h"
 #include "engine/base/DirectXBase.h"
-#include "engine/2d/TextureManager.h"
 #include "engine/math/func/Math.h"
 #include "engine/audio/AudioManager.h"
 #include "engine/input/Input.h"
@@ -58,12 +57,8 @@ public://メンバ関数
 	/// <returns>終了したかどうか</returns>
 	virtual bool isEndRequest();
 protected://メンバ変数
-	//ウィンドウズApi
-	WinApi* winApi_ = nullptr;
 	//入力処理
 	Input* input_ = nullptr;
-	//テクスチャの管理
-	TextureManager* textureManager_ = nullptr;
 	//カメラの管理
 	CameraManager* cameraManager_ = nullptr;
 	//オーディオの管理
@@ -73,12 +68,8 @@ protected://メンバ変数
 	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase_ = nullptr;
 	//SRVの管理
-	std::unique_ptr<SRVManager>srvManager_ = nullptr;
+	SRVManager*srvManager_ = nullptr;
 	//ImGuiの管理
 	std::unique_ptr<ImGuiManager>imguiManager_ = nullptr;
-	//スプライトの共通部分
-	std::unique_ptr<SpriteCommon>spriteCommon_ = nullptr;
-	//3Dオブジェクトの共通部分
-	std::unique_ptr<Object3dCommon>object3dCommon_ = nullptr;
 };
 

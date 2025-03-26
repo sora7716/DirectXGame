@@ -11,14 +11,15 @@ private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	Object3dCommon() = default;
+	/// <returns></returns>
+	static Object3dCommon* GetInstance();
 
 	/// <summary>
-	/// デストラクタ
+	/// 終了
 	/// </summary>
-	~Object3dCommon() = default;
+	void Finalize();
 
 	/// <summary>
 	/// デフォルトカメラのセッター
@@ -31,6 +32,20 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>デフォルトカメラ</returns>
 	Camera* GetDefaultCamera()const;
+private://メンバ関数
+	//コンストラクタの封印
+	Object3dCommon() = default;
+	//デストラクタの封印
+	~Object3dCommon() = default;
+	//コピーコンストラクタ禁止
+	Object3dCommon(const Object3dCommon&) = delete;
+	//代入演算子の禁止
+	Object3dCommon operator=(const Object3dCommon&) = delete;
+private://静的メンバ変数
+	//インスタンス
+	static inline Object3dCommon* instance = nullptr;
+	//Finalizeをしたかどうかのフラグ
+	static inline bool isFinalize = false;
 private://メンバ変数
 	Camera* defaultCamera_ = nullptr;
 };

@@ -7,10 +7,8 @@
 #include "WinApi.h"
 
 //初期化
-void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath) {
-	assert(spriteCommon);//Nullチェック
-	spriteCommon_ = spriteCommon;//共通部分を受け取る
-	directXBase_ = spriteCommon_->GetDirectXBase();//DirectXの基盤部分を受け取る
+void Sprite::Initialize(std::string textureFilePath) {
+	directXBase_ = SpriteCommon::GetInstance()->GetDirectXBase();//DirectXの基盤部分を受け取る
 	//頂点データの生成
 	CreateVertexResorce();
 	//インデックスデータの生成
@@ -35,7 +33,7 @@ void Sprite::Initialize(SpriteCommon* spriteCommon, std::string textureFilePath)
 		.rotate = {},
 		.translate{}
 	};
-	TextureManager::GetInstance()->LoadTexture(textureFilePath);
+	SpriteCommon::GetInstance()->LoadTexture(textureFilePath);
 	filePath_ = textureFilePath;
 }
 
