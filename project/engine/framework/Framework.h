@@ -67,9 +67,5 @@ protected://メンバ変数
 	ModelManager* modelManager_ = nullptr;
 	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase_ = nullptr;
-	//SRVの管理
-	SRVManager*srvManager_ = nullptr;
-	//ImGuiの管理
-	std::unique_ptr<ImGuiManager>imguiManager_ = nullptr;
 };
 

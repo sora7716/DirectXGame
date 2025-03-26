@@ -1,26 +1,26 @@
 #pragma once
-#include "Framework.h"
-#include "engine/scene/IScene.h"
+#include "IScene.h"
 
 /// <summary>
-/// ゲームシステム
+/// タイトルシーン
 /// </summary>
-class GameSystem:public Framework{
+class TitleScene :public IScene {
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	GameSystem()=default;
+	TitleScene() = default;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameSystem()=default;
+	~TitleScene()override = default;
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize()override;
+	/// <param name="directXBase">DirectXの基盤部分</param>
+	void Initialize(DirectXBase* directXBase)override;
 
 	/// <summary>
 	/// 更新
@@ -36,8 +36,14 @@ public://メンバ関数
 	/// 終了
 	/// </summary>
 	void Finalize()override;
+
 private://メンバ変数
-	//シーン
-	std::unique_ptr<IScene>scene_ = nullptr;
+	//スプライト
+	std::unique_ptr<Sprite>sprite_ = nullptr;
+	//スプライトの位置
+	Transform2D worldTransform_ = {};
+	//オーディオの管理
+	AudioManager* audioManager_ = nullptr;
 };
+
 

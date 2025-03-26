@@ -1,20 +1,20 @@
-#include "GameScene.h"
+#include "TitleScene.h"
 
 //初期化
-void GameScene::Initialize(DirectXBase* directXBase){
+void TitleScene::Initialize(DirectXBase* directXBase) {
 	//オーディオ
 	audioManager_ = AudioManager::GetInstance();
-	audioManager_->LoadAudio("mokugyo", "mokugyo.wav");
-	audioManager_->FindAudio("mokugyo")->SoundPlayWave(true);
+	audioManager_->LoadAudio("Alarm01", "Alarm01.wav");
+	audioManager_->FindAudio("Alarm01")->SoundPlayWave(true);
 	//スプライト
 	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize("block.png");
+	sprite_->Initialize("monsterBall.png");
 	worldTransform_.scale = { 360.0f,360.0f };
 	worldTransform_.translate = { 100.0f,100.0f };
 }
 
 //更新
-void GameScene::Update(){
+void TitleScene::Update() {
 	//スプライト
 	sprite_->SetScale(worldTransform_.scale);
 	sprite_->SetTranslate(worldTransform_.translate);
@@ -32,11 +32,11 @@ void GameScene::Update(){
 }
 
 //描画
-void GameScene::Draw(){
+void TitleScene::Draw() {
 	//スプライト
 	sprite_->Draw();
 }
 
 //終了
-void GameScene::Finalize(){
+void TitleScene::Finalize() {
 }

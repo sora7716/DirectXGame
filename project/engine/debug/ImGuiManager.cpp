@@ -2,6 +2,16 @@
 #include "DirectXBase.h"
 #include "SRVManager.h"
 #include "WinApi.h"
+#include<cassert>
+//インスタンスのゲッター
+ImGuiManager* ImGuiManager::GetInstance() {
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new ImGuiManager();
+	}
+	return instance;
+}
+
 //初期化
 void ImGuiManager::Initialize(DirectXBase* directXBase) {
 #ifdef USE_IMGUI
@@ -66,4 +76,7 @@ void ImGuiManager::Finalize() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 #endif // USE_IMGUI
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
 }

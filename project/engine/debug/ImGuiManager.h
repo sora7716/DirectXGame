@@ -13,14 +13,10 @@ class SRVManager;
 class ImGuiManager {
 public://メンバ関数
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンスのゲッター
 	/// </summary>
-	ImGuiManager() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~ImGuiManager() = default;
+	/// <returns></returns>
+	static ImGuiManager* GetInstance();
 
 	/// <summary>
 	/// 初期化
@@ -47,6 +43,20 @@ public://メンバ関数
 	/// 終了
 	/// </summary>
 	void Finalize();
+private://メンバ関数
+	//コンストラクタの封印
+	ImGuiManager() = default;
+	//デストラクタの封印
+	~ImGuiManager() = default;
+	//コピーコンストラクタ禁止
+	ImGuiManager(const ImGuiManager&) = delete;
+	//代入演算子の禁止
+	ImGuiManager operator=(const ImGuiManager&) = delete;
+private://静的メンバ変数
+	//インスタンス
+	static inline ImGuiManager* instance = nullptr;
+	//Finalize呼んだかどうか
+	static inline bool isFinalize = false;
 private://メンバ変数
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;

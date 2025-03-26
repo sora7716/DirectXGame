@@ -1,17 +1,10 @@
 #pragma once
-#include "engine/2d/Sprite.h"
-#include "engine/3d/Object3d.h"
-#include "engine/debug/ImGuiManager.h"
-#include "engine/audio/AudioManager.h"
-
-//前方宣言
-class SRVManager;
-class DirectXBase;
+#include "IScene.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
-class GameScene {
+class GameScene :public IScene {
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
@@ -21,37 +14,34 @@ public://メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~GameScene() = default;
+	~GameScene()override = default;
 
 	/// <summary>
-    /// 初期化
-    /// </summary>
-    /// <param name="directXBase">DirectXの基盤部分</param>
-	/// <param name="imguiManager">imGuiの管理</param>
-	void Initialize(DirectXBase* directXBase,ImGuiManager*imguiManager);
+	/// 初期化
+	/// </summary>
+	/// <param name="directXBase">DirectXの基盤部分</param>
+	void Initialize(DirectXBase* directXBase)override;
 
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	void Update()override;
 
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw();
+	void Draw()override;
 
 	/// <summary>
 	/// 終了
 	/// </summary>
-	void Finalize();
+	void Finalize()override;
 
 private://メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite>sprite_ = nullptr;
 	//スプライトの位置
 	Transform2D worldTransform_ = {};
-	//ImGuiの管理
-	ImGuiManager* imguiManager_ = nullptr;
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
 };

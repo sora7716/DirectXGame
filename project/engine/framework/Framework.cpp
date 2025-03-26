@@ -2,15 +2,14 @@
 #include "engine/2d/TextureManager.h"
 
 //初期化
-void Framework::Initialize(){
+void Framework::Initialize() {
 	//winApi
 	WinApi::GetInstance()->Initialize();
 	//DirectXの基盤部分
 	directXBase_ = std::make_unique<DirectXBase>();
 	directXBase_->Initialize();
 	//SRVの管理
-	srvManager_ = SRVManager::GetInstance();
-	srvManager_->Initialize(directXBase_.get());
+	SRVManager::GetInstance()->Initialize(directXBase_.get());
 	//入力処理
 	input_ = Input::GetInstance();
 	input_->Initialize();
@@ -20,8 +19,7 @@ void Framework::Initialize(){
 	modelManager_ = ModelManager::GetInstance();
 	modelManager_->Initialize(directXBase_.get());
 	//ImGuiの管理
-	imguiManager_ = std::make_unique<ImGuiManager>();
-	imguiManager_->Initialize(directXBase_.get());
+	ImGuiManager::GetInstance()->Initialize(directXBase_.get());
 	//カメラの管理
 	cameraManager_ = CameraManager::GetInstance();
 	//オーディオの管理
@@ -33,7 +31,7 @@ void Framework::Initialize(){
 }
 
 //更新
-void Framework::Update(){
+void Framework::Update() {
 	//入力処理
 	input_->Update();
 	//カメラの管理
@@ -41,13 +39,13 @@ void Framework::Update(){
 }
 
 //終了
-void Framework::Finalize(){
+void Framework::Finalize() {
 	//winApi
 	WinApi::GetInstance()->Finalize();
 	//DirectXの基盤部分
 	directXBase_->Finalize();
 	//SRVの管理
-	srvManager_->Finalize();
+	SRVManager::GetInstance()->Finalize();
 	//入力
 	input_->Finalize();
 	//テクスチャ管理
@@ -55,7 +53,7 @@ void Framework::Finalize(){
 	//モデルの管理
 	modelManager_->Finalize();
 	//ImGuiの管理
-	imguiManager_->Finalize();
+	ImGuiManager::GetInstance()->Finalize();
 	//カメラの管理
 	cameraManager_->Finalize();
 	//オーディオの管理
@@ -67,7 +65,7 @@ void Framework::Finalize(){
 }
 
 //ゲームループ
-void Framework::Run(){
+void Framework::Run() {
 	//ゲームシステムの初期化
 	Initialize();
 	//ウィンドウの✖ボタンが押されるまでループ
@@ -78,7 +76,7 @@ void Framework::Run(){
 		Draw();
 #ifdef _DEBUG
 		//エスケイプを押したらループを抜ける
-		if (input_->TriggerKey(DIK_ESCAPE)&&input_->PressKey(DIK_LSHIFT)) {
+		if (input_->TriggerKey(DIK_ESCAPE) && input_->PressKey(DIK_LSHIFT)) {
 			break;
 		}
 #endif // _DEBUG
@@ -88,6 +86,6 @@ void Framework::Run(){
 }
 
 //終了リクエスト
-bool Framework::isEndRequest(){
+bool Framework::isEndRequest() {
 	return WinApi::GetInstance()->ProcesMessage();
 }

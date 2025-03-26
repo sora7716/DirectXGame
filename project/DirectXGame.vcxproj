@@ -46,6 +46,8 @@
     <ClCompile Include="engine\particle\Particle.cpp" />
     <ClCompile Include="engine\particle\ParticleManager.cpp" />
     <ClCompile Include="engine\scene\GameScene.cpp" />
+    <ClCompile Include="engine\scene\IScene.cpp" />
+    <ClCompile Include="engine\scene\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Sprite.h" />
@@ -85,6 +87,8 @@
     <ClInclude Include="engine\particle\Particle.h" />
     <ClInclude Include="engine\particle\ParticleManager.h" />
     <ClInclude Include="engine\scene\GameScene.h" />
+    <ClInclude Include="engine\scene\IScene.h" />
+    <ClInclude Include="engine\scene\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="engine\resources\shaders\Object3d.hlsli">
