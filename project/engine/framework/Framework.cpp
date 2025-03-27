@@ -29,8 +29,7 @@ void Framework::Initialize() {
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Initialize(directXBase_.get());
 	//シーンの管理
-	sceneManager_ = std::make_unique<SceneManager>();
-	sceneManager_->Initialize(directXBase_.get());
+	SceneManager::GetInstance()->Initialize(directXBase_.get());
 }
 
 //更新
@@ -40,7 +39,7 @@ void Framework::Update() {
 	//カメラの管理
 	cameraManager_->Update();
 	//シーンの管理
-	sceneManager_->Update();
+	SceneManager::GetInstance()->Update();
 }
 
 //終了
@@ -67,6 +66,8 @@ void Framework::Finalize() {
 	SpriteCommon::GetInstance()->Finalize();
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Finalize();
+	//シーンの管理
+	SceneManager::GetInstance()->Finalize();
 }
 
 //ゲームループ

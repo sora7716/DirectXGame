@@ -68,7 +68,5 @@ protected://メンバ変数
 	ModelManager* modelManager_ = nullptr;
 	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase_ = nullptr;
-	//シーンの管理
-	std::unique_ptr<SceneManager>sceneManager_ = nullptr;
 };
 

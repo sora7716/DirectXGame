@@ -7,7 +7,7 @@ void GameSystem::Initialize() {
 	Framework::Initialize();
 	//シーン
 	scene_ = new TitleScene();
-	sceneManager_->SetNextScene(scene_);
+	SceneManager::GetInstance()->SetNextScene(scene_);
 }
 
 //更新
@@ -26,8 +26,7 @@ void GameSystem::Draw() {
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
 	//シーン
-	//scene_->Draw();
-	sceneManager_->Draw();
+	SceneManager::GetInstance()->Draw();
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Draw();
 	//描画終了位置

@@ -1,9 +1,13 @@
 #include "SceneManager.h"
+#include <cassert>
 
-//デストラクタ
-SceneManager::~SceneManager(){
-	scene_->Finalize();
-	delete scene_;
+//インストールしてものゲッター
+SceneManager* SceneManager::GetInstance(){
+	assert(!isFinalize && "GetInstance() called after Finalize()");
+	if (instance == nullptr) {
+		instance = new SceneManager();
+	}
+	return instance;
 }
 
 //初期化
@@ -38,6 +42,14 @@ void SceneManager::Update() {
 void SceneManager::Draw() {
 	//描画
 	scene_->Draw();
+}
+
+void SceneManager::Finalize(){
+	scene_->Finalize();
+	delete scene_;
+	delete instance;
+	instance = nullptr;
+	isFinalize = true;
 }
 
 //次のシーンのセッター
