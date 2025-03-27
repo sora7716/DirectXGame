@@ -68,6 +68,8 @@ void Framework::Finalize() {
 	Object3dCommon::GetInstance()->Finalize();
 	//シーンの管理
 	SceneManager::GetInstance()->Finalize();
+	//シーンファクトリーの解放
+	delete sceneFactory_;
 }
 
 //ゲームループ

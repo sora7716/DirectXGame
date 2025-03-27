@@ -2,7 +2,7 @@
 #include <cassert>
 
 //インストールしてものゲッター
-SceneManager* SceneManager::GetInstance(){
+SceneManager* SceneManager::GetInstance() {
 	assert(!isFinalize && "GetInstance() called after Finalize()");
 	if (instance == nullptr) {
 		instance = new SceneManager();
@@ -11,7 +11,7 @@ SceneManager* SceneManager::GetInstance(){
 }
 
 //初期化
-void SceneManager::Initialize(DirectXBase* directXBase){
+void SceneManager::Initialize(DirectXBase* directXBase) {
 	directXBase_ = directXBase;
 }
 
@@ -27,10 +27,6 @@ void SceneManager::Update() {
 		//シーンの切り替え
 		scene_ = nextScene_;
 		nextScene_ = nullptr;
-
-		//シーンの管理をセット
-		scene_->SetSeceneManager(this);
-
 		//次のシーン
 		scene_->Initialize(directXBase_);
 	}
@@ -44,7 +40,7 @@ void SceneManager::Draw() {
 	scene_->Draw();
 }
 
-void SceneManager::Finalize(){
+void SceneManager::Finalize() {
 	scene_->Finalize();
 	delete scene_;
 	delete instance;
@@ -52,7 +48,14 @@ void SceneManager::Finalize(){
 	isFinalize = true;
 }
 
-//次のシーンのセッター
-void SceneManager::SetNextScene(IScene* nextScene) {
-	nextScene_ = nextScene;
+//シーンファクトリーのセッター
+void SceneManager::SetSceneFactory(AbstractSceneFactory* sceneFactory) {
+	sceneFactory_ = sceneFactory;
+}
+
+//シーンの切り替え
+void SceneManager::ChangeScene(const std::string& sceneName) {
+	assert(sceneFactory_);
+	assert(nextScene_ == nullptr);
+	nextScene_ = sceneFactory_->CreateScene(sceneName);
 }

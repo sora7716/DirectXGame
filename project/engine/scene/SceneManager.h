@@ -1,5 +1,6 @@
 #pragma once
 #include "IScene.h"
+#include "AbstractSceneFactory.h"
 
 /// <summary>
 /// シーン管理
@@ -34,10 +35,16 @@ public://メンバ関数
 	void Finalize();
 
 	/// <summary>
-	/// 次のシーンのセッター
+	/// シーンファクトリーのセッター
 	/// </summary>
-	/// <param name="nextScene">次のシーン</param>
-	void SetNextScene(IScene* nextScene);
+	/// <param name="sceneFactory">シーンファクトリー</param>
+	void SetSceneFactory(AbstractSceneFactory*sceneFactory);
+
+	/// <summary>
+	/// シーン切り替え
+	/// </summary>
+	/// <param name="sceneName"></param>
+	void ChangeScene(const std::string& sceneName);
 private://メンバ関数
 	//コンストラクタの封印
 	SceneManager() = default;
@@ -59,5 +66,7 @@ private://メンバ変数
 	IScene* nextScene_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
+	//シーンファクトリー
+	AbstractSceneFactory* sceneFactory_ = nullptr;
 };
 

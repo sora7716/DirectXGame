@@ -8,6 +8,7 @@
 
 //前方宣言
 class SceneManager;
+class AbstractSceneFactory;
 
 /// <summary>
 /// シーンのインターフェース
@@ -28,14 +29,5 @@ public://メンバ関数
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	virtual void Finalize() = 0;
-
-	/// <summary>
-	/// シーンの管理のセッター
-	/// </summary>
-	/// <param name="sceneManager">シーン管理</param>
-	virtual void SetSeceneManager(SceneManager* sceneManager);
-protected://メンバ変数
-	//シーンの管理
-	SceneManager* sceneManager_ = nullptr;
 };
 

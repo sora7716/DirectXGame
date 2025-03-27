@@ -1,13 +1,15 @@
 #include "GameSystem.h"
-#include "engine/scene/GameScene.h"
-#include "engine/scene/TitleScene.h"
-
+#include "engine/scene/SceneManager.h"
+#include "engine/scene/SceneFactory.h"
 //初期化
 void GameSystem::Initialize() {
 	Framework::Initialize();
-	//シーン
-	scene_ = new TitleScene();
-	SceneManager::GetInstance()->SetNextScene(scene_);
+	//シーンファクトリーの生成
+	sceneFactory_ = new SceneFactory();
+	//シーンファクトリーのセット
+	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+	//タイトルシーンを呼び出す
+	SceneManager::GetInstance()->ChangeScene("Title");
 }
 
 //更新

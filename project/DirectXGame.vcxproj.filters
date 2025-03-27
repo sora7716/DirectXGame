@@ -174,6 +174,12 @@
     <ClCompile Include="engine\scene\SceneManager.cpp">
       <Filter>engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="engine\scene\SceneFactory.cpp">
+      <Filter>engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\AbstractSceneFactory.cpp">
+      <Filter>engine\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -294,6 +300,12 @@
       <Filter>engine\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\SceneManager.h">
+      <Filter>engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\AbstractSceneFactory.h">
+      <Filter>engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SceneFactory.h">
       <Filter>engine\scene</Filter>
     </ClInclude>
   </ItemGroup>
