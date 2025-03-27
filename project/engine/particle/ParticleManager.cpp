@@ -7,7 +7,7 @@
 #include "engine/3d/Camera.h"
 
 // インスタンスのゲッター
-ParticleManager* ParticleManager::GetInstance(){
+ParticleManager* ParticleManager::GetInstance() {
 	assert(!isFinalize && "GerInstance() called after Finalize()");
 	if (instance == nullptr) {
 		instance = new ParticleManager();
@@ -16,15 +16,13 @@ ParticleManager* ParticleManager::GetInstance(){
 }
 
 //初期化
-void ParticleManager::Initialize(DirectXBase* directXBase, SRVManager* srvManager, BaseObjectCommon* baseObjectCommon){
+void ParticleManager::Initialize(DirectXBase* directXBase, BaseObjectCommon* baseObjectCommon) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
-	//SRVの管理を記録する
-	srvManager_ = srvManager;
 	//オブジェクトの共通部分を記録する
 	baseObjectCommon_ = baseObjectCommon;
 	//ランダムデバイスの生成
-	std::mt19937 engine(randomDevice_());
+	randomEngine_.seed(randomDevice_);
 	//パイプラインの生成
 	graphicsPiplene_ = baseObjectCommon_->GetGraphicsPipelineState();
 	//頂点データの生成
@@ -34,19 +32,19 @@ void ParticleManager::Initialize(DirectXBase* directXBase, SRVManager* srvManage
 }
 
 //更新
-void ParticleManager::Update(Camera* camera){
-	
+void ParticleManager::Update(Camera* camera) {
+
 }
 
 //終了
-void ParticleManager::Finalize(){
+void ParticleManager::Finalize() {
 	delete instance;
 	instance = nullptr;
 	isFinalize = true;
 }
 
 // 頂点データの初期化
-void ParticleManager::InitializeVertexData(){
+void ParticleManager::InitializeVertexData() {
 	//1枚目の三角形
 	vertexData_[0].position = { 0.0f,1.0f,0.0f,1.0f };//左下
 	vertexData_[0].texcoord = { 0.0f,1.0f };
@@ -73,13 +71,13 @@ void ParticleManager::InitializeVertexData(){
 }
 
 //インデックスデータの初期化
-void ParticleManager::InitializeIndexData(){
+void ParticleManager::InitializeIndexData() {
 	indexData_[0] = 0; indexData_[1] = 1; indexData_[2] = 2;
 	indexData_[3] = 1; indexData_[4] = 4; indexData_[5] = 2;
 }
 
 // 頂点リソースの生成
-void ParticleManager::CreateVertexResource(){
+void ParticleManager::CreateVertexResource() {
 	//VertexResourceを作成する
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
 	//VertexBufferViewを作成する
@@ -113,13 +111,14 @@ void ParticleManager::CreateIndexResource() {
 }
 
 // パーティクルグループの生成
-void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath){
+void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath) {
 	assert(particleGroups_.contains(name));
 	ParticleGroup particleGroup;
 	particleGroup.materialData.textureFilePath = textureFilePath;
 	TextureManager::GetInstance()->LoadTexture(particleGroup.materialData.textureFilePath);
 	particleGroup.materialData.srvIndex = TextureManager::GetInstance()->GetSRVIndex(particleGroup.materialData.textureFilePath);
 	particleGroup.resource = directXBase_->CreateBufferResource(particleGroup.materialData.srvIndex);
-	particleGroup.srvIndex = srvManager_->Allocate();
-	srvManager_->CreateSRVforStructuredBuffer(particleGroup.srvIndex,particleGroup.resource.Get(),particleGroup.instanceCount,sizeof(InstanceData));
+	particleGroup.srvIndex = SRVManager::GetInstance()->Allocate();
+	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(particleGroup.srvIndex, particleGroup.resource.Get(), particleGroup.instanceCount, sizeof(InstanceData));
+	SRVManager::GetInstance()->Free(particleGroup.srvIndex);
 }

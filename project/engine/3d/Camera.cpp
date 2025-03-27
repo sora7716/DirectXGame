@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "engine/base/WinApi.h"
+
 /// <summary>
 /// コンストラクタ
 /// </summary>

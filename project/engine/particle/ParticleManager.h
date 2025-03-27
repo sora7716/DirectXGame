@@ -47,9 +47,8 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤部分</param>
-	/// <param name="srvManager">SRVの管理</param>
 	/// <param name="baseObjectCommon">オブジェクトの共通部分</param>
-	void Initialize(DirectXBase* directXBase, SRVManager* srvManager, BaseObjectCommon* baseObjectCommon);
+	void Initialize(DirectXBase* directXBase, BaseObjectCommon* baseObjectCommon);
 
 	/// <summary>
 	/// 更新
@@ -106,10 +105,6 @@ private://静的メンバ変数
 private://メンバ変数
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
-	//SRVの管理
-	SRVManager* srvManager_ = nullptr;
-	//ランダムデバイス
-	std::random_device randomDevice_;
 	//オブジェクトの共通部分
 	BaseObjectCommon* baseObjectCommon_ = nullptr;
 	//パイプラインステート
@@ -127,5 +122,9 @@ private://メンバ変数
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス
 	//パーティクルグループコンテナ
 	std::unordered_map<std::string, ParticleGroup>particleGroups_;
+	//ランダムエンジン
+	std::mt19937 randomEngine_;
+	//ランダムデバイス
+	std::random_device randomDevice_;
 };
 
