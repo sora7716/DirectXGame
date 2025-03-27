@@ -6,6 +6,10 @@
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
 
+//前方宣言
+class SceneManager;
+class AbstractSceneFactory;
+
 /// <summary>
 /// シーンのインターフェース
 /// </summary>

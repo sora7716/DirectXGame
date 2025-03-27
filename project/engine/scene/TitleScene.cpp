@@ -1,4 +1,7 @@
 #include "TitleScene.h"
+#include "engine/input/Input.h"
+#include "SceneManager.h"
+#include "SceneFactory.h"
 
 //初期化
 void TitleScene::Initialize(DirectXBase* directXBase) {
@@ -11,6 +14,10 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	sprite_->Initialize("monsterBall.png");
 	worldTransform_.scale = { 360.0f,360.0f };
 	worldTransform_.translate = { 100.0f,100.0f };
+	//シーンファクトリーの生成
+	sceneFactory_ = new SceneFactory();
+	//シーンファクトリーのセット
+	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
 }
 
 //更新
@@ -19,6 +26,12 @@ void TitleScene::Update() {
 	sprite_->SetScale(worldTransform_.scale);
 	sprite_->SetTranslate(worldTransform_.translate);
 	sprite_->Update();
+
+	//Enterキーを押したら
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		//シーンをGameに切り替え
+		SceneManager::GetInstance()->ChangeScene("Game");
+	}
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();
 #ifdef USE_IMGUI

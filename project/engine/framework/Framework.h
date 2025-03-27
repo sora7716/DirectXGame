@@ -10,6 +10,8 @@
 #include "engine/3d/CameraManager.h"
 #include "engine/base/SRVManager.h"
 #include"engine/debug/ImGuiManager.h"
+#include "engine/scene/SceneManager.h"
+#include "engine/scene/AbstractSceneFactory.h"
 
 /// <summary>
 /// ゲーム全体
@@ -67,5 +69,7 @@ protected://メンバ変数
 	ModelManager* modelManager_ = nullptr;
 	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase_ = nullptr;
+	//シーンファクトリー
+	AbstractSceneFactory*sceneFactory_=nullptr;
 };
 

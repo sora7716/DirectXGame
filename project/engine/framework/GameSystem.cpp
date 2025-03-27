@@ -1,20 +1,20 @@
 #include "GameSystem.h"
-#include "engine/scene/GameScene.h"
-#include "engine/scene/TitleScene.h"
-
+#include "engine/scene/SceneManager.h"
+#include "engine/scene/SceneFactory.h"
 //初期化
 void GameSystem::Initialize() {
 	Framework::Initialize();
-	//シーン
-	scene_ = std::make_unique<TitleScene>();
-	scene_->Initialize(directXBase_.get());
+	//シーンファクトリーの生成
+	sceneFactory_ = new SceneFactory();
+	//シーンファクトリーのセット
+	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+	//タイトルシーンを呼び出す
+	SceneManager::GetInstance()->ChangeScene("Title");
 }
 
 //更新
 void GameSystem::Update() {
 	Framework::Update();
-	//シーン
-	scene_->Update();
 }
 
 //描画
@@ -28,7 +28,7 @@ void GameSystem::Draw() {
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
 	//シーン
-	scene_->Draw();
+	SceneManager::GetInstance()->Draw();
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Draw();
 	//描画終了位置
@@ -38,6 +38,4 @@ void GameSystem::Draw() {
 //終了
 void GameSystem::Finalize() {
 	Framework::Finalize();
-	//シーン
-	scene_->Finalize();
 }

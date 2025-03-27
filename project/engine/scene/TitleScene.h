@@ -14,7 +14,7 @@ public://メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~TitleScene()override = default;
+	~TitleScene()override = default;	
 
 	/// <summary>
 	/// 初期化
@@ -44,6 +44,8 @@ private://メンバ変数
 	Transform2D worldTransform_ = {};
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
+	//シーンファクトリー
+	AbstractSceneFactory* sceneFactory_ = nullptr;
 };
 
 

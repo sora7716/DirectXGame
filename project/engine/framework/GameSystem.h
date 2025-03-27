@@ -38,6 +38,6 @@ public://メンバ関数
 	void Finalize()override;
 private://メンバ変数
 	//シーン
-	std::unique_ptr<IScene>scene_ = nullptr;
+	IScene*scene_ = nullptr;
 };
 
