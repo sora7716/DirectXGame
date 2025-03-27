@@ -28,6 +28,9 @@ void Framework::Initialize() {
 	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Initialize(directXBase_.get());
+	//シーンの管理
+	sceneManager_ = std::make_unique<SceneManager>();
+	sceneManager_->Initialize(directXBase_.get());
 }
 
 //更新
@@ -36,6 +39,8 @@ void Framework::Update() {
 	input_->Update();
 	//カメラの管理
 	cameraManager_->Update();
+	//シーンの管理
+	sceneManager_->Update();
 }
 
 //終了

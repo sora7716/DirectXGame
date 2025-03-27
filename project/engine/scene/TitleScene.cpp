@@ -1,4 +1,7 @@
 #include "TitleScene.h"
+#include "GameScene.h"
+#include "engine/input/Input.h"
+#include "SceneManager.h"
 
 //初期化
 void TitleScene::Initialize(DirectXBase* directXBase) {
@@ -19,6 +22,14 @@ void TitleScene::Update() {
 	sprite_->SetScale(worldTransform_.scale);
 	sprite_->SetTranslate(worldTransform_.translate);
 	sprite_->Update();
+
+	//Enterキーを押したら
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		//ゲームシーンを生成
+		IScene* scene = new GameScene();
+		//シーンを切り替え
+		sceneManager_->SetNextScene(scene);
+	}
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();
 #ifdef USE_IMGUI

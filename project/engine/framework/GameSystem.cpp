@@ -6,15 +6,13 @@
 void GameSystem::Initialize() {
 	Framework::Initialize();
 	//シーン
-	scene_ = std::make_unique<TitleScene>();
-	scene_->Initialize(directXBase_.get());
+	scene_ = new TitleScene();
+	sceneManager_->SetNextScene(scene_);
 }
 
 //更新
 void GameSystem::Update() {
 	Framework::Update();
-	//シーン
-	scene_->Update();
 }
 
 //描画
@@ -28,7 +26,8 @@ void GameSystem::Draw() {
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
 	//シーン
-	scene_->Draw();
+	//scene_->Draw();
+	sceneManager_->Draw();
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Draw();
 	//描画終了位置
@@ -38,6 +37,4 @@ void GameSystem::Draw() {
 //終了
 void GameSystem::Finalize() {
 	Framework::Finalize();
-	//シーン
-	scene_->Finalize();
 }
