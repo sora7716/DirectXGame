@@ -40,6 +40,7 @@ void SceneManager::Draw() {
 	scene_->Draw();
 }
 
+//終了
 void SceneManager::Finalize() {
 	scene_->Finalize();
 	delete scene_;
