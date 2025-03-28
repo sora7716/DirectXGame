@@ -59,7 +59,7 @@
       <UniqueIdentifier>{4ac48d9b-28cd-4b88-b0e4-12be62ae53eb}</UniqueIdentifier>
     </Filter>
     <Filter Include="application\scene">
-      <UniqueIdentifier>{c9e00e1a-9bd1-4ac9-a6f9-5f9b02f2cfcf}</UniqueIdentifier>
+      <UniqueIdentifier>{d09609c5-5464-4a8e-a106-9af2e72858bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -150,12 +150,6 @@
     <ClCompile Include="engine\audio\AudioManager.cpp">
       <Filter>engine\audio</Filter>
     </ClCompile>
-    <ClCompile Include="engine\particle\ParticleManager.cpp">
-      <Filter>engine\particle</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\particle\Particle.cpp">
-      <Filter>engine\particle</Filter>
-    </ClCompile>
     <ClCompile Include="engine\debug\ImGuiManager.cpp">
       <Filter>engine\debug</Filter>
     </ClCompile>
@@ -180,10 +174,10 @@
     <ClCompile Include="engine\scene\GameScene.cpp">
       <Filter>application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\TitleScene.cpp">
+    <ClCompile Include="engine\scene\SceneFactory.cpp">
       <Filter>application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\SceneFactory.cpp">
+    <ClCompile Include="engine\scene\TitleScene.cpp">
       <Filter>application\scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,12 +275,6 @@
     <ClInclude Include="engine\audio\AudioManager.h">
       <Filter>engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="engine\particle\ParticleManager.h">
-      <Filter>engine\particle</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\particle\Particle.h">
-      <Filter>engine\particle</Filter>
-    </ClInclude>
     <ClInclude Include="engine\debug\ImGuiManager.h">
       <Filter>engine\debug</Filter>
     </ClInclude>
@@ -305,17 +293,17 @@
     <ClInclude Include="engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\SceneManager.h">
-      <Filter>engine\scene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\GameScene.h">
+      <Filter>application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SceneFactory.h">
       <Filter>application\scene</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\TitleScene.h">
       <Filter>application\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\SceneFactory.h">
-      <Filter>application\scene</Filter>
+    <ClInclude Include="engine\scene\SceneManager.h">
+      <Filter>engine\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

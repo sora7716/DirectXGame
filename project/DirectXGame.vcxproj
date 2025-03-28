@@ -43,8 +43,6 @@
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\SpriteCommon.cpp" />
-    <ClCompile Include="engine\particle\Particle.cpp" />
-    <ClCompile Include="engine\particle\ParticleManager.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\GameScene.cpp" />
     <ClCompile Include="engine\scene\IScene.cpp" />
@@ -87,8 +85,6 @@
     <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
     <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
     <ClInclude Include="engine\objectCommon\SpriteCommon.h" />
-    <ClInclude Include="engine\particle\Particle.h" />
-    <ClInclude Include="engine\particle\ParticleManager.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\GameScene.h" />
     <ClInclude Include="engine\scene\IScene.h" />

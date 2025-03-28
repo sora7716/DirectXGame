@@ -31,6 +31,7 @@ void TitleScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		//シーンをGameに切り替え
 		SceneManager::GetInstance()->ChangeScene("Game");
+		audioManager_->FindAudio("Alarm01")->StopAudio();
 	}
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();

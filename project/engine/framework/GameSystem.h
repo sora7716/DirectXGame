@@ -1,6 +1,5 @@
 #pragma once
 #include "Framework.h"
-#include "engine/scene/IScene.h"
 
 /// <summary>
 /// ゲームシステム
@@ -37,7 +36,5 @@ public://メンバ関数
 	/// </summary>
 	void Finalize()override;
 private://メンバ変数
-	//シーン
-	IScene*scene_ = nullptr;
 };
 
