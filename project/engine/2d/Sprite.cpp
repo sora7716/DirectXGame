@@ -15,41 +15,8 @@ void Sprite::Initialize(std::string textureFilePath) {
 	CreateIndexResorce();
 	//マテリアルデータの生成
 	CreateMaterialResorce();
-	//座標変換行列データの生成
-	CreateTransformationMatrixResorce();
-	//光源の生成
-	CreateDirectionLight();
-
-	//Transformの情報の初期化
-	transform_ = {
-		.scale = {1.0f,1.0f,1.0f},
-		.rotate = {},
-		.translate{}
-	};
-
-	//uvTransformの情報の初期化
-	uvTransform_ = {
-		.scale = {1.0f,1.0f},
-		.rotate = {},
-		.translate{}
-	};
 	SpriteCommon::GetInstance()->LoadTexture(textureFilePath);
 	filePath_ = textureFilePath;
-}
-
-//更新処理
-void Sprite::Update() {
-	//頂点リソースにデータを書き込む(4点分)
-	//インデックスリソースにデータを書き込む(6個分)
-
-	//メンバ変数の値を見た目に反映
-	transform_.scale = { transform2D_.scale.x,transform2D_.scale.y,1.0f };
-	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
-	transform_.translate = { transform2D_.translate.x,transform2D_.translate.y,0.0f };
-	//Transform情報を作成する
-	UpdateTransform();
-	//UVTransform情報を作成する
-	UpdateUVTransform();
 }
 
 //描画処理
@@ -58,12 +25,8 @@ void Sprite::Draw() {
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//IndexBufferViewを設定
 	directXBase_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定
-
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
-	//座標変換行列CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResoruce_->GetGPUVirtualAddress());//wvp
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(filePath_));
@@ -76,74 +39,16 @@ void Sprite::ChangeTexture(std::string textureFilePath) {
 	filePath_ = textureFilePath;
 }
 
-//サイズのゲッター
-const Vector2& Sprite::GetScale() const {
-	// TODO: return ステートメントをここに挿入します
-	return transform2D_.scale;
-}
-
-//回転のゲッター
-float Sprite::GetRotate() const {
-	return transform2D_.rotate;
-}
-
-// 位置のゲッター
-const Vector2& Sprite::GetTranslate() const {
-	// TODO: return ステートメントをここに挿入します
-	return transform2D_.translate;
-}
-
-//UVのサイズのゲッター
-const Vector2& Sprite::GetUVScale() const {
-	// TODO: return ステートメントをここに挿入します
-	return uvTransform_.scale;
-}
-
-//UVの回転のセッター
-float Sprite::GetUVRotate() const {
-	return uvTransform_.rotate;
-}
-
-//UVの位置のゲッター
-const Vector2& Sprite::GetUVTranslate() const {
-	// TODO: return ステートメントをここに挿入します
-	return uvTransform_.translate;
+// UVの座標変換の更新
+void Sprite::UpdateUVTransform(Transform2D uvTransform) {
+	//UVTransform
+	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform.scale.x,uvTransform.scale.y,1.0f }, uvTransform.rotate, { uvTransform.translate.x,uvTransform.translate.y,1.0f });
 }
 
 //色のゲッター
 const Vector4& Sprite::GetColor() const {
 	// TODO: return ステートメントをここに挿入します
 	return materialData_->color;
-}
-
-//サイズのセッター
-void Sprite::SetScale(const Vector2& scale) {
-	transform2D_.scale = scale;
-}
-
-//回転のセッター
-void Sprite::SetRotate(float rotate) {
-	transform2D_.rotate = rotate;
-}
-
-// 位置のセッター
-void Sprite::SetTranslate(const Vector2& translate) {
-	transform2D_.translate = translate;
-}
-
-//UVのサイズのセッター
-void Sprite::SetUVScale(const Vector2& scale) {
-	uvTransform_.scale = scale;
-}
-
-//UVの回転のセッター
-void Sprite::SetUVRotate(float rotate) {
-	uvTransform_.rotate = rotate;
-}
-
-//UVの位置のセッター
-void Sprite::SetUVTranslate(const Vector2& translate) {
-	uvTransform_.translate = translate;
 }
 
 //色のセッター
@@ -235,48 +140,4 @@ void Sprite::CreateMaterialResorce() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//マテリアルデータの初期値を書き込む
 	InitializeMaterialData();
-}
-
-//座標変換行列データの初期化
-void Sprite::InitializeTransformationMatrixData() {
-	//単位行列を書き込んでおく
-	transformationMatrixData_->WVP = Math::MakeIdentity4x4();
-	transformationMatrixData_->World = Math::MakeIdentity4x4();
-}
-
-//座標変換行列リソースの生成
-void Sprite::CreateTransformationMatrixResorce() {
-	//座標変換行列リソースを作成する
-	transformationMatrixResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
-	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
-	//書き込むためのアドレス
-	transformationMatrixResoruce_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
-	InitializeTransformationMatrixData();
-}
-
-//光源の生成
-void Sprite::CreateDirectionLight() {
-	//光源
-	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
-}
-
-// 座標変換の更新
-void Sprite::UpdateTransform() {
-	//TransformからWorldMatrixを作る
-	transformationMatrixData_->World = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//ViewMatirxを作って単位行列を入れる
-	Matrix4x4 viewMatrix = Math::MakeIdentity4x4();
-	//ProjectionMatrixを作って平行投影行列を書き込む
-	Matrix4x4 projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
-	transformationMatrixData_->WVP = transformationMatrixData_->World * (viewMatrix * projectionMatrix);
-}
-
-// UVの座標変換の更新
-void Sprite::UpdateUVTransform() {
-	//UVTransform
-	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform_.scale.x,uvTransform_.scale.y,1.0f }, uvTransform_.rotate, { uvTransform_.translate.x,uvTransform_.translate.y,1.0f });
 }

@@ -40,6 +40,7 @@ public://メンバ関数
 private://メンバ変数
 	//スプライト
 	std::unique_ptr<Sprite>sprite_ = nullptr;
+	std::unique_ptr<Object2d>object2d_ = nullptr;
 	//スプライトの位置
 	Transform2D worldTransform_ = {};
 	//オーディオの管理

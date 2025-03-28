@@ -9,6 +9,8 @@ void GameScene::Initialize(DirectXBase* directXBase){
 	//スプライト
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("block.png");
+	object2d_ = std::make_unique<Object2d>();
+	object2d_->Initialize();
 	worldTransform_.scale = { 360.0f,360.0f };
 	worldTransform_.translate = { 100.0f,100.0f };
 }
@@ -16,9 +18,10 @@ void GameScene::Initialize(DirectXBase* directXBase){
 //更新
 void GameScene::Update(){
 	//スプライト
-	sprite_->SetScale(worldTransform_.scale);
-	sprite_->SetTranslate(worldTransform_.translate);
-	sprite_->Update();
+	object2d_->SetSprite(sprite_.get());
+	object2d_->SetScale(worldTransform_.scale);
+	object2d_->SetTranslate(worldTransform_.translate);
+	object2d_->Update();
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();
 #ifdef USE_IMGUI
@@ -34,7 +37,7 @@ void GameScene::Update(){
 //描画
 void GameScene::Draw(){
 	//スプライト
-	sprite_->Draw();
+	object2d_->Draw();
 }
 
 //終了

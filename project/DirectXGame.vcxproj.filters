@@ -180,6 +180,9 @@
     <ClCompile Include="engine\scene\TitleScene.cpp">
       <Filter>application\scene</Filter>
     </ClCompile>
+    <ClCompile Include="engine\2d\Object2d.cpp">
+      <Filter>engine\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="engine\scene\SceneManager.h">
       <Filter>engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\2d\Object2d.h">
+      <Filter>engine\2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

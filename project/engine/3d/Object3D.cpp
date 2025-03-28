@@ -1,7 +1,6 @@
 #include "Object3d.h"
 #include "engine/objectCommon/Object3dCommon.h"
 #include "engine/3d/Camera.h"
-#include "engine/2d/TextureManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
 #include "ModelManager.h"
@@ -22,6 +21,7 @@ void Object3d::Initialize(Object3dCommon* object3dCommon) {
 	CreateDirectionLight();
 	//Transform変数を作る
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
 	camera_ = object3dCommon_->GetDefaultCamera();
 }

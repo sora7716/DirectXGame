@@ -12,6 +12,8 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	//スプライト
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("monsterBall.png");
+	object2d_ = std::make_unique<Object2d>();
+	object2d_->Initialize();
 	worldTransform_.scale = { 360.0f,360.0f };
 	worldTransform_.translate = { 100.0f,100.0f };
 	//シーンファクトリーの生成
@@ -23,9 +25,10 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 //更新
 void TitleScene::Update() {
 	//スプライト
-	sprite_->SetScale(worldTransform_.scale);
-	sprite_->SetTranslate(worldTransform_.translate);
-	sprite_->Update();
+	object2d_->SetSprite(sprite_.get());
+	object2d_->SetScale(worldTransform_.scale);
+	object2d_->SetTranslate(worldTransform_.translate);
+	object2d_->Update();
 
 	//Enterキーを押したら
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
@@ -48,7 +51,7 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	//スプライト
-	sprite_->Draw();
+	object2d_->Draw();
 }
 
 //終了
