@@ -183,6 +183,9 @@
     <ClCompile Include="engine\2d\Object2d.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
+    <ClCompile Include="engine\particle\ParticleManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="engine\2d\Object2d.h">
       <Filter>engine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\particle\ParticleManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
