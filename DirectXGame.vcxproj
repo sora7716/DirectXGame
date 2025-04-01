@@ -14,12 +14,60 @@
     <ClCompile Include="engine\2d\Log.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\WinApp.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_demo.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_draw.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_tables.cpp" />
+    <ClCompile Include="engine\externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="engine\main.cpp" />
+    <ClCompile Include="engine\math\func\Aithmetic.cpp" />
+    <ClCompile Include="engine\math\func\Math.cpp" />
+    <ClCompile Include="engine\math\rendering\Rendering.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Log.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\WinApp.h" />
+    <ClInclude Include="engine\externals\imgui\imconfig.h" />
+    <ClInclude Include="engine\externals\imgui\imgui.h" />
+    <ClInclude Include="engine\externals\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="engine\externals\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="engine\externals\imgui\imgui_internal.h" />
+    <ClInclude Include="engine\externals\imgui\imstb_rectpack.h" />
+    <ClInclude Include="engine\externals\imgui\imstb_textedit.h" />
+    <ClInclude Include="engine\externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="engine\math\func\Aithmetic.h" />
+    <ClInclude Include="engine\math\func\Math.h" />
+    <ClInclude Include="engine\math\Matrix3x3.h" />
+    <ClInclude Include="engine\math\Matrix4x4.h" />
+    <ClInclude Include="engine\math\rendering\Rendering.h" />
+    <ClInclude Include="engine\math\Vector2.h" />
+    <ClInclude Include="engine\math\Vector3.h" />
+    <ClInclude Include="engine\math\Vector4.h" />
+    <ClInclude Include="engine\math\ResourceData.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="engine\resource\shader\Object3d.PS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="engine\resource\shader\Object3d.VS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="engine\resource\shader\Object3d.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="engine\externals\imgui\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -66,13 +114,21 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;C:\Users\sora\Desktop\CG2\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals;C:\Subject\CG\CG2\GameEngine1\externals;C:\Subject\CG\CG2\GameEngine1\DirectXGame\engine;C:\Subject\CG\CG2\GameEngine1\DirectXGame\externals;C:\Subject\CG\CG2\CG2\DirectXGame\externals;C:\Subject\CG\CG2\CG2\DirectXGame\engine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+    <PostBuildEvent>
+      <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
+copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dxil.dll"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -86,7 +142,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine;%(AdditionalIncludeDirectories);C:\Users\PC_User\Documents\GitHub\CG2_1\externals;C:\Subject\CG\CG2\CG2\DirectXGame\externals;C:\Subject\CG\CG2\CG2\DirectXGame\engine;C:\Users\PC_User\Documents\GitHub\CG2_1\DirectXGame\engine\externals</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

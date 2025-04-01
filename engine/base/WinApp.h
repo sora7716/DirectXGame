@@ -2,19 +2,18 @@
 #include <Windows.h>
 #include <cstdint>
 #include <string>
+#include "externals/imgui/imgui.h"
+#include "externals/imgui/imgui_impl_dx12.h"
+#include "externals/imgui/imgui_impl_win32.h"
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 /// <summary>
 /// ウィンドウズアプリケーション
 /// </summary>
-class WinApp final{
+class WinApp {
 public://メンバ関数
-
-	/// <summary>
-	/// インスタンスのゲッター
-	/// </summary>
-	/// <returns>インスタンス</returns>
-	static WinApp* GetInstance();
-
+	WinApp() = default;
+	~WinApp();
 	/// <summary>
 	/// ウィンドウプロシージャ
 	/// </summary>
@@ -36,9 +35,14 @@ public://メンバ関数
 	/// <returns>プロセスメッセージ</returns>
 	bool ProcesMessage();
 
+
+	/// <summary>
+	/// HWNDのゲッター
+	/// </summary>
+	/// <returns>HWND</returns>
+	HWND GetHwnd() { return hwnd_; }
+
 private://メンバ関数
-	WinApp() = default;
-	~WinApp() = default;
 	WinApp(const WinApp&) = delete;
 	const WinApp& operator=(const WinApp&) = delete;
 
@@ -48,7 +52,7 @@ public://静的メンバ変数
 	static inline const std::wstring label = L"CG2";//タイトル名
 private://メンバ変数
 	WNDCLASS wndClass_{};	//ウィンドウクラス
-	HWND hwnd_=nullptr;	//ウィンドウハンドル
+	HWND hwnd_ = nullptr;	//ウィンドウハンドル
 	RECT windowRect_{};
 };
 

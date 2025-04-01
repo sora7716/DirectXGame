@@ -1,13 +1,10 @@
 #include "WinApp.h"
 
-//インスタンスのゲッター
-WinApp* WinApp::GetInstance(){
-	static WinApp instance;
-	return &instance;
-}
-
 //ウィンドウプロシージャ
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)){
+		return true;
+	}
     //メッセージに応じてゲーム固有の処理を行う
     switch(msg){
     //ウィンドウが破棄された
@@ -18,7 +15,6 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam){
     }
     //標準のメッセージ処理を行う
     return DefWindowProc(hwnd, msg, wparam, lparam);
-    return LRESULT();
 }
 
 // ウィンドウの生成するための初期化
@@ -70,4 +66,9 @@ bool WinApp::ProcesMessage(){
 		return true;
 	}
 	return false;
+}
+
+//デストラクタ
+WinApp::~WinApp(){
+	CloseWindow(hwnd_);
 }
