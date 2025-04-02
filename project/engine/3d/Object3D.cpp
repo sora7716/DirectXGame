@@ -8,11 +8,9 @@
 #include <sstream>
 #include <cassert>
 //初期化
-void Object3d::Initialize(Object3dCommon* object3dCommon) {
-	//Nullチェック
-	assert(object3dCommon);
+void Object3d::Initialize() {
 	//引数を受け取ってメンバ変数に記録
-	object3dCommon_ = object3dCommon;
+	object3dCommon_ = Object3dCommon::GetInstance();
 	//DirectXの基盤部分を受け取る
 	directXBase_ = object3dCommon_->GetDirectXBase();
 	//座標変換行列の生成
@@ -30,6 +28,10 @@ void Object3d::Initialize(Object3dCommon* object3dCommon) {
 void Object3d::Update() {
 	//ワールドマトリックスの生成
 	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	//親子付け
+	if (parent_) {
+		worldMatrix = worldMatrix * parent_;
+	}
 	//wvpの書き込み
 	if (camera_) {
 		const Matrix4x4& viewProjectionMatrix = camera_->GetViewProjectionMatrix();
@@ -104,6 +106,11 @@ void Object3d::SetColor(const Vector4& color) {
 	}
 }
 
+//親のセッター
+void Object3d::SetParent(const Matrix4x4* parent){
+	parent_ = parent;
+}
+
 // スケールのゲッター
 const Vector3& Object3d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
@@ -148,6 +155,12 @@ const Vector4& Object3d::GetColor() const {
 		return model_->GetColor();
 	}
 	return defaultColor;
+}
+
+//ワールド行列のゲッター
+const Matrix4x4& Object3d::GetWorldMatrix() const{
+	// TODO: return ステートメントをここに挿入します
+	return wvpData_->World;
 }
 
 // 座標変換行列リソースの生成

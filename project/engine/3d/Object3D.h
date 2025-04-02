@@ -30,8 +30,7 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="object3dCommon">3Dオブジェクトの共通部分</param>
-	void Initialize(Object3dCommon* object3dCommon);
+	void Initialize();
 
 	/// <summary>
 	/// 更新
@@ -98,6 +97,12 @@ public://メンバ関数
 	void SetColor(const Vector4& color);
 
 	/// <summary>
+	/// 親のセッター
+	/// </summary>
+	/// <param name="parent">親</param>
+	void SetParent(const Matrix4x4* parent);
+
+	/// <summary>
 	/// スケールのゲッター
 	/// </summary>
 	/// <returns>スケール</returns>
@@ -138,6 +143,12 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>色</returns>
 	const Vector4& GetColor()const;
+
+	/// <summary>
+	/// ワールド行列のゲッター
+	/// </summary>
+	/// <returns>ワールド行列</returns>
+	const Matrix4x4& GetWorldMatrix()const;
 private://メンバ関数
 	/// <summary>
 	/// 座標変換行列リソースの生成
@@ -171,5 +182,7 @@ private://メンバ変数
 	//バッファリソース内のデータを指すポインタ
 	TransformationMatrix* wvpData_ = nullptr;//座標変換行列
 	DirectionalLight* directionalLightData_ = nullptr;//光源
+	//親
+	const Matrix4x4* parent_ = nullptr;
 };
 

@@ -22,11 +22,11 @@ public://メンバ関数
 	void Initialize(DirectXBase* directXBase);
 
 	/// <summary>
-	/// モデルの読み込み
+	/// objモデルの読み込み
 	/// </summary>
-	/// <param name="storedFilePath">保管しているファイル名(最初と最後に"/"入らない)</param>
-	/// <param name="filePath">ファイル名(最初に"/"いらない)</param>
-	void LoadModel(const std::string& storedFilePath, const std::string& filePath);
+	/// <param name="storedFilePath">保管しているファイル名("/"は書かなくていい)</param>
+	/// <param name="filePath">ファイル名("/"と".obj"は書かなくていい)</param>
+	void LoadOBJModel(const std::string& storedFilePath, const std::string& filePath);
 
 	/// <summary>
 	/// モデルの検索

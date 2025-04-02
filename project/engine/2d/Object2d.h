@@ -5,7 +5,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 //前方宣言
-class SpriteCommon;
+class Object2dCommon;
 class DirectXBase;
 class Camera;
 class Sprite;
@@ -16,7 +16,6 @@ class Sprite;
 class Object2d{
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
-
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
@@ -98,6 +97,18 @@ public://メンバ関数
 	const Vector4& GetColor()const;
 
 	/// <summary>
+	/// カメラのゲッター
+	/// </summary>
+	/// <returns>カメラ</returns>
+	const Camera* GetCamera()const;
+
+	/// <summary>
+	/// ワールド行列のゲッター
+	/// </summary>
+	/// <returns>ワールド行列</returns>
+	const Matrix4x4& GetWorldMatrix()const;
+
+	/// <summary>
 	/// サイズのセッター
 	/// </summary>
 	/// <param name="scale">サイズ</param>
@@ -139,6 +150,18 @@ public://メンバ関数
 	/// <param name="color">色</param>
 	void SetColor(const Vector4& color);
 
+	/// <summary>
+	/// カメラのセッター
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	void SetCamera(Camera* camera);
+
+	/// <summary>
+	/// 親のセッター
+	/// </summary>
+	/// <param name="parent">親</param>
+	void SetParent(const Matrix4x4* parent);
+
 private://メンバ関数
 	/// <summary>
 	/// 座標変換行列リソースの生成
@@ -172,7 +195,7 @@ private://メンバ変数
 	//カメラ
 	Camera* camera_ = nullptr;
 	//スプライトの共通部分
-	SpriteCommon* spriteCommon_ = nullptr;
+	Object2dCommon* object2dCommon_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//バッファリソース
@@ -181,6 +204,9 @@ private://メンバ変数
 	//バッファリソース内のデータを指すポインタ
 	DirectionalLight* directionalLightData_ = nullptr;
 	TransformationMatrix* wvpData_ = nullptr;
+	//スプライト
 	Sprite* sprite_ = nullptr;
+	//親
+	const Matrix4x4* parent_ = nullptr;
 };
 

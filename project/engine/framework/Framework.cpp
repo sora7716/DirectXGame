@@ -16,18 +16,23 @@ void Framework::Initialize() {
 	//テクスチャ管理
 	TextureManager::GetInstance()->Initialize(directXBase_.get());
 	//モデルの管理
-	modelManager_ = ModelManager::GetInstance();
-	modelManager_->Initialize(directXBase_.get());
+	ModelManager::GetInstance()->Initialize(directXBase_.get());
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Initialize(directXBase_.get());
 	//カメラの管理
 	cameraManager_ = CameraManager::GetInstance();
+	cameraManager_->AddCamera("defaultCamera");
 	//オーディオの管理
 	audioManager_ = AudioManager::GetInstance();
-	//3Dオブジェクトの共通部分
-	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Initialize(directXBase_.get());
+	//2Dオブジェクトの共通部分
+	Object2dCommon::GetInstance()->Initialize(directXBase_.get());
+	//3Dオブジェクトの共通部分
+	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
+	//カメラの設定
+	Object2dCommon::GetInstance()->SetDefaultCamera(cameraManager_->FindCamera("defaultCamera"));
+	Object3dCommon::GetInstance()->SetDefaultCamera(cameraManager_->FindCamera("defaultCamera"));
 	//シーンの管理
 	SceneManager::GetInstance()->Initialize(directXBase_.get());
 }
@@ -55,7 +60,7 @@ void Framework::Finalize() {
 	//テクスチャ管理
 	TextureManager::GetInstance()->Finalize();
 	//モデルの管理
-	modelManager_->Finalize();
+	ModelManager::GetInstance()->Finalize();
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Finalize();
 	//カメラの管理
@@ -64,6 +69,8 @@ void Framework::Finalize() {
 	audioManager_->Finalize();
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Finalize();
+	//2Dオブジェクトの共通部分
+	Object2dCommon::GetInstance()->Finalize();
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Finalize();
 	//シーンの管理

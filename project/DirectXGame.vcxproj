@@ -42,6 +42,7 @@
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
+    <ClCompile Include="engine\objectCommon\Object2dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\SpriteCommon.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\math\ResourceData.h" />
     <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
+    <ClInclude Include="engine\objectCommon\Object2dCommon.h" />
     <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
     <ClInclude Include="engine\objectCommon\SpriteCommon.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />

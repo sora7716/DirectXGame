@@ -35,8 +35,7 @@ public://メンバ関数
 	/// 初期化
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤</param>
-	/// <param name="directoryPath">ディレクトリファイルパス</param>
-	void Initialize(DirectXBase* directXBase,const std::string& directoryPath="engine/resources/texture");
+	void Initialize(DirectXBase* directXBase);
 
 	/// <summary>
 	/// テクスチャファイルの読み込み
@@ -92,6 +91,4 @@ private://メンバ変数
 	DirectXBase* directXBase_ = nullptr;
 	//SRVの管理
 	SRVManager* srvManager_ = nullptr;
-	//ディレクトリファイルパス
-	std::string directryPath_ = "";
 };

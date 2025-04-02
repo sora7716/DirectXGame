@@ -5,6 +5,7 @@
 #include "engine/audio/AudioManager.h"
 #include "engine/input/Input.h"
 #include "engine/objectCommon/SpriteCommon.h"
+#include "engine/objectCommon/Object2dCommon.h"
 #include "engine/objectCommon/Object3dCommon.h"
 #include "engine/3d/ModelManager.h"
 #include "engine/3d/CameraManager.h"
@@ -65,8 +66,6 @@ protected://メンバ変数
 	CameraManager* cameraManager_ = nullptr;
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
-	//モデルの管理
-	ModelManager* modelManager_ = nullptr;
 	//DirectXの基盤部分
 	std::unique_ptr<DirectXBase>directXBase_ = nullptr;
 	//シーンファクトリー

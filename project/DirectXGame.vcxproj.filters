@@ -111,9 +111,6 @@
     <ClCompile Include="engine\2d\TextureManager.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\Object3d.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\3d\Model.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
@@ -183,6 +180,12 @@
     <ClCompile Include="engine\2d\Object2d.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
+    <ClCompile Include="engine\objectCommon\Object2dCommon.cpp">
+      <Filter>engine\objectCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\Object3d.cpp">
+      <Filter>engine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -238,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="engine\2d\TextureManager.h">
       <Filter>engine\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\Object3d.h">
-      <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\ModelCommon.h">
       <Filter>engine\3d</Filter>
@@ -310,6 +310,12 @@
     </ClInclude>
     <ClInclude Include="engine\2d\Object2d.h">
       <Filter>engine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\objectCommon\Object2dCommon.h">
+      <Filter>engine\objectCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Object3d.h">
+      <Filter>engine\3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 	//マテリアルデータの生成
 	CreateMaterialResource();
 	//テクスチャの読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath );
 	//テクスチャ番号を取得して、メンバ変数に書き込む
 	//modelData_.material.textureIndex = TextureManager::GetInstance()->GetTextureIndexByFilePath(modelData_.material.textureFilePath);
 }

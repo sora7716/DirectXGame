@@ -23,15 +23,13 @@ TextureManager* TextureManager::GetInstance() {
 }
 
 //初期化
-void TextureManager::Initialize(DirectXBase* directXBase,const std::string& directoryPath) {
+void TextureManager::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//SRVの管理を記録する
 	srvManager_ = SRVManager::GetInstance();
 	//SRVの数と同数
 	textureDatas_.reserve(SRVManager::kMaxSRVCount);
-	//ディレクトリファイルパスを記録
-	directryPath_ = directoryPath;
 }
 
 //テクスチャファイルの読み込み
@@ -43,7 +41,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	}
 	//テクスチャファイルを読み込んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW = StringUtility::ConvertString(directryPath_ + "/" + filePath);
+	std::wstring filePathW = StringUtility::ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	assert(SUCCEEDED(hr));
 

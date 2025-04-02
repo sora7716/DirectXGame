@@ -25,6 +25,8 @@ void GameSystem::Draw() {
 	SRVManager::GetInstance()->PreDraw();
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->DrawSetting();
+	//2Dオブジェクトの共通部分
+	Object2dCommon::GetInstance()->DrawSetting();
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
 	//シーン

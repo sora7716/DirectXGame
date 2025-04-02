@@ -4,6 +4,7 @@
 #include "engine/3d/Object3d.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/audio/AudioManager.h"
+#include "engine/3d/CameraManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
 

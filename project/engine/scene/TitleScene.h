@@ -14,7 +14,7 @@ public://メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~TitleScene()override = default;	
+	~TitleScene()override = default;
 
 	/// <summary>
 	/// 初期化
@@ -39,10 +39,14 @@ public://メンバ関数
 
 private://メンバ変数
 	//スプライト
-	std::unique_ptr<Sprite>sprite_ = nullptr;
-	std::unique_ptr<Object2d>object2d_ = nullptr;
+	std::unique_ptr<Sprite>sprite_[2] = { nullptr };
+	//オブジェクト2D
+	std::unique_ptr<Object2d>object2d_[2] = { nullptr };
 	//スプライトの位置
-	Transform2D worldTransform_ = {};
+	Transform2D worldTransform_[2] = {};
+	//オブジェクト3D
+	std::unique_ptr<Object3d>object3d_ = nullptr;
+	Transform worldTransform3D_ = {};
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
 	//シーンファクトリー

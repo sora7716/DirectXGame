@@ -1,14 +1,14 @@
 #include "Object2d.h"
-#include "engine/objectCommon/SpriteCommon.h"
+#include "engine/objectCommon/Object2dCommon.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/WinApi.h"
 #include "engine/math/func/Math.h"
 #include "engine/3d/Camera.h"
 #include "Sprite.h"
 //初期化
-void Object2d::Initialize(){
-	spriteCommon_ = SpriteCommon::GetInstance();
-	directXBase_ = spriteCommon_->GetDirectXBase();
+void Object2d::Initialize() {
+	object2dCommon_ = Object2dCommon::GetInstance();
+	directXBase_ = object2dCommon_->GetDirectXBase();
 	//座標変換行列データの生成
 	CreateTransformationMatrixResorce();
 	//光源の生成
@@ -17,11 +17,11 @@ void Object2d::Initialize(){
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
-	//camera_ = object3dCommon_->GetDefaultCamera();
+	camera_ = object2dCommon_->GetDefaultCamera();
 }
 
 //更新
-void Object2d::Update(){
+void Object2d::Update() {
 	//メンバ変数の値を見た目に反映
 	transform_.scale = { transform2D_.scale.x,transform2D_.scale.y,1.0f };
 	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
@@ -35,7 +35,7 @@ void Object2d::Update(){
 }
 
 //描画
-void Object2d::Draw(){
+void Object2d::Draw() {
 	//座標変換行列CBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResoruce_->GetGPUVirtualAddress());//wvp
 	//平光源CBufferの場所を設定
@@ -47,53 +47,53 @@ void Object2d::Draw(){
 }
 
 //スプライトのセッター
-void Object2d::SetSprite(Sprite* sprite){
+void Object2d::SetSprite(Sprite* sprite) {
 	sprite_ = sprite;
 }
 
 //テクスチャの変更
-void Object2d::ChangeTexture(std::string textureFilePath){
+void Object2d::ChangeTexture(std::string textureFilePath) {
 	if (sprite_) {
 		sprite_->ChangeTexture(textureFilePath);
 	}
 }
 
 //サイズのゲッター
-const Vector2& Object2d::GetScale() const{
+const Vector2& Object2d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
 	return transform2D_.scale;
 }
 
 //回転のゲッター
-float Object2d::GetRotate() const{
+float Object2d::GetRotate() const {
 	return transform2D_.rotate;
 }
 
 //位置のゲッター
-const Vector2& Object2d::GetTranslate() const{
+const Vector2& Object2d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
 	return transform2D_.translate;
 }
 
 //UVのサイズのゲッター
-const Vector2& Object2d::GetUVScale() const{
+const Vector2& Object2d::GetUVScale() const {
 	// TODO: return ステートメントをここに挿入します
 	return uvTransform_.scale;
 }
 
 //UVの回転のゲッター
-float Object2d::GetUVRotate() const{
+float Object2d::GetUVRotate() const {
 	return uvTransform_.rotate;
 }
 
 //UVの位置のゲッター
-const Vector2& Object2d::GetUVTranslate() const{
+const Vector2& Object2d::GetUVTranslate() const {
 	// TODO: return ステートメントをここに挿入します
 	return uvTransform_.translate;
 }
 
 //色のゲッター
-const Vector4& Object2d::GetColor() const{
+const Vector4& Object2d::GetColor() const {
 	// TODO: return ステートメントをここに挿入します
 	static Vector4 defaultColor = {};
 	if (sprite_) {
@@ -102,46 +102,67 @@ const Vector4& Object2d::GetColor() const{
 	return defaultColor;
 }
 
+//カメラのゲッター
+const Camera* Object2d::GetCamera() const {
+	return camera_;
+}
+
+//ワールド行列のゲッター
+const Matrix4x4& Object2d::GetWorldMatrix() const {
+	// TODO: return ステートメントをここに挿入します
+	return wvpData_->World;
+}
+
 //サイズのセッター
-void Object2d::SetScale(const Vector2& scale){
+void Object2d::SetScale(const Vector2& scale) {
 	transform2D_.scale = scale;
 }
 
 //回転のセッター
-void Object2d::SetRotate(float rotate){
+void Object2d::SetRotate(float rotate) {
 	transform2D_.rotate = rotate;
 }
 
 //位置のセッター
-void Object2d::SetTranslate(const Vector2& translate){
+void Object2d::SetTranslate(const Vector2& translate) {
 	transform2D_.translate = translate;
 }
 
 //UVのサイズのセッター
-void Object2d::SetUVScale(const Vector2& scale){
+void Object2d::SetUVScale(const Vector2& scale) {
 	uvTransform_.scale = scale;
 }
 
 //UVの回転のセッター
-void Object2d::SetUVRotate(float rotate){
+void Object2d::SetUVRotate(float rotate) {
 	uvTransform_.rotate = rotate;
 }
 
 //UVの位置のゲッター
-void Object2d::SetUVTranslate(const Vector2& translate){
+void Object2d::SetUVTranslate(const Vector2& translate) {
 	uvTransform_.translate = translate;
 }
 
 //色のセッター
-void Object2d::SetColor(const Vector4& color){
+void Object2d::SetColor(const Vector4& color) {
 	if (sprite_) {
 		sprite_->SetColor(color);
 	}
 }
 
+//カメラのセッター
+void Object2d::SetCamera(Camera* camera) {
+	camera_ = camera;
+}
+
+//親のセッター
+void Object2d::SetParent(const Matrix4x4* parent) {
+	parent_ = parent;
+}
+
 
 //座標変換行列リソースの生成
-void Object2d::CreateTransformationMatrixResorce(){
+void Object2d::CreateTransformationMatrixResorce() {
 	//座標変換行列リソースを作成する
 	wvpResoruce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
 	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
@@ -153,7 +174,7 @@ void Object2d::CreateTransformationMatrixResorce(){
 }
 
 //光源の生成
-void Object2d::CreateDirectionLight(){
+void Object2d::CreateDirectionLight() {
 	//光源
 	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
@@ -163,13 +184,23 @@ void Object2d::CreateDirectionLight(){
 }
 
 //座標変換の更新
-void Object2d::UpdateTransform(){
+void Object2d::UpdateTransform() {
 	//TransformからWorldMatrixを作る
-	wvpData_->World = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//ViewMatirxを作って単位行列を入れる
-	Matrix4x4 viewMatrix = Math::MakeIdentity4x4();
+	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	if (parent_) {
+		worldMatrix = worldMatrix * parent_;
+	}
 	//ProjectionMatrixを作って平行投影行列を書き込む
 	Matrix4x4 projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
-	wvpData_->WVP = wvpData_->World * (viewMatrix * projectionMatrix);
+	//wvpの書き込み
+	if (camera_) {
+		const Matrix4x4& viewProjectionMatrix = camera_->GetViewMatrix() * projectionMatrix;
+		wvpData_->WVP = worldMatrix * viewProjectionMatrix;
+	}
+	else {
+		wvpData_->WVP = worldMatrix * projectionMatrix;
+	}
+	//ワールド行列を送信
+	wvpData_->World = worldMatrix;
 }
 
