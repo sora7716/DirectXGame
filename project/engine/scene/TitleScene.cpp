@@ -24,12 +24,18 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	worldTransform_[1].scale = { 1.0f,1.0f };
 	worldTransform_[1].rotate = 0.0f;
 	worldTransform_[1].translate = { 1.4f,0.0f };
-	//3Dオブジェクト
-	object3d_ = std::make_unique<Object3d>();
-	object3d_->Initialize();
 	//モデルの読み込み
-	ModelManager::GetInstance()->LoadOBJModel("base","axis");
-	object3d_->SetModel("axis");
+	ModelManager::GetInstance()->LoadOBJModel("base", "axis");
+	//3Dオブジェクト
+	for (int i = 0;i < 2;i++) {
+		object3d_[i] = std::make_unique<Object3d>();
+		object3d_[i]->Initialize();
+		object3d_[i]->SetModel("axis");
+	}
+	worldTransform3D_[1].translate = { 5.0f,0.0f,0.0f };
+	//カメラ
+	CameraManager::GetInstance()->AddCamera("titleCamera");
+	cameraWorldTransform_.translate = { 0.0f,0.0f,-10.0f };
 	//シーンファクトリーの生成
 	sceneFactory_ = new SceneFactory();
 	//シーンファクトリーのセット
@@ -54,9 +60,17 @@ void TitleScene::Update() {
 		SceneManager::GetInstance()->ChangeScene("Game");
 		audioManager_->FindAudio("Alarm01")->StopAudio();
 	}
+	//カメラ
+	CameraManager::GetInstance()->FindCamera("titleCamera")->SetRotate(cameraWorldTransform_.rotate);
+	CameraManager::GetInstance()->FindCamera("titleCamera")->SetTranslate(cameraWorldTransform_.translate);
 	//3Dオブジェクト
-	object3d_->SetRotate(worldTransform3D_.rotate);
-	object3d_->Update();
+	object3d_[1]->SetParent(&object3d_[0]->GetWorldMatrix());
+	for (int i = 0;i < 2;i++) {
+		object3d_[i]->SetRotate(worldTransform3D_[i].rotate);
+		object3d_[i]->SetTranslate(worldTransform3D_[i].translate);
+		object3d_[i]->SetCamera(CameraManager::GetInstance()->FindCamera("titleCamera"));
+		object3d_[i]->Update();
+	}
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();
 #ifdef USE_IMGUI
@@ -70,7 +84,15 @@ void TitleScene::Update() {
 	ImGui::End();
 
 	ImGui::Begin("3dObject");
-	ImGui::DragFloat3("rotate", &worldTransform3D_.rotate.x, 0.1f);
+	ImGui::DragFloat3("rotate[0]", &worldTransform3D_[0].rotate.x, 0.1f);
+	ImGui::DragFloat3("rotate[1]", &worldTransform3D_[1].rotate.x, 0.1f);
+	ImGui::DragFloat3("translate[0]", &worldTransform3D_[0].translate.x, 0.1f);
+	ImGui::DragFloat3("translate[1]", &worldTransform3D_[1].translate.x, 0.1f);
+	ImGui::End();
+
+	ImGui::Begin("camera");
+	ImGui::DragFloat3("rotate", &cameraWorldTransform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("translate", &cameraWorldTransform_.translate.x, 0.1f);
 	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了
@@ -84,7 +106,9 @@ void TitleScene::Draw() {
 		object2d_[i]->Draw();
 	}*/
 	//3Dオブジェクト
-	object3d_->Draw();
+	for (int i = 0;i < 2;i++) {
+		object3d_[i]->Draw();
+	}
 }
 
 //終了

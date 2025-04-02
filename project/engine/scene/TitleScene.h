@@ -45,8 +45,10 @@ private://メンバ変数
 	//スプライトの位置
 	Transform2D worldTransform_[2] = {};
 	//オブジェクト3D
-	std::unique_ptr<Object3d>object3d_ = nullptr;
-	Transform worldTransform3D_ = {};
+	std::unique_ptr<Object3d>object3d_[2] = { nullptr };
+	Transform worldTransform3D_[2] = {};
+	//カメラ
+	Transform cameraWorldTransform_ = {};
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
 	//シーンファクトリー
