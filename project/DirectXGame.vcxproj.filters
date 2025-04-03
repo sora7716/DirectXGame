@@ -186,6 +186,9 @@
     <ClCompile Include="engine\3d\Object3d.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="engine\2d\SpriteManager.cpp">
+      <Filter>engine\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -316,6 +319,9 @@
     </ClInclude>
     <ClInclude Include="engine\3d\Object3d.h">
       <Filter>engine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\2d\SpriteManager.h">
+      <Filter>engine\2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
