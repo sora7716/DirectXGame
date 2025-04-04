@@ -6,9 +6,7 @@ void GameScene::Initialize(DirectXBase* directXBase){
 	audioManager_ = AudioManager::GetInstance();
 	audioManager_->LoadAudio("mokugyo", "mokugyo.wav");
 	audioManager_->FindAudio("mokugyo")->SoundPlayWave(true);
-	//スプライト
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize("block.png");
+	//2Dオブジェクト
 	object2d_ = std::make_unique<Object2d>();
 	object2d_->Initialize();
 	worldTransform_.scale = { 360.0f,360.0f };
@@ -18,7 +16,7 @@ void GameScene::Initialize(DirectXBase* directXBase){
 //更新
 void GameScene::Update(){
 	//スプライト
-	object2d_->SetSprite(sprite_.get());
+	object2d_->SetSprite(SpriteManager::GetInstance()->FindSprite("block"));
 	object2d_->SetScale(worldTransform_.scale);
 	object2d_->SetTranslate(worldTransform_.translate);
 	object2d_->Update();

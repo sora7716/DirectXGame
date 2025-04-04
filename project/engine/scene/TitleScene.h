@@ -38,8 +38,6 @@ public://メンバ関数
 	void Finalize()override;
 
 private://メンバ変数
-	//スプライト
-	std::unique_ptr<Sprite>sprite_[2] = { nullptr };
 	//オブジェクト2D
 	std::unique_ptr<Object2d>object2d_[2] = { nullptr };
 	//スプライトの位置

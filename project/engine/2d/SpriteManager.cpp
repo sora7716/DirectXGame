@@ -5,7 +5,7 @@
 //インスタンスのゲッター
 SpriteManager* SpriteManager::GetInstance() {
 	assert(!isFinalize && "GetInstance() called after Finalize()");
-	if (instance) {
+	if (instance==nullptr) {
 		instance = new SpriteManager();
 	}
 	return instance;
@@ -20,9 +20,9 @@ void SpriteManager::LoadSprite(const std::string& filePath) {
 	}
 	//モデルの生成とファイル読み込み、初期化
 	std::unique_ptr<Sprite>sprite = std::make_unique<Sprite>();
-	sprite->Initialize("engine/resources/"+filePath+);
+	sprite->Initialize("engine/resources/textures/"+filePath+".png");
 
-	//モデルをmapコンテナに格納する
+	//モデルをmapコンテナに格納する 
 	sprites_.insert(std::make_pair(filePath, std::move(sprite)));
 }
 

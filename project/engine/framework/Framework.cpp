@@ -77,6 +77,8 @@ void Framework::Finalize() {
 	SceneManager::GetInstance()->Finalize();
 	//シーンファクトリーの解放
 	delete sceneFactory_;
+	//スプライトの管理
+	SpriteManager::GetInstance()->Finalize();
 }
 
 //ゲームループ
