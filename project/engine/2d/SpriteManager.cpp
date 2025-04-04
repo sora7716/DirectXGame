@@ -27,7 +27,14 @@ void SpriteManager::LoadSprite(const std::string& filePath) {
 }
 
 //スプライトの検索
-void SpriteManager::FindSprite(const std::string& filePath) {
+Sprite* SpriteManager::FindSprite(const std::string& filePath) {
+	//読み込み済みモデルを検索
+	if (sprites_.contains(filePath)) {
+		//読み込み済みモデルを戻り値としてreturn
+		return sprites_.at(filePath).get();
+	}
+	//ファイル名一致なし
+	return nullptr;
 }
 
 //終了

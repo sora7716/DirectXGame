@@ -28,7 +28,7 @@ public://メンバ関数
 	/// スプライトの検索
 	/// </summary>
 	/// <param name="filePath">ファイルパス</param>
-	void FindSprite(const std::string& filePath);
+	Sprite* FindSprite(const std::string& filePath);
 
 	/// <summary>
 	/// 終了
