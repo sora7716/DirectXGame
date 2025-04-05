@@ -3,14 +3,24 @@
 #include <dinput.h>
 #include <memory>
 #include <wrl.h>
-
+#include "engine/math/Vector2.h"
+#include "engine/math/Vector3.h"
+#include <cstdint>
 //前方宣言
 class WinApi;
+class Camera;
+
+//マウスのクリック位置
+enum Clic {
+	kLeft,
+	kRight,
+	kMiddle
+};
 
 /// <summary>
 /// 入力
 /// </summary>
-class Input final{
+class Input final {
 public://エイリアステンプレート
 	//namespace省略
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -54,9 +64,55 @@ public://メンバ関数
 	/// <summary>
 	/// キーを離した瞬間をチェック
 	/// </summary>
-	/// <param name="keyNumber"></param>
+	/// <param name="keyNumber">キー番号</param>
 	/// <returns>離した瞬間</returns>
 	bool ReleaseTriggerKey(BYTE keyNumber);
+
+	/// <summary>
+	/// マウスのボタンの押下をチェック
+	/// </summary>
+	/// <param name="mouseClicPos">マウスのボタン</param>
+	/// <returns>押されてるか</returns>
+	bool PressMouseButton(Clic mouseClicPos);
+
+	/// <summary>
+	/// マウスのボタンの押下した瞬間をチェック
+	/// </summary>
+	/// <param name="mouseClicPos">マウスのボタン</param>
+	/// <returns>押した瞬間</returns>
+	bool TriggerMouseButton(Clic mouseClicPos);
+
+	/// <summary>
+	/// マウスのボタンを話した瞬間をチェック
+	/// </summary>
+	/// <param name="mouseClicPos">マウスのボタン</param>
+	/// <returns>離した瞬間</returns>
+	bool ReleaseTriggerMouseButton(Clic mouseClicPos);
+
+	/// <summary>
+	/// マウスの移動量のゲッター
+	/// </summary>
+	/// <returns>マウスの移動量</returns>
+	const Vector2Int GetMouseMoveAmount()const;
+
+	/// <summary>
+	/// マウスホイールの回転量のゲッター
+	/// </summary>
+	/// <returns>マウスホイールの回転量</returns>
+	const int32_t GetWheelRotate()const;
+
+	/// <summary>
+	/// ワールド座標系のマウスの位置のゲッター
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	/// <returns>ワールド座標系のマウスの位置</returns>
+	const Vector3 GetWorldMousePosition(Camera*camera)const;
+
+	/// <summary>
+	/// スクリーン座標系のマウスの位置のゲッター
+	/// </summary>
+	/// <returns>スクリーン座標系のマウスの位置</returns>
+	const Vector2Int GetMousePosition()const;
 private://メンバ関数
 	//コンストラクタの封印
 	Input() = default;
@@ -66,6 +122,26 @@ private://メンバ関数
 	Input(const Input&) = delete;
 	//代入演算子を禁止
 	const Input& operator=(const Input&) = delete;
+
+	/// <summary>
+	/// キーボード入力の初期化
+	/// </summary>
+	void KeyboardInitialize();
+
+	/// <summary>
+	/// キーボード入力の更新
+	/// </summary>
+	void KeyboardUpdate();
+
+	/// <summary>
+	/// マウス入力の初期化
+	/// </summary>
+	void MouseInitialize();
+
+	/// <summary>
+	/// マウス入力の更新
+	/// </summary>
+	void MouseUpdate();
 private://静的メンバ変数
 	//インスタンス
 	static inline Input* instance = nullptr;
@@ -77,7 +153,11 @@ private://メンバ変数
 	//キーボードデバイス
 	ComPtr<IDirectInputDevice8> keyboard_ = nullptr;
 	//全キーの入力状態を取得する
-	BYTE key[256] = {};
-	BYTE preKey[256] = {};
+	BYTE keys_[256] = {};
+	BYTE preKeys_[256] = {};
+	//マウス
+	ComPtr<IDirectInputDevice8>mouse_ = nullptr;
+	DIMOUSESTATE mouseState_ = {};
+	DIMOUSESTATE preMouseState_ = {};
 };
 

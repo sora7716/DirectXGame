@@ -27,3 +27,11 @@ typedef struct Vector2 final {
 	//スカラー倍(複合)
 	Vector2& operator*=(float n);
 }Vector2;
+
+/// <summary>
+/// 2次元ベクトルの整数型
+/// </summary>
+typedef struct Vector2Int final {
+	int x;
+	int y;
+}Vector2Int;
