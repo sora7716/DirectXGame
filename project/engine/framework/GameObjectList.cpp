@@ -37,7 +37,8 @@ void GameObjectList::Finalize() {
 
 //オーディオの読み込み
 void GameObjectList::LoadAudio() {
-	AudioManager::GetInstance()->LoadAudio("Alarm01", "Alarm01.wav");
+	AudioManager::GetInstance()->LoadAudio("Alarm01", "Alarm01");
+	AudioManager::GetInstance()->LoadAudio("mokugyo", "mokugyo");
 }
 
 //スプライトの読み込み

@@ -77,7 +77,7 @@ Audio::SoundData Audio::SoundLoadWave(const std::string& filename) {
 		//ファイル入力ストリームのインスタンス
 	std::ifstream file;
 	//.wavファイルをバイナリーモードで開く
-	file.open(directoryPath_ + "/" + filename, std::ios_base::binary);
+	file.open(directoryPath_ + "/" + filename+".wav", std::ios_base::binary);
 	//ファイルオープン失敗を検知
 	assert(file.is_open());
 	//2..wavデータの読み込み

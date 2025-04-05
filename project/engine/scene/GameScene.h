@@ -38,11 +38,6 @@ public://メンバ関数
 	void Finalize()override;
 
 private://メンバ変数
-	//2Dオブジェクト
-	std::unique_ptr<Object2d>object2d_ = nullptr;
-	//スプライトの位置
-	Transform2D worldTransform_ = {};
-	//オーディオの管理
-	AudioManager* audioManager_ = nullptr;
+	
 };
 

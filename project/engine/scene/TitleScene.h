@@ -38,17 +38,7 @@ public://メンバ関数
 	void Finalize()override;
 
 private://メンバ変数
-	//オブジェクト2D
-	std::unique_ptr<Object2d>object2d_[2] = { nullptr };
-	//スプライトの位置
-	Transform2D worldTransform_[2] = {};
-	//オブジェクト3D
-	std::unique_ptr<Object3d>object3d_[2] = { nullptr };
-	Transform worldTransform3D_[2] = {};
-	//カメラ
-	Transform cameraWorldTransform_ = {};
-	//シーンファクトリー
-	AbstractSceneFactory* sceneFactory_ = nullptr;
+	
 };
 
 
