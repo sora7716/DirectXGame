@@ -38,6 +38,10 @@ public://メンバ関数
 	void Finalize()override;
 
 private://メンバ変数
+	//2Dモデル
+	std::unique_ptr<Object2d>object2d_ = nullptr;
+	Transform2d worldTransform_ = {};
+	Vector4 color = {};
 };
 
 

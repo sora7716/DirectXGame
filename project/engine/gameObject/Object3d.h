@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "Model.h"
+#include "engine/3d/Model.h"
 #include <vector>
 #include <string>
 #include <wrl.h>
@@ -163,7 +163,7 @@ private://メンバ変数
 	//ローカル座標
 	Transform transform_ = {};
 	//UV座標
-	Transform2D uvTransform_ = {
+	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}

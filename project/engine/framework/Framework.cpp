@@ -5,7 +5,7 @@
 #include "engine/audio/AudioManager.h"
 #include "engine/input/Input.h"
 #include "engine/3d/ModelManager.h"
-#include "engine/3d/CameraManager.h"
+#include "engine/gameObject/CameraManager.h"
 #include "engine/2d/SpriteManager.h"
 
 //初期化

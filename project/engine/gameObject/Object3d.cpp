@@ -1,9 +1,9 @@
 #include "Object3d.h"
 #include "engine/objectCommon/Object3dCommon.h"
-#include "engine/3d/Camera.h"
+#include "engine/gameObject/Camera.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
-#include "ModelManager.h"
+#include "engine/3d/ModelManager.h"
 #include <fstream>
 #include <sstream>
 #include <cassert>

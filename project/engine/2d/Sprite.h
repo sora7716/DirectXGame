@@ -49,7 +49,7 @@ public://メンバ関数
 	/// UVの座標変換の更新
 	/// </summary>
 	/// <param name="uvTransform">uv座標</param>
-	void UpdateUVTransform(Transform2D uvTransform);
+	void UpdateUVTransform(Transform2d uvTransform);
 
 	/// <summary>
 	/// 色のゲッター

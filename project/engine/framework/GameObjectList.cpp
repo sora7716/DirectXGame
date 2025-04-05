@@ -43,8 +43,8 @@ void GameObjectList::LoadAudio() {
 
 //スプライトの読み込み
 void GameObjectList::LoadSprite() {
-	SpriteManager::GetInstance()->LoadSprite("pokemon", "monsterBall");
-	SpriteManager::GetInstance()->LoadSprite("enemy", "block");
+	SpriteManager::GetInstance()->LoadSprite("monsterBall", "monsterBall");
+	SpriteManager::GetInstance()->LoadSprite("block", "block");
 }
 
 //OBJファイルの読み込み

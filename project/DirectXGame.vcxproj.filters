@@ -61,6 +61,9 @@
     <Filter Include="application\scene">
       <UniqueIdentifier>{d09609c5-5464-4a8e-a106-9af2e72858bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\gameObject">
+      <UniqueIdentifier>{fe8994bd-0b9a-44df-b447-7f1938d187b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -129,14 +132,8 @@
     <ClCompile Include="engine\3d\ModelManager.cpp">
       <Filter>engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\Camera.cpp">
-      <Filter>engine\3d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\func\Rendering.cpp">
       <Filter>engine\math\func</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\CameraManager.cpp">
-      <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\SRVManager.cpp">
       <Filter>engine\base</Filter>
@@ -177,20 +174,26 @@
     <ClCompile Include="engine\scene\TitleScene.cpp">
       <Filter>application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\2d\Object2d.cpp">
-      <Filter>engine\2d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\objectCommon\Object2dCommon.cpp">
       <Filter>engine\objectCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\Object3d.cpp">
-      <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\2d\SpriteManager.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
     <ClCompile Include="engine\framework\GameObjectList.cpp">
       <Filter>application</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gameObject\Camera.cpp">
+      <Filter>engine\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gameObject\CameraManager.cpp">
+      <Filter>engine\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gameObject\Object2d.cpp">
+      <Filter>engine\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\gameObject\Object3d.cpp">
+      <Filter>engine\gameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,14 +269,8 @@
     <ClInclude Include="engine\3d\ModelManager.h">
       <Filter>engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\Camera.h">
-      <Filter>engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\math\func\Rendering.h">
       <Filter>engine\math\func</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\CameraManager.h">
-      <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\base\SRVManager.h">
       <Filter>engine\base</Filter>
@@ -314,20 +311,26 @@
     <ClInclude Include="engine\scene\SceneManager.h">
       <Filter>engine\scene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\2d\Object2d.h">
-      <Filter>engine\2d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\objectCommon\Object2dCommon.h">
       <Filter>engine\objectCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\Object3d.h">
-      <Filter>engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\2d\SpriteManager.h">
       <Filter>engine\2d</Filter>
     </ClInclude>
     <ClInclude Include="engine\framework\GameObjectList.h">
       <Filter>application</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gameObject\Camera.h">
+      <Filter>engine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gameObject\CameraManager.h">
+      <Filter>engine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gameObject\Object2d.h">
+      <Filter>engine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\gameObject\Object3d.h">
+      <Filter>engine\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

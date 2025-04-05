@@ -2,7 +2,7 @@
 #include "engine/audio/AudioManager.h"
 #include "engine/2d/SpriteManager.h"
 #include "engine/3d/ModelManager.h"
-#include "engine/3d/CameraManager.h"
+#include "engine/gameObject/CameraManager.h"
 
 /// <summary>
 /// ゲームで使用するオブジェクトの読み込みのリスト

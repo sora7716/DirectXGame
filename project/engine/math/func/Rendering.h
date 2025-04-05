@@ -11,7 +11,7 @@ typedef struct Transform {
 }Transform;
 
 //Transform2D情報
-typedef struct Transform2D {
+typedef struct Transform2d {
 	Vector2 scale;
 	float rotate;
 	Vector2 translate;

@@ -3,7 +3,7 @@
 #include "engine/base/DirectXBase.h"
 #include "engine/base/WinApi.h"
 #include "engine/math/func/Math.h"
-#include "engine/3d/Camera.h"
+#include "engine/gameObject/Camera.h"
 #include "Sprite.h"
 //初期化
 void Object2d::Initialize() {
@@ -23,9 +23,9 @@ void Object2d::Initialize() {
 //更新
 void Object2d::Update() {
 	//メンバ変数の値を見た目に反映
-	transform_.scale = { transform2D_.scale.x,transform2D_.scale.y,1.0f };
-	transform_.rotate = { 0.0f,0.0f,transform2D_.rotate };
-	transform_.translate = { transform2D_.translate.x,transform2D_.translate.y,0.0f };
+	transform_.scale = { transform2d_.scale.x,transform2d_.scale.y,1.0f };
+	transform_.rotate = { 0.0f,0.0f,transform2d_.rotate };
+	transform_.translate = { transform2d_.translate.x,transform2d_.translate.y,0.0f };
 	//座標の更新
 	UpdateTransform();
 	//UV座標の更新
@@ -61,18 +61,18 @@ void Object2d::ChangeTexture(std::string spriteName) {
 //サイズのゲッター
 const Vector2& Object2d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform2D_.scale;
+	return transform2d_.scale;
 }
 
 //回転のゲッター
 float Object2d::GetRotate() const {
-	return transform2D_.rotate;
+	return transform2d_.rotate;
 }
 
 //位置のゲッター
 const Vector2& Object2d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform2D_.translate;
+	return transform2d_.translate;
 }
 
 //UVのサイズのゲッター
@@ -115,17 +115,22 @@ const Matrix4x4& Object2d::GetWorldMatrix() const {
 
 //サイズのセッター
 void Object2d::SetScale(const Vector2& scale) {
-	transform2D_.scale = scale;
+	transform2d_.scale = scale;
 }
 
 //回転のセッター
 void Object2d::SetRotate(float rotate) {
-	transform2D_.rotate = rotate;
+	transform2d_.rotate = rotate;
 }
 
 //位置のセッター
 void Object2d::SetTranslate(const Vector2& translate) {
-	transform2D_.translate = translate;
+	transform2d_.translate = translate;
+}
+
+//トランスフォームのセッター
+void Object2d::SetTransform(const Transform2d& transform2d){
+	transform2d_ = transform2d;
 }
 
 //UVのサイズのセッター

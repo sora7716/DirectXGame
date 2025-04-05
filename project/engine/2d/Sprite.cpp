@@ -40,7 +40,7 @@ void Sprite::ChangeTexture(std::string spriteName) {
 }
 
 // UVの座標変換の更新
-void Sprite::UpdateUVTransform(Transform2D uvTransform) {
+void Sprite::UpdateUVTransform(Transform2d uvTransform) {
 	//UVTransform
 	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform.scale.x,uvTransform.scale.y,1.0f }, uvTransform.rotate, { uvTransform.translate.x,uvTransform.translate.y,1.0f });
 }
@@ -75,9 +75,11 @@ void Sprite::InitializeVertexData() {
 	vertexData_[3].position = { 0.0f,0.0f,0.0f,1.0f };//左上
 	vertexData_[3].texcoord = { 0.0f,0.0f };
 	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+
 	vertexData_[4].position = { 1.0f,0.0f,0.0f,1.0f };//右上
 	vertexData_[4].texcoord = { 1.0f,0.0f };
 	vertexData_[4].normal = { 0.0f,0.0f,-1.0f };
+
 	vertexData_[5].position = { 1.0f,1.0f,0.0f,1.0f };//右下
 	vertexData_[5].texcoord = { 1.0f,1.0f };
 	vertexData_[5].normal = { 0.0f,0.0f,-1.0f };

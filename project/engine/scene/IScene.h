@@ -1,10 +1,10 @@
 #pragma once
 #include "engine/2d/SpriteManager.h"
-#include "engine/2d/Object2d.h"
-#include "engine/3d/Object3d.h"
+#include "engine/gameObject/Object2d.h"
+#include "engine/gameObject/Object3d.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/audio/AudioManager.h"
-#include "engine/3d/CameraManager.h"
+#include "engine/gameObject/CameraManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
 

@@ -127,6 +127,12 @@ public://メンバ関数
 	void SetTranslate(const Vector2& translate);
 
 	/// <summary>
+	/// トランスフォームのセッター
+	/// </summary>
+	/// <param name="transform2d">トランスフォ-ム</param>
+	void SetTransform(const Transform2d& transform2d);
+
+	/// <summary>
 	/// UVのサイズのセッター
 	/// </summary>
 	/// <param name="scale">サイズ</param>
@@ -181,13 +187,13 @@ private://メンバ変数
 	//ローカル座標
 	Transform transform_ = {};
 	//ローカル座標
-	Transform2D transform2D_ = {
+	Transform2d transform2d_ = {
 		.scale = { 90.0f,90.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
 	//UV座標
-	Transform2D uvTransform_ = {
+	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}

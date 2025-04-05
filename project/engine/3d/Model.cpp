@@ -42,7 +42,7 @@ void Model::Draw() {
 }
 
 //uv変換
-void Model::UVTransform(Transform2D uvTransform) {
+void Model::UVTransform(Transform2d uvTransform) {
 	materialData_->uvTransform = Rendering::MakeUVAffineMatrix({ uvTransform.scale.x,uvTransform.scale.y,1.0f }, uvTransform.rotate, { uvTransform.translate.x,uvTransform.translate.y,1.0f });
 }
 

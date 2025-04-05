@@ -55,7 +55,7 @@ public://メンバ関数
 	/// uv変換
 	/// </summary>
 	/// <param name="uvTransform">uv座標</param>
-	void UVTransform(Transform2D uvTransform);
+	void UVTransform(Transform2d uvTransform);
 
 	/// <summary>
 	/// 色を変更
