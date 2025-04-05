@@ -42,6 +42,9 @@ private://メンバ変数
 	std::unique_ptr<Object2d>object2d_ = nullptr;
 	Transform2d worldTransform_ = {};
 	Vector4 color = {};
+	//3Dモデル
+	std::unique_ptr<Object3d>object3d_ = nullptr;
+	Transform worldTransform3d_ = {};
 };
 
 

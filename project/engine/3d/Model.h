@@ -64,6 +64,12 @@ public://メンバ関数
 	void SetColor(const Vector4&color);
 
 	/// <summary>
+	/// テクスチャの変更
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	void SetTexture(const std::string& filePath);
+
+	/// <summary>
 	/// 色を取得
 	/// </summary>
 	/// <returns>色</returns>

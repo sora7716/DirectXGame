@@ -1,5 +1,4 @@
 #pragma once
-#include "engine/2d/SpriteManager.h"
 #include "engine/gameObject/Object2d.h"
 #include "engine/gameObject/Object3d.h"
 #include "engine/debug/ImGuiManager.h"

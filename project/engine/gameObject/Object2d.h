@@ -45,8 +45,8 @@ public://メンバ関数
 	/// <summary>
 	/// スプライトのセッター
 	/// </summary>
-	/// <param name="sprite">スプライト</param>
-	void SetSprite(Sprite* sprite);
+	/// <param name="name">スプライトの名前</param>
+	void SetSprite(const std::string& name);
 
 	/// <summary>
 	/// テクスチャの変更

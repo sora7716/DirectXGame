@@ -30,7 +30,7 @@ public://メンバ関数
 	void LoadOBJModel(const std::string& name, const std::string& storedFilePath, const std::string& filePath);
 
 	/// <summary>
-	/// モデルの検索
+	/// モデルの検索(.objはいらない)
 	/// </summary>
 	/// <param name="name">名前</param>
 	/// <returns>モデル</returns>

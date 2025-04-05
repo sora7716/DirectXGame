@@ -9,10 +9,8 @@
 #include <cassert>
 //初期化
 void Object3d::Initialize() {
-	//引数を受け取ってメンバ変数に記録
-	object3dCommon_ = Object3dCommon::GetInstance();
 	//DirectXの基盤部分を受け取る
-	directXBase_ = object3dCommon_->GetDirectXBase();
+	directXBase_ = Object3dCommon::GetInstance()->GetDirectXBase();
 	//座標変換行列の生成
 	CreateTransformationMatrixResource();
 	//光源の生成
@@ -21,9 +19,10 @@ void Object3d::Initialize() {
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
-	camera_ = object3dCommon_->GetDefaultCamera();
+	camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
 }
 
+#include "engine/base/WinApi.h"
 //更新
 void Object3d::Update() {
 	//ワールドマトリックスの生成
@@ -84,6 +83,11 @@ void Object3d::SetTranslate(const Vector3& translate) {
 	transform_.translate = translate;
 }
 
+//トランスフォームのセッター
+void Object3d::SetTransform(const Transform& transform) {
+	transform_ = transform;
+}
+
 // uvスケールのセッター
 void Object3d::SetUVScale(const Vector2& uvScale) {
 	uvTransform_.scale = uvScale;
@@ -107,8 +111,15 @@ void Object3d::SetColor(const Vector4& color) {
 }
 
 //親のセッター
-void Object3d::SetParent(const Matrix4x4* parent){
+void Object3d::SetParent(const Matrix4x4* parent) {
 	parent_ = parent;
+}
+
+//テクスチャの変更
+void Object3d::SetTexture(const std::string& filePath) {
+	if (model_) {
+		model_->SetTexture("engine/resources/textures/" + filePath + ".png");
+	}
 }
 
 // スケールのゲッター
@@ -158,7 +169,7 @@ const Vector4& Object3d::GetColor() const {
 }
 
 //ワールド行列のゲッター
-const Matrix4x4& Object3d::GetWorldMatrix() const{
+const Matrix4x4& Object3d::GetWorldMatrix() const {
 	// TODO: return ステートメントをここに挿入します
 	return wvpData_->World;
 }

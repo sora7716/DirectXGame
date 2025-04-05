@@ -50,7 +50,7 @@ void GameObjectList::LoadSprite() {
 //OBJファイルの読み込み
 void GameObjectList::LoadModel() {
 	//モデルの読み込み
-	ModelManager::GetInstance()->LoadOBJModel("ziku", "base", "axis");
+	ModelManager::GetInstance()->LoadOBJModel("cube", "cube", "cube");
 }
 
 //カメラの生成

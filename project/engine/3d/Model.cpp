@@ -51,6 +51,12 @@ void Model::SetColor(const Vector4& color) {
 	materialData_->color = color;
 }
 
+//テクスチャの変更
+void Model::SetTexture(const std::string& filePath){
+	TextureManager::GetInstance()->LoadTexture(filePath);
+	modelData_.material.textureFilePath = filePath;
+}
+
 // 色を取得
 const Vector4& Model::GetColor() const {
 	// TODO: return ステートメントをここに挿入します

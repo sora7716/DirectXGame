@@ -4,6 +4,7 @@
 #include "engine/base/WinApi.h"
 #include "engine/math/func/Math.h"
 #include "engine/gameObject/Camera.h"
+#include "SpriteManager.h"
 #include "Sprite.h"
 //初期化
 void Object2d::Initialize() {
@@ -47,8 +48,8 @@ void Object2d::Draw() {
 }
 
 //スプライトのセッター
-void Object2d::SetSprite(Sprite* sprite) {
-	sprite_ = sprite;
+void Object2d::SetSprite(const std::string&name) {
+	sprite_ = SpriteManager::GetInstance()->FindSprite(name);
 }
 
 //テクスチャの変更

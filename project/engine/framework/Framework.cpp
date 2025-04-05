@@ -31,13 +31,13 @@ void Framework::Initialize() {
 	Object2dCommon::GetInstance()->Initialize(directXBase_.get());
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
+	//ゲームオブジェクトのリスト
+	GameObjectList::GetInstance()->Initialize();
 	//カメラの設定
 	Object2dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 	Object3dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 	//シーンの管理
 	SceneManager::GetInstance()->Initialize(directXBase_.get());
-	//ゲームオブジェクトのリスト
-	GameObjectList::GetInstance()->Initialize();
 }
 
 //更新

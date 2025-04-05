@@ -45,7 +45,7 @@ public://メンバ関数
 	/// <summary>
 	/// モデルのセッター
 	/// </summary>
-	/// <param name="name">名前</param>
+	/// <param name="name">モデルの名前</param>
 	void SetModel(const std::string& name);
 
 	/// <summary>
@@ -71,6 +71,12 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="translate">平行移動</param>
 	void SetTranslate(const Vector3& translate);
+
+	/// <summary>
+	/// トランスフォームのセッター
+	/// </summary>
+	/// <param name="transform">トランスフォーム</param>
+	void SetTransform(const Transform& transform);
 
 	/// <summary>
 	/// uvスケールのセッター
@@ -101,6 +107,12 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="parent">親</param>
 	void SetParent(const Matrix4x4* parent);
+
+	/// <summary>
+	/// テクスチャの変更(.pngはいらない)
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	void SetTexture(const std::string& filePath);
 
 	/// <summary>
 	/// スケールのゲッター
@@ -171,9 +183,7 @@ private://メンバ変数
 	//カメラ
 	Camera* camera_ = nullptr;
 	//DirectXの基盤部分
-	DirectXBase* directXBase_ = nullptr;
-	//3Dオブジェクトの共通部分
-	Object3dCommon* object3dCommon_ = nullptr;	
+	DirectXBase* directXBase_ = nullptr;	
 	//3Dモデル
 	Model* model_ = nullptr;
 	//バッファリソース
