@@ -13,6 +13,7 @@
 #include"engine/debug/ImGuiManager.h"
 #include "engine/scene/SceneManager.h"
 #include "engine/scene/AbstractSceneFactory.h"
+#include "engine/2d/SpriteManager.h"
 
 /// <summary>
 /// ゲーム全体

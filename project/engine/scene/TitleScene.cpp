@@ -11,13 +11,13 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	audioManager_->LoadAudio("Alarm01", "Alarm01.wav");
 	audioManager_->FindAudio("Alarm01")->SoundPlayWave(true);
 	//スプライト
+	SpriteManager::GetInstance()->LoadSprite("monsterBall");
+	SpriteManager::GetInstance()->LoadSprite("block");
+	//2Dオブジェクト
 	for (int i = 0;i < 2;i++) {
-		sprite_[i] = std::make_unique<Sprite>();
 		object2d_[i] = std::make_unique<Object2d>();
 		object2d_[i]->Initialize();
 	}
-	sprite_[0]->Initialize("engine/resources/texture/monsterBall.png");
-	sprite_[1]->Initialize("engine/resources/texture/block.png");
 	worldTransform_[0].scale = { 360.0f,360.0f };
 	worldTransform_[0].rotate = 0.0f;
 	worldTransform_[0].translate = { 100.0f,100.0f };
@@ -40,13 +40,13 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	sceneFactory_ = new SceneFactory();
 	//シーンファクトリーのセット
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+	//スプライト
+	object2d_[0]->SetSprite(SpriteManager::GetInstance()->FindSprite("monsterBall"));
+	object2d_[1]->SetSprite(SpriteManager::GetInstance()->FindSprite("block"));
 }
 
 //更新
 void TitleScene::Update() {
-	//スプライト
-	object2d_[0]->SetSprite(sprite_[0].get());
-	object2d_[1]->SetSprite(sprite_[1].get());
 	for (int i = 0;i < 2;i++) {
 		object2d_[i]->SetScale(worldTransform_[i].scale);
 		object2d_[i]->SetRotate(worldTransform_[i].rotate);
@@ -102,9 +102,9 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	//スプライト
-	/*for (int i = 0;i < 2;i++) {
+	for (int i = 0;i < 2;i++) {
 		object2d_[i]->Draw();
-	}*/
+	}
 	//3Dオブジェクト
 	for (int i = 0;i < 2;i++) {
 		object3d_[i]->Draw();

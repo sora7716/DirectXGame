@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/2d/Sprite.h"
+#include "engine/2d/SpriteManager.h"
 #include "engine/2d/Object2d.h"
 #include "engine/3d/Object3d.h"
 #include "engine/debug/ImGuiManager.h"
