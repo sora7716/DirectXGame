@@ -38,13 +38,6 @@ public://メンバ関数
 	void Finalize()override;
 
 private://メンバ変数
-	bool isPressMouseButton_ = false;
-	bool isTriggerMouseButton_ = false;
-	bool isReleseTriggerMouseButton_ = false;
-	Vector2Int mouseMove_ = {};
-	int32_t wheelRotate_ = {};
-	Vector3 worldMosePos_ = {};
-	Vector2Int screenMousePos_ = {};
 };
 
 
