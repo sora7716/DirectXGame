@@ -45,8 +45,8 @@ public://メンバ関数
 	/// <summary>
 	/// モデルのセッター
 	/// </summary>
-	/// <param name="filePath">モデルファイルパス</param>
-	void SetModel(const std::string& filePath);
+	/// <param name="name">名前</param>
+	void SetModel(const std::string& name);
 
 	/// <summary>
 	/// カメラのセッター

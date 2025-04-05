@@ -47,8 +47,6 @@ private://メンバ変数
 	Transform worldTransform3D_[2] = {};
 	//カメラ
 	Transform cameraWorldTransform_ = {};
-	//オーディオの管理
-	AudioManager* audioManager_ = nullptr;
 	//シーンファクトリー
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 };

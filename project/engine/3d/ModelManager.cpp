@@ -19,9 +19,9 @@ void ModelManager::Initialize(DirectXBase* directXBase) {
 }
 
 // objモデルの読み込み
-void ModelManager::LoadOBJModel(const std::string& storedFilePath, const std::string& filePath) {
+void ModelManager::LoadOBJModel(const std::string& name, const std::string& storedFilePath, const std::string& filePath) {
 	//読み込み済みならモデルを検索
-	if (models_.contains(filePath)) {
+	if (models_.contains(name)) {
 		//読み込み済みなら早期return
 		return;
 	}
@@ -30,15 +30,15 @@ void ModelManager::LoadOBJModel(const std::string& storedFilePath, const std::st
 	model->Initialize(modelCommon_, "engine/resources/models", storedFilePath, filePath+".obj");
 
 	//モデルをmapコンテナに格納する
-	models_.insert(std::make_pair(filePath, std::move(model)));
+	models_.insert(std::make_pair(name, std::move(model)));
 }
 
 //モデルの検索
-Model* ModelManager::FindModel(const std::string& filePath) {
+Model* ModelManager::FindModel(const std::string& name) {
 	//読み込み済みモデルを検索
-	if (models_.contains(filePath)) {
+	if (models_.contains(name)) {
 		//読み込み済みモデルを戻り値としてreturn
-		return models_.at(filePath).get();
+		return models_.at(name).get();
 	}
 	//ファイル名一致なし
 	return nullptr;

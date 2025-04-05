@@ -24,16 +24,17 @@ public://メンバ関数
 	/// <summary>
 	/// objモデルの読み込み
 	/// </summary>
-	/// <param name="storedFilePath">保管しているファイル名("/"は書かなくていい)</param>
+	/// <param name="name">名前</param>
+    /// <param name="storedFilePath">保管しているファイル名("/"は書かなくていい)</param>
 	/// <param name="filePath">ファイル名("/"と".obj"は書かなくていい)</param>
-	void LoadOBJModel(const std::string& storedFilePath, const std::string& filePath);
+	void LoadOBJModel(const std::string& name, const std::string& storedFilePath, const std::string& filePath);
 
 	/// <summary>
 	/// モデルの検索
 	/// </summary>
-	/// <param name="filePath">モデルファイルパス</param>
+	/// <param name="name">名前</param>
 	/// <returns>モデル</returns>
-	Model* FindModel(const std::string& filePath);
+	Model* FindModel(const std::string& name);
 
 	/// <su	mmary>
 	/// 終了

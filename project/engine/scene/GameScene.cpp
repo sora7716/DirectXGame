@@ -16,7 +16,7 @@ void GameScene::Initialize(DirectXBase* directXBase){
 //更新
 void GameScene::Update(){
 	//スプライト
-	object2d_->SetSprite(SpriteManager::GetInstance()->FindSprite("block"));
+	object2d_->SetSprite(SpriteManager::GetInstance()->FindSprite("enemy"));
 	object2d_->SetScale(worldTransform_.scale);
 	object2d_->SetTranslate(worldTransform_.translate);
 	object2d_->Update();

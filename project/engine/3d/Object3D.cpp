@@ -60,8 +60,8 @@ void Object3d::Draw() {
 }
 
 //モデルのセッター
-void Object3d::SetModel(const std::string& filePath) {
-	model_ = ModelManager::GetInstance()->FindModel(filePath);
+void Object3d::SetModel(const std::string& name) {
+	model_ = ModelManager::GetInstance()->FindModel(name);
 }
 
 //カメラのセッター

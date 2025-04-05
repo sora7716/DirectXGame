@@ -33,6 +33,7 @@
     <ClCompile Include="engine\debug\ImGuiManager.cpp" />
     <ClCompile Include="engine\debug\Log.cpp" />
     <ClCompile Include="engine\framework\Framework.cpp" />
+    <ClCompile Include="engine\framework\GameObjectList.cpp" />
     <ClCompile Include="engine\framework\GameSystem.cpp" />
     <ClCompile Include="engine\input\Input.cpp" />
     <ClCompile Include="engine\main.cpp" />
@@ -76,6 +77,7 @@
     <ClInclude Include="engine\debug\ImGuiManager.h" />
     <ClInclude Include="engine\debug\Log.h" />
     <ClInclude Include="engine\framework\Framework.h" />
+    <ClInclude Include="engine\framework\GameObjectList.h" />
     <ClInclude Include="engine\framework\GameSystem.h" />
     <ClInclude Include="engine\input\Input.h" />
     <ClInclude Include="engine\math\func\Aithmetic.h" />

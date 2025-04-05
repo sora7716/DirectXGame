@@ -7,12 +7,7 @@
 //初期化
 void TitleScene::Initialize(DirectXBase* directXBase) {
 	//オーディオ
-	audioManager_ = AudioManager::GetInstance();
-	audioManager_->LoadAudio("Alarm01", "Alarm01.wav");
-	audioManager_->FindAudio("Alarm01")->SoundPlayWave(true);
-	//スプライト
-	SpriteManager::GetInstance()->LoadSprite("monsterBall");
-	SpriteManager::GetInstance()->LoadSprite("block");
+	AudioManager::GetInstance()->FindAudio("Alarm01")->SoundPlayWave(true);
 	//2Dオブジェクト
 	for (int i = 0;i < 2;i++) {
 		object2d_[i] = std::make_unique<Object2d>();
@@ -24,25 +19,23 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	worldTransform_[1].scale = { 1.0f,1.0f };
 	worldTransform_[1].rotate = 0.0f;
 	worldTransform_[1].translate = { 1.4f,0.0f };
-	//モデルの読み込み
-	ModelManager::GetInstance()->LoadOBJModel("base", "axis");
+	
 	//3Dオブジェクト
 	for (int i = 0;i < 2;i++) {
 		object3d_[i] = std::make_unique<Object3d>();
 		object3d_[i]->Initialize();
-		object3d_[i]->SetModel("axis");
+		object3d_[i]->SetModel("ziku");
 	}
 	worldTransform3D_[1].translate = { 5.0f,0.0f,0.0f };
 	//カメラ
-	CameraManager::GetInstance()->AddCamera("titleCamera");
 	cameraWorldTransform_.translate = { 0.0f,0.0f,-10.0f };
 	//シーンファクトリーの生成
 	sceneFactory_ = new SceneFactory();
 	//シーンファクトリーのセット
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
 	//スプライト
-	object2d_[0]->SetSprite(SpriteManager::GetInstance()->FindSprite("monsterBall"));
-	object2d_[1]->SetSprite(SpriteManager::GetInstance()->FindSprite("block"));
+	object2d_[0]->SetSprite(SpriteManager::GetInstance()->FindSprite("pokemon"));
+	object2d_[1]->SetSprite(SpriteManager::GetInstance()->FindSprite("enemy"));
 }
 
 //更新
@@ -58,7 +51,7 @@ void TitleScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_LALT)) {
 		//シーンをGameに切り替え
 		SceneManager::GetInstance()->ChangeScene("Game");
-		audioManager_->FindAudio("Alarm01")->StopAudio();
+		AudioManager::GetInstance()->FindAudio("Alarm01")->StopAudio();
 	}
 	//カメラ
 	CameraManager::GetInstance()->FindCamera("titleCamera")->SetRotate(cameraWorldTransform_.rotate);

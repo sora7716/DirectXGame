@@ -1,5 +1,12 @@
 #include "Framework.h"
 #include "engine/2d/TextureManager.h"
+#include "engine/framework/GameObjectList.h"
+#include "engine/math/func/Math.h"
+#include "engine/audio/AudioManager.h"
+#include "engine/input/Input.h"
+#include "engine/3d/ModelManager.h"
+#include "engine/3d/CameraManager.h"
+#include "engine/2d/SpriteManager.h"
 
 //初期化
 void Framework::Initialize() {
@@ -11,19 +18,13 @@ void Framework::Initialize() {
 	//SRVの管理
 	SRVManager::GetInstance()->Initialize(directXBase_.get());
 	//入力処理
-	input_ = Input::GetInstance();
-	input_->Initialize();
+	Input::GetInstance()->Initialize();
 	//テクスチャ管理
 	TextureManager::GetInstance()->Initialize(directXBase_.get());
 	//モデルの管理
 	ModelManager::GetInstance()->Initialize(directXBase_.get());
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Initialize(directXBase_.get());
-	//カメラの管理
-	cameraManager_ = CameraManager::GetInstance();
-	cameraManager_->AddCamera("defaultCamera");
-	//オーディオの管理
-	audioManager_ = AudioManager::GetInstance();
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Initialize(directXBase_.get());
 	//2Dオブジェクトの共通部分
@@ -31,18 +32,20 @@ void Framework::Initialize() {
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
 	//カメラの設定
-	Object2dCommon::GetInstance()->SetDefaultCamera(cameraManager_->FindCamera("defaultCamera"));
-	Object3dCommon::GetInstance()->SetDefaultCamera(cameraManager_->FindCamera("defaultCamera"));
+	Object2dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
+	Object3dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 	//シーンの管理
 	SceneManager::GetInstance()->Initialize(directXBase_.get());
+	//ゲームオブジェクトのリスト
+	GameObjectList::GetInstance()->Initialize();
 }
 
 //更新
 void Framework::Update() {
 	//入力処理
-	input_->Update();
+	Input::GetInstance()->Update();
 	//カメラの管理
-	cameraManager_->Update();
+	CameraManager::GetInstance()->Update();
 	//シーンの管理
 	SceneManager::GetInstance()->Update();
 }
@@ -56,7 +59,7 @@ void Framework::Finalize() {
 	//SRVの管理
 	SRVManager::GetInstance()->Finalize();
 	//入力
-	input_->Finalize();
+	Input::GetInstance()->Finalize();
 	//テクスチャ管理
 	TextureManager::GetInstance()->Finalize();
 	//モデルの管理
@@ -64,9 +67,9 @@ void Framework::Finalize() {
 	//ImGuiの管理
 	ImGuiManager::GetInstance()->Finalize();
 	//カメラの管理
-	cameraManager_->Finalize();
+	CameraManager::GetInstance()->Finalize();
 	//オーディオの管理
-	audioManager_->Finalize();
+	AudioManager::GetInstance()->Finalize();
 	//スプライトの共通部分
 	SpriteCommon::GetInstance()->Finalize();
 	//2Dオブジェクトの共通部分
@@ -79,6 +82,8 @@ void Framework::Finalize() {
 	delete sceneFactory_;
 	//スプライトの管理
 	SpriteManager::GetInstance()->Finalize();
+	//ゲームオブジェクトリスト
+	GameObjectList::GetInstance()->Finalize();
 }
 
 //ゲームループ
@@ -93,7 +98,7 @@ void Framework::Run() {
 		Draw();
 #ifdef _DEBUG
 		//エスケイプを押したらループを抜ける
-		if (input_->TriggerKey(DIK_ESCAPE) && input_->PressKey(DIK_LSHIFT)) {
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && Input::GetInstance()->PressKey(DIK_LSHIFT)) {
 			break;
 		}
 #endif // _DEBUG

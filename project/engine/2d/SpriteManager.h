@@ -19,16 +19,17 @@ public://メンバ関数
 	static SpriteManager* GetInstance();
 
 	/// <summary>
-	/// スプライトの読み込み
+	/// スプライトの読み込み(.png)
 	/// </summary>
+	/// <param name="name">名前</param>
 	/// <param name="filePath">ファイルパス</param>
-	void LoadSprite(const std::string& filePath);
+	void LoadSprite(const std::string& name,const std::string& filePath);
 
 	/// <summary>
 	/// スプライトの検索
 	/// </summary>
-	/// <param name="filePath">ファイルパス</param>
-	Sprite* FindSprite(const std::string& filePath);
+	/// <param name="name">名前</param>
+	Sprite* FindSprite(const std::string& name);
 
 	/// <summary>
 	/// 終了

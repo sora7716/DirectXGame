@@ -12,26 +12,26 @@ SpriteManager* SpriteManager::GetInstance() {
 }
 
 //スプライトの読み込み
-void SpriteManager::LoadSprite(const std::string& filePath) {
+void SpriteManager::LoadSprite(const std::string& name, const std::string& filePath) {
 	//読み込み済みならモデルを検索
-	if (sprites_.contains(filePath)) {
+	if (sprites_.contains(name)) {
 		//読み込み済みなら早期return
 		return;
 	}
 	//モデルの生成とファイル読み込み、初期化
 	std::unique_ptr<Sprite>sprite = std::make_unique<Sprite>();
-	sprite->Initialize("engine/resources/"+filePath+".png");
+	sprite->Initialize("engine/resources/textures/"+filePath+".png");
 
 	//モデルをmapコンテナに格納する 
-	sprites_.insert(std::make_pair(filePath, std::move(sprite)));
+	sprites_.insert(std::make_pair(name, std::move(sprite)));
 }
 
 //スプライトの検索
-Sprite* SpriteManager::FindSprite(const std::string& filePath) {
+Sprite* SpriteManager::FindSprite(const std::string& name) {
 	//読み込み済みモデルを検索
-	if (sprites_.contains(filePath)) {
+	if (sprites_.contains(name)) {
 		//読み込み済みモデルを戻り値としてreturn
-		return sprites_.at(filePath).get();
+		return sprites_.at(name).get();
 	}
 	//ファイル名一致なし
 	return nullptr;

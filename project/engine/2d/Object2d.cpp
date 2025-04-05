@@ -52,9 +52,9 @@ void Object2d::SetSprite(Sprite* sprite) {
 }
 
 //テクスチャの変更
-void Object2d::ChangeTexture(std::string textureFilePath) {
+void Object2d::ChangeTexture(std::string spriteName) {
 	if (sprite_) {
-		sprite_->ChangeTexture(textureFilePath);
+		sprite_->ChangeTexture(spriteName);
 	}
 }
 

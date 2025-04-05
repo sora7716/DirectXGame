@@ -31,8 +31,8 @@ public://メンバ関数
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	/// <param name="textureFilePath">テクスチャのファイルパス</param>
-	void Initialize(std::string textureFilePath);
+	/// <param name="spriteName">スプライト名</param>
+	void Initialize(std::string spriteName);
 
 	/// <summary>
 	/// 描画処理
@@ -42,8 +42,8 @@ public://メンバ関数
 	/// <summary>
 	/// テクスチャの変更
 	/// </summary>
-	/// <param name="textureFilePath">テクスチャファイルパス</param>
-	void ChangeTexture(std::string textureFilePath);
+	/// <param name="spriteName">スプライト名</param>
+	void ChangeTexture(std::string spriteName);
 
 	/// <summary>
 	/// UVの座標変換の更新
@@ -94,7 +94,7 @@ private://メンバ関数
 	void CreateMaterialResorce();
 private://メンバ変数
 	//テクスチャ番号
-	std::string filePath_ = {};
+	std::string spriteName_ = {};
 	Transform transform_ = {};//トランスフォームの情報
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//バッファリソース

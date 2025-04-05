@@ -7,7 +7,7 @@
 #include "WinApi.h"
 
 //初期化
-void Sprite::Initialize(std::string textureFilePath) {
+void Sprite::Initialize(std::string spriteName) {
 	directXBase_ = SpriteCommon::GetInstance()->GetDirectXBase();//DirectXの基盤部分を受け取る
 	//頂点データの生成
 	CreateVertexResorce();
@@ -15,8 +15,8 @@ void Sprite::Initialize(std::string textureFilePath) {
 	CreateIndexResorce();
 	//マテリアルデータの生成
 	CreateMaterialResorce();
-	SpriteCommon::GetInstance()->LoadTexture(textureFilePath);
-	filePath_ = textureFilePath;
+	SpriteCommon::GetInstance()->LoadTexture(spriteName);
+	spriteName_ = spriteName;
 }
 
 //描画処理
@@ -29,14 +29,14 @@ void Sprite::Draw() {
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
 
 	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(filePath_));
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(spriteName_));
 	//描画(DrwaCall/ドローコール)
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
 //テクスチャの変更
-void Sprite::ChangeTexture(std::string textureFilePath) {
-	filePath_ = textureFilePath;
+void Sprite::ChangeTexture(std::string spriteName) {
+	spriteName_ = spriteName;
 }
 
 // UVの座標変換の更新
