@@ -20,7 +20,7 @@ void SpriteManager::LoadSprite(const std::string& filePath) {
 	}
 	//モデルの生成とファイル読み込み、初期化
 	std::unique_ptr<Sprite>sprite = std::make_unique<Sprite>();
-	sprite->Initialize("engine/resources/"+filePath+);
+	sprite->Initialize("engine/resources/"+filePath+".png");
 
 	//モデルをmapコンテナに格納する
 	sprites_.insert(std::make_pair(filePath, std::move(sprite)));
