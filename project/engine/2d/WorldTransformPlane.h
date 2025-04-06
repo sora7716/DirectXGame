@@ -76,7 +76,5 @@ public://メンバ変数
 	Matrix4x4 worldMatrix_ = {};
 	//親
 	const WorldTransformPlane* parent_ = nullptr;
-	//親のローカル座標を保持
-	Matrix4x4 saveTransform_ = {};
 };
 

@@ -12,8 +12,6 @@ void WorldTransformPlane::Initialize(DirectXBase* directXBase) {
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	//ローカル2D座標の初期化
 	transform2d_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
-	//親のローカル座標を保持
-	saveTransform_ = Math::MakeIdentity4x4();
 	//wvpリソースの初期化
 	CreateTransformationMatrixResorce();
 }
@@ -52,10 +50,6 @@ void WorldTransformPlane::UpdateTransform2d() {
 	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	if (parent_) {
 		worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
-		saveTransform_ = parent_->worldMatrix_;
-	}
-	else {
-		worldMatrix_ = worldMatrix_ * saveTransform_;
 	}
 	//画面を切り取るところ
 	PlanePoint vertex = {

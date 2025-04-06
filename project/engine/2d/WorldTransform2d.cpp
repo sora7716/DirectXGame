@@ -12,8 +12,6 @@ void WorldTransform2d::Initialize(DirectXBase* directXBase) {
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
 	//ローカル2D座標の初期化
 	transform2d_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
-	//親のローカル座標を保持
-	saveTransform_ = { {1.0f,1.0f,1.0f},{1.0f,1.0f,1.0f},{1.0f,1.0f,1.0f} }; 
 	//wvpリソースの初期化
 	CreateTransformationMatrixResorce();
 }
@@ -52,10 +50,6 @@ void WorldTransform2d::UpdateTransform2d() {
 	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	if (parent_) {
 		worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
-		saveTransform_ = parent_->transform_;
-	}
-	else {
-		transform_ = transform_ * saveTransform_;
 	}
 	//ProjectionMatrixを作って平行投影行列を書き込む
 	const Matrix4x4& projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
