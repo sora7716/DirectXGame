@@ -7,7 +7,7 @@
 Camera::Camera(){
 	transform_ = { {1.0f,1.0f,1.0f},{},{0.0f,0.0f,-10.0f} };
 	fovY_ = 0.45f;
-	aspectRation_ = float(WinApi::kClientWidth / WinApi::kClientHeight);
+	aspectRation_ = float(WinApi::kClientWidth) / float(WinApi::kClientHeight);
 	nearClip_ = 0.1f;
 	farClip_ = 100.0f;
 }

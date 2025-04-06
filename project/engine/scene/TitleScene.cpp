@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "SceneFactory.h"
 #include "engine/3d/ModelManager.h"
+#include "engine/objectCommon/Object3dCommon.h"
 
 //初期化
 void TitleScene::Initialize(DirectXBase* directXBase) {
@@ -21,8 +22,8 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	object3d_->Initialize();
 	object3d_->SetModel("cube");
 	
-	/*plane_ = std::make_unique<PlaneObject>();
-	plane_->Initialize();*/
+	plane_ = std::make_unique<PlaneObject>();
+	plane_->Initialize();
 }
 
 //更新
@@ -33,11 +34,13 @@ void TitleScene::Update() {
 	object2d_->SetColor(color);
 	object2d_->Update();
 	
-	object3d_->SetTransform(worldTransform3d_);
-	object3d_->Update();
+	//object3d_->SetScale(worldTransform3d_.scale);
+	//object3d_->SetRotate(worldTransform3d_.rotate);
+	//object3d_->SetTranslate(worldTransform3d_.translate);
+	//object3d_->Update();
 
-	/*plane_->SetTransform(worldTransform3d_);
-	plane_->Update();*/
+	plane_->SetTransform(worldTransform3d_);
+	plane_->Update();
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
 	ImGui::DragFloat2("scale", &worldTransform_.scale.x, 0.1f);
@@ -59,8 +62,8 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	object2d_->Draw();
-	object3d_->Draw();
-	//plane_->Draw();
+	//object3d_->Draw();
+	plane_->Draw();
 }
 
 //終了
