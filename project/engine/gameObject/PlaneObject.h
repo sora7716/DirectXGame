@@ -200,6 +200,7 @@ private://メンバ変数
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//親
 	const Matrix4x4* parent_ = nullptr;
+	Matrix4x4 tempWorldMatrix_ = {};
 };
 
 

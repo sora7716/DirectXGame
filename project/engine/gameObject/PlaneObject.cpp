@@ -35,6 +35,11 @@ void PlaneObject::Update() {
 	//親子付け
 	if (parent_) {
 		worldMatrix = worldMatrix * parent_;
+		tempWorldMatrix_ = worldMatrix;
+	}
+	else {
+		worldMatrix += tempWorldMatrix_;
+		tempWorldMatrix_ = {};
 	}
 	//wvpの書き込み
 	if (camera_) {

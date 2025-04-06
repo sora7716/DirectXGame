@@ -46,8 +46,8 @@ private://メンバ変数
 	std::unique_ptr<Object3d>object3d_ = nullptr;
 	Transform worldTransform3d_ = {};
 	//平面
-	std::unique_ptr<PlaneObject>plane_ = nullptr;
-	Transform2d planeTransform_ = {};
+	std::unique_ptr<PlaneObject>plane_[2] = { nullptr };
+	Transform2d planeTransform_[2] = {};
 };
 
 
