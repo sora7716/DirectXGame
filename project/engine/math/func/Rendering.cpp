@@ -163,3 +163,21 @@ Matrix4x4 Rendering::MakeViewportMatrix(const float& left, const float& top, con
 	};
 	return result;
 }
+
+//乗算
+Transform Transform::operator*(const Transform transform){
+	Transform result;
+	result.scale = this->scale * transform.scale;
+	result.rotate = this->rotate * transform.rotate;
+	result.translate = this->translate * transform.translate;
+	return result;
+}
+
+//乗算
+Transform2d Transform2d::operator*(const Transform2d transform){
+	Transform2d result;
+	result.scale = this->scale * transform.scale;
+	result.rotate = this->rotate * transform.rotate;
+	result.translate = this->translate * transform.translate;
+	return result;
+}

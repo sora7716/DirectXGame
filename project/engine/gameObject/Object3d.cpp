@@ -18,6 +18,8 @@ void Object3d::Initialize() {
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
 	camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
+	//親のワールド座標を初期化
+	saveWorldMatrix_ = Math::MakeIdentity4x4();
 }
 
 //更新
@@ -27,6 +29,10 @@ void Object3d::Update() {
 	//親子付け
 	if (parent_) {
 		worldMatrix = worldMatrix * parent_;
+		saveWorldMatrix_ = *parent_;
+	}
+	else {
+		worldMatrix = worldMatrix * saveWorldMatrix_;
 	}
 	//wvpの書き込み
 	if (camera_) {

@@ -21,6 +21,8 @@ void PlaneObject::Initialize() {
 	camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
 	//モデルの生成
 	model_ = ModelManager::GetInstance()->FindModel("plane");
+	//親のワールド座標を保存
+	saveWorldMatrix_ = Math::MakeIdentity4x4();
 }
 
 //更新
@@ -35,11 +37,10 @@ void PlaneObject::Update() {
 	//親子付け
 	if (parent_) {
 		worldMatrix = worldMatrix * parent_;
-		tempWorldMatrix_ = worldMatrix;
+		saveWorldMatrix_ = *parent_;
 	}
 	else {
-		worldMatrix += tempWorldMatrix_;
-		tempWorldMatrix_ = {};
+		worldMatrix = worldMatrix * saveWorldMatrix_;
 	}
 	//wvpの書き込み
 	if (camera_) {
@@ -48,10 +49,10 @@ void PlaneObject::Update() {
 			-(float)WinApi::kClientWidth / 2.0f,
 			(float)WinApi::kClientHeight / 2.0f,
 			(float)WinApi::kClientWidth / 2.0f,
-			-(float)WinApi::kClientHeight / 2.0f 
+			-(float)WinApi::kClientHeight / 2.0f
 		};
 		const Matrix4x4& projectionMatrix = Rendering::MakeOrthographicMatrix(vertex.left, vertex.top, vertex.right, vertex.bottom, 0.0f, 100.0f);
-		const Matrix4x4& viewProjectionMatrix = camera_->GetViewMatrix()* projectionMatrix;
+		const Matrix4x4& viewProjectionMatrix = camera_->GetViewMatrix() * projectionMatrix;
 		wvpData_->WVP = worldMatrix * viewProjectionMatrix;
 	}
 	else {

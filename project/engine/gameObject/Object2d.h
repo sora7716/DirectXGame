@@ -1,9 +1,11 @@
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/math/func/Rendering.h"
+#include "engine/2d/WorldTransform2d.h"
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
+#include <memory>
 //前方宣言
 class Object2dCommon;
 class DirectXBase;
@@ -103,10 +105,10 @@ public://メンバ関数
 	const Camera* GetCamera()const;
 
 	/// <summary>
-	/// ワールド行列のゲッター
+	/// ワールドトランスフォームのゲッター
 	/// </summary>
-	/// <returns>ワールド行列</returns>
-	const Matrix4x4& GetWorldMatrix()const;
+	/// <returns>ワールドトランスフォーム</returns>
+	WorldTransform2d* GetWorldTransform();
 
 	/// <summary>
 	/// サイズのセッター
@@ -166,53 +168,31 @@ public://メンバ関数
 	/// 親のセッター
 	/// </summary>
 	/// <param name="parent">親</param>
-	void SetParent(const Matrix4x4* parent);
+	void SetParent(const WorldTransform2d* parent);
 
 private://メンバ関数
-	/// <summary>
-	/// 座標変換行列リソースの生成
-	/// </summary>
-	void CreateTransformationMatrixResorce();
-
 	/// <summary>
 	/// 光源の生成
 	/// </summary>
 	void CreateDirectionLight();
-
-	/// <summary>
-    /// 座標変換の更新
-    /// </summary>
-	void UpdateTransform();
 private://メンバ変数
-	//ローカル座標
-	Transform transform_ = {};
-	//ローカル座標
-	Transform2d transform2d_ = {
-		.scale = { 90.0f,90.0f },
-		.rotate = 0.0f,
-		.translate = {0.0f,0.0f}
-	};
 	//UV座標
 	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
-	//カメラ
-	Camera* camera_ = nullptr;
 	//スプライトの共通部分
 	Object2dCommon* object2dCommon_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//バッファリソース
-	ComPtr<ID3D12Resource>wvpResoruce_ = nullptr;//座標変換行列
 	ComPtr<ID3D12Resource>directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
 	DirectionalLight* directionalLightData_ = nullptr;
-	TransformationMatrix* wvpData_ = nullptr;
 	//スプライト
 	Sprite* sprite_ = nullptr;
-	//親
-	const Matrix4x4* parent_ = nullptr;
+	//ワールドトランスフォーム
+	std::unique_ptr<WorldTransform2d> worldTransform2d_ = nullptr;
 };
 

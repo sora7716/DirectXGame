@@ -8,6 +8,8 @@ typedef struct Transform {
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
+	//乗算
+	Transform operator*(const Transform transform);
 }Transform;
 
 //Transform2D情報
@@ -15,6 +17,8 @@ typedef struct Transform2d {
 	Vector2 scale;
 	float rotate;
 	Vector2 translate;
+	//乗算
+	Transform2d operator*(const Transform2d transform);
 }Transform2D;
 
 //TransformationMatrix

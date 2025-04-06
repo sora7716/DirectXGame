@@ -194,5 +194,6 @@ private://メンバ変数
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//親
 	const Matrix4x4* parent_ = nullptr;
+	Matrix4x4 saveWorldMatrix_ = {};//親のワールド座標の保存場所
 };
 

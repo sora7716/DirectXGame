@@ -19,7 +19,7 @@ typedef struct PlanePoint {
 /// <summary>
 /// 平面のオブジェクト
 /// </summary>
-class PlaneObject{
+class PlaneObject {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -200,7 +200,7 @@ private://メンバ変数
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//親
 	const Matrix4x4* parent_ = nullptr;
-	Matrix4x4 tempWorldMatrix_ = {};
+	Matrix4x4 saveWorldMatrix_ = {};
 };
 
 
