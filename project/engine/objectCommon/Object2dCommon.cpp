@@ -1,5 +1,5 @@
 #include "Object2dCommon.h"
-#include "engine/3d/Camera.h"
+#include "engine/gameObject/Camera.h"
 #include <cassert>
 
 //インスタンスのゲッター
