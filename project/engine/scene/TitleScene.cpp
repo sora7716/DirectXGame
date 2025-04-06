@@ -17,9 +17,12 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	object3d_ = std::make_unique<Object3d>();
 	worldTransform3d_.scale = { 1.0f,1.0f,1.0f };
 	worldTransform3d_.rotate = {};
-	worldTransform3d_.translate = {0.0f,0.0f,-100.0f};
+	worldTransform3d_.translate = {0.0f,0.0f,0.0f};
 	object3d_->Initialize();
 	object3d_->SetModel("cube");
+	
+	/*plane_ = std::make_unique<PlaneObject>();
+	plane_->Initialize();*/
 }
 
 //更新
@@ -29,10 +32,12 @@ void TitleScene::Update() {
 	object2d_->SetTransform(worldTransform_);
 	object2d_->SetColor(color);
 	object2d_->Update();
-
+	
 	object3d_->SetTransform(worldTransform3d_);
-	object3d_->SetTexture("block");
 	object3d_->Update();
+
+	/*plane_->SetTransform(worldTransform3d_);
+	plane_->Update();*/
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
 	ImGui::DragFloat2("scale", &worldTransform_.scale.x, 0.1f);
@@ -55,6 +60,7 @@ void TitleScene::Update() {
 void TitleScene::Draw() {
 	object2d_->Draw();
 	object3d_->Draw();
+	//plane_->Draw();
 }
 
 //終了

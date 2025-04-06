@@ -10,10 +10,6 @@ Camera::Camera(){
 	aspectRation_ = float(WinApi::kClientWidth / WinApi::kClientHeight);
 	nearClip_ = 0.1f;
 	farClip_ = 100.0f;
-	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	viewMatrix_ = ~worldMatrix_;
-	projectionMatrix_ = Rendering::MakePerspectiveFovMatrix(fovY_, aspectRation_, nearClip_, farClip_);
-	viewProjectionMatrix_ = viewMatrix_ * projectionMatrix_;
 }
 
 //更新

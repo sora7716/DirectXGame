@@ -197,7 +197,7 @@ void Object2d::UpdateTransform() {
 		worldMatrix = worldMatrix * parent_;
 	}
 	//ProjectionMatrixを作って平行投影行列を書き込む
-	Matrix4x4 projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
+	const Matrix4x4& projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
 	//wvpの書き込み
 	if (camera_) {
 		const Matrix4x4& viewProjectionMatrix = camera_->GetViewMatrix() * projectionMatrix;

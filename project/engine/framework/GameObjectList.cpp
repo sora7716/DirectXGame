@@ -51,6 +51,8 @@ void GameObjectList::LoadSprite() {
 void GameObjectList::LoadModel() {
 	//モデルの読み込み
 	ModelManager::GetInstance()->LoadOBJModel("cube", "cube", "cube");
+	//平面
+	ModelManager::GetInstance()->LoadOBJModel("plane", "plane", "plane");
 }
 
 //カメラの生成

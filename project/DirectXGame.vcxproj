@@ -35,6 +35,7 @@
     <ClCompile Include="engine\gameObject\CameraManager.cpp" />
     <ClCompile Include="engine\gameObject\Object2d.cpp" />
     <ClCompile Include="engine\gameObject\Object3d.cpp" />
+    <ClCompile Include="engine\gameObject\PlaneObject.cpp" />
     <ClCompile Include="engine\input\Input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="engine\gameObject\CameraManager.h" />
     <ClInclude Include="engine\gameObject\Object2d.h" />
     <ClInclude Include="engine\gameObject\Object3d.h" />
+    <ClInclude Include="engine\gameObject\PlaneObject.h" />
     <ClInclude Include="engine\input\Input.h" />
     <ClInclude Include="engine\math\func\Aithmetic.h" />
     <ClInclude Include="engine\math\func\Math.h" />
