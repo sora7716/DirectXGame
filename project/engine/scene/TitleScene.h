@@ -47,6 +47,7 @@ private://メンバ変数
 	Transform worldTransform3d_ = {};
 	//平面
 	std::unique_ptr<PlaneObject>plane_ = nullptr;
+	Transform2d planeTransform_ = {};
 };
 
 

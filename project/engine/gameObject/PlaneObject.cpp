@@ -15,7 +15,7 @@ void PlaneObject::Initialize() {
 	//光源の生成
 	CreateDirectionLight();
 	//Transform変数を作る
-	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	transform2d_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
 	camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
@@ -25,15 +25,27 @@ void PlaneObject::Initialize() {
 
 //更新
 void PlaneObject::Update() {
+	//トランスフォーム
+	Transform transform;
+	transform.scale = { transform2d_.scale.x,transform2d_.scale.y,1.0f };
+	transform.rotate = { 0.0f,0.0f,transform2d_.rotate };
+	transform.translate = { transform2d_.translate.x,transform2d_.translate.y,1.0f };
 	//ワールドマトリックスの生成
-	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	//親子付け
 	if (parent_) {
 		worldMatrix = worldMatrix * parent_;
 	}
 	//wvpの書き込み
 	if (camera_) {
-		const Matrix4x4& projectionMatrix = Rendering::MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApi::kClientWidth, (float)WinApi::kClientHeight, 0.0f, 100.0f);
+		//画面を切り取るところ
+		PlanePoint vertex = {
+			-(float)WinApi::kClientWidth / 2.0f,
+			(float)WinApi::kClientHeight / 2.0f,
+			(float)WinApi::kClientWidth / 2.0f,
+			-(float)WinApi::kClientHeight / 2.0f 
+		};
+		const Matrix4x4& projectionMatrix = Rendering::MakeOrthographicMatrix(vertex.left, vertex.top, vertex.right, vertex.bottom, 0.0f, 100.0f);
 		const Matrix4x4& viewProjectionMatrix = camera_->GetViewMatrix()* projectionMatrix;
 		wvpData_->WVP = worldMatrix * viewProjectionMatrix;
 	}
@@ -70,23 +82,23 @@ void PlaneObject::SetCamera(Camera* camera) {
 }
 
 // スケールのセッター
-void PlaneObject::SetScale(const Vector3& scale) {
-	transform_.scale = scale;
+void PlaneObject::SetScale(const Vector2& scale) {
+	transform2d_.scale = scale;
 }
 
 // 回転のセッター
-void PlaneObject::SetRotate(const Vector3& rotate) {
-	transform_.rotate = rotate;
+void PlaneObject::SetRotate(float rotate) {
+	transform2d_.rotate = rotate;
 }
 
 // 平行移動のセッター
-void PlaneObject::SetTranslate(const Vector3& translate) {
-	transform_.translate = translate;
+void PlaneObject::SetTranslate(const Vector2& translate) {
+	transform2d_.translate = translate;
 }
 
 //トランスフォームのセッター
-void PlaneObject::SetTransform(const Transform& transform) {
-	transform_ = transform;
+void PlaneObject::SetTransform(const Transform2d& transform2d) {
+	transform2d_ = transform2d;
 }
 
 // uvスケールのセッター
@@ -124,21 +136,20 @@ void PlaneObject::SetTexture(const std::string& filePath) {
 }
 
 // スケールのゲッター
-const Vector3& PlaneObject::GetScale() const {
+const Vector2& PlaneObject::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform_.scale;
+	return transform2d_.scale;
 }
 
 // 回転のゲッター
-const Vector3& PlaneObject::GetRotate() const {
-	// TODO: return ステートメントをここに挿入します
-	return transform_.rotate;
+const float PlaneObject::GetRotate() const {
+	return transform2d_.rotate;
 }
 
 // 平行移動のゲッター
-const Vector3& PlaneObject::GetTranslate() const {
+const Vector2& PlaneObject::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform_.translate;
+	return transform2d_.translate;
 }
 
 // uvスケールのゲッター

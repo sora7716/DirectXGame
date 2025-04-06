@@ -9,6 +9,13 @@
 //前方宣言
 class Camera;
 
+//正規化デバイスするときに使用する
+typedef struct PlanePoint {
+	float left;
+	float top;
+	float right;
+	float bottom;
+}PlanePoint;
 /// <summary>
 /// 平面のオブジェクト
 /// </summary>
@@ -57,25 +64,25 @@ public://メンバ関数
 	/// スケールのセッター
 	/// </summary>
 	/// <param name="scale">スケール</param>
-	void SetScale(const Vector3& scale);
+	void SetScale(const Vector2& scale);
 
 	/// <summary>
 	/// 回転のセッター
 	/// </summary>
 	/// <param name="rotate">回転</param>
-	void SetRotate(const Vector3& rotate);
+	void SetRotate(float rotate);
 
 	/// <summary>
 	/// 平行移動のセッター
 	/// </summary>
 	/// <param name="translate">平行移動</param>
-	void SetTranslate(const Vector3& translate);
+	void SetTranslate(const Vector2& translate);
 
 	/// <summary>
 	/// トランスフォームのセッター
 	/// </summary>
-	/// <param name="transform">トランスフォーム</param>
-	void SetTransform(const Transform& transform);
+	/// <param name="transform">トランスフォーム2D</param>
+	void SetTransform(const Transform2d& transform2d);
 
 	/// <summary>
 	/// uvスケールのセッター
@@ -117,19 +124,19 @@ public://メンバ関数
 	/// スケールのゲッター
 	/// </summary>
 	/// <returns>スケール</returns>
-	const Vector3& GetScale()const;
+	const Vector2& GetScale()const;
 
 	/// <summary>
 	/// 回転のゲッター
 	/// </summary>
 	/// <returns>回転</returns>
-	const Vector3& GetRotate()const;
+	const float GetRotate()const;
 
 	/// <summary>
 	/// 平行移動のゲッター
 	/// </summary>
 	/// <returns>平行移動</returns>
-	const Vector3& GetTranslate()const;
+	const Vector2& GetTranslate()const;
 
 	/// <summary>
 	/// uvスケールのゲッター
@@ -172,7 +179,7 @@ private://メンバ関数
 	void CreateDirectionLight();
 private://メンバ変数
 	//ローカル座標
-	Transform transform_ = {};
+	Transform2d transform2d_ = {};
 	//UV座標
 	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },

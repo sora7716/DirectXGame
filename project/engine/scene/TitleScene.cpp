@@ -24,6 +24,10 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	
 	plane_ = std::make_unique<PlaneObject>();
 	plane_->Initialize();
+	plane_->SetTexture("block");
+	planeTransform_.scale = { 100.0f,100.0f };
+	planeTransform_.rotate = 0.0f;
+	planeTransform_.translate = { 100.0f,100.0f };
 }
 
 //更新
@@ -34,12 +38,12 @@ void TitleScene::Update() {
 	object2d_->SetColor(color);
 	object2d_->Update();
 	
-	//object3d_->SetScale(worldTransform3d_.scale);
-	//object3d_->SetRotate(worldTransform3d_.rotate);
-	//object3d_->SetTranslate(worldTransform3d_.translate);
-	//object3d_->Update();
+	object3d_->SetScale(worldTransform3d_.scale);
+	object3d_->SetRotate(worldTransform3d_.rotate);
+	object3d_->SetTranslate(worldTransform3d_.translate);
+	object3d_->Update();
 
-	plane_->SetTransform(worldTransform3d_);
+	plane_->SetTransform(planeTransform_);
 	plane_->Update();
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
@@ -47,6 +51,12 @@ void TitleScene::Update() {
 	ImGui::DragFloat("rotate", &worldTransform_.rotate, 0.1f);
 	ImGui::DragFloat2("translate", &worldTransform_.translate.x, 0.1f);
 	ImGui::ColorEdit4("color", &color.x);
+	ImGui::End();
+
+	ImGui::Begin("quad");
+	ImGui::DragFloat2("scale", &planeTransform_.scale.x, 0.1f);
+	ImGui::DragFloat("rotate", &planeTransform_.rotate, 0.1f);
+	ImGui::DragFloat2("translate", &planeTransform_.translate.x, 0.1f);
 	ImGui::End();
 
 	ImGui::Begin("3dModel");
@@ -62,7 +72,7 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	object2d_->Draw();
-	//object3d_->Draw();
+	object3d_->Draw();
 	plane_->Draw();
 }
 
