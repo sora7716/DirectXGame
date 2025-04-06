@@ -125,7 +125,7 @@ Matrix4x4 Rendering::MakeSTRMatrix(const Vector3& scale, const Vector3& rotate, 
 }
 
 // UVのアフィン変換
-Matrix4x4 Rendering::MakeUVAffineMatrix(const Vector3& scale, float rotate, const Vector3& translate){
+Matrix4x4 Rendering::MakeUVAffineMatrix(const Vector3& scale, float rotate, const Vector3& translate) {
 	return MakeScaleMatrix(scale) * MakeRotateZMatrix(rotate) * MakeTranslateMatrix(translate);
 }
 
@@ -164,8 +164,43 @@ Matrix4x4 Rendering::MakeViewportMatrix(const float& left, const float& top, con
 	return result;
 }
 
+//スケールのゲッター
+const Vector3 Rendering::GetScale(const Matrix4x4& m) {
+	Vector3 scele;
+	scele.x = sqrt(m.m[0][0] * m.m[0][0] + m.m[0][1] * m.m[0][1] + m.m[0][2] * m.m[0][2]);
+	scele.y = sqrt(m.m[1][0] * m.m[1][0] + m.m[1][1] * m.m[1][1] + m.m[1][2] * m.m[1][2]);
+	scele.z = sqrt(m.m[2][0] * m.m[2][0] + m.m[2][1] * m.m[2][1] + m.m[2][2] * m.m[2][2]);
+	return scele;
+}
+
+//回転のゲッター
+const Vector3 Rendering::GetRotate(const Matrix4x4& m) {
+	Vector3 scele;
+	scele.x = sqrt(m.m[0][0] * m.m[0][0] + m.m[0][1] * m.m[0][1] + m.m[0][2] * m.m[0][2]);
+	scele.y = sqrt(m.m[1][0] * m.m[1][0] + m.m[1][1] * m.m[1][1] + m.m[1][2] * m.m[1][2]);
+	scele.z = sqrt(m.m[2][0] * m.m[2][0] + m.m[2][1] * m.m[2][1] + m.m[2][2] * m.m[2][2]);
+	Matrix3x3 rotationMatrix = {
+		{
+			{ m.m[0][0] / scele.x, m.m[0][1] / scele.x, m.m[0][2] / scele.x },
+	        { m.m[1][0] / scele.y, m.m[1][1] / scele.y, m.m[1][2] / scele.y },
+	        { m.m[2][0] / scele.z, m.m[2][1] / scele.z, m.m[2][2] / scele.z }
+		}
+	};
+	float pitch = atan2(-rotationMatrix.m[1][2], rotationMatrix.m[2][2]);
+	float yaw = atan2(rotationMatrix.m[0][2], sqrt(rotationMatrix.m[0][0] * rotationMatrix.m[0][0] + rotationMatrix.m[1][0] * rotationMatrix.m[1][0]));
+	float roll = atan2(rotationMatrix.m[1][0], rotationMatrix.m[0][0]);
+	Vector3 rotation= Vector3(pitch, yaw, roll);
+	return rotation;
+}
+
+//平行移動のゲッター
+const Vector3 Rendering::GetTranslate(const Matrix4x4& m) {
+	Vector3 translate= Vector3(m.m[3][0], m.m[3][1], m.m[3][2]);
+	return translate;
+}
+
 //乗算
-Transform Transform::operator*(const Transform transform){
+Transform Transform::operator*(const Transform transform) {
 	Transform result;
 	result.scale = this->scale * transform.scale;
 	result.rotate = this->rotate * transform.rotate;
@@ -174,7 +209,7 @@ Transform Transform::operator*(const Transform transform){
 }
 
 //乗算
-Transform2d Transform2d::operator*(const Transform2d transform){
+Transform2d Transform2d::operator*(const Transform2d transform) {
 	Transform2d result;
 	result.scale = this->scale * transform.scale;
 	result.rotate = this->rotate * transform.rotate;

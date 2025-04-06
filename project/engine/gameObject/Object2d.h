@@ -8,8 +8,6 @@
 #include <memory>
 //前方宣言
 class Object2dCommon;
-class DirectXBase;
-class Camera;
 class Sprite;
 
 /// <summary>
@@ -193,6 +191,6 @@ private://メンバ変数
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransform2d> worldTransform2d_ = nullptr;
+	std::unique_ptr<WorldTransform2d> worldTransform_ = nullptr;
 };
 

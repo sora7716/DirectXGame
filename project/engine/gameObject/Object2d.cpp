@@ -15,16 +15,16 @@ void Object2d::Initialize() {
 	//uvTransform変数を作る
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//ワールドトランスフォームの生成と初期化
-	worldTransform2d_ = std::make_unique<WorldTransform2d>();
-	worldTransform2d_->Initialize(directXBase_);
+	worldTransform_ = std::make_unique<WorldTransform2d>();
+	worldTransform_->Initialize(directXBase_);
 	//カメラにデフォルトカメラを代入
-	worldTransform2d_->camera_ = object2dCommon_->GetDefaultCamera();
+	worldTransform_->camera_ = object2dCommon_->GetDefaultCamera();
 }
 
 //更新
 void Object2d::Update() {
 	//ワールドトランスフォームの更新
-	worldTransform2d_->Update();
+	worldTransform_->Update();
 	//UV座標の更新
 	if (sprite_) {
 		sprite_->UpdateUVTransform(uvTransform_);
@@ -34,7 +34,7 @@ void Object2d::Update() {
 //描画
 void Object2d::Draw() {
 	//ワールドトランスフォームの描画
-	worldTransform2d_->Draw();
+	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 	//3Dモデルが割り当てられていれば描画
@@ -58,18 +58,18 @@ void Object2d::ChangeTexture(std::string spriteName) {
 //サイズのゲッター
 const Vector2& Object2d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform2d_->transform2d_.scale;
+	return worldTransform_->transform2d_.scale;
 }
 
 //回転のゲッター
 float Object2d::GetRotate() const {
-	return worldTransform2d_->transform2d_.rotate;
+	return worldTransform_->transform2d_.rotate;
 }
 
 //位置のゲッター
 const Vector2& Object2d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform2d_->transform2d_.translate;
+	return worldTransform_->transform2d_.translate;
 }
 
 //UVのサイズのゲッター
@@ -101,33 +101,33 @@ const Vector4& Object2d::GetColor() const {
 
 //カメラのゲッター
 const Camera* Object2d::GetCamera() const {
-	return worldTransform2d_->camera_;
+	return worldTransform_->camera_;
 }
 
 //ワールドトランスフォームのゲッター
 WorldTransform2d* Object2d::GetWorldTransform(){
-	return worldTransform2d_.get();
+	return worldTransform_.get();
 }
 
 
 //サイズのセッター
 void Object2d::SetScale(const Vector2& scale) {
-	worldTransform2d_->transform2d_.scale = scale;
+	worldTransform_->transform2d_.scale = scale;
 }
 
 //回転のセッター
 void Object2d::SetRotate(float rotate) {
-	worldTransform2d_->transform2d_.rotate = rotate;
+	worldTransform_->transform2d_.rotate = rotate;
 }
 
 //位置のセッター
 void Object2d::SetTranslate(const Vector2& translate) {
-	worldTransform2d_->transform2d_.translate = translate;
+	worldTransform_->transform2d_.translate = translate;
 }
 
 //トランスフォームのセッター
 void Object2d::SetTransform(const Transform2d& transform2d){
-	worldTransform2d_->transform2d_ = transform2d;
+	worldTransform_->transform2d_ = transform2d;
 }
 
 //UVのサイズのセッター
@@ -154,12 +154,12 @@ void Object2d::SetColor(const Vector4& color) {
 
 //カメラのセッター
 void Object2d::SetCamera(Camera* camera) {
-	worldTransform2d_->camera_ = camera;
+	worldTransform_->camera_ = camera;
 }
 
 //親のセッター
 void Object2d::SetParent(const WorldTransform2d* parent) {
-	worldTransform2d_->parent_ = parent;
+	worldTransform_->parent_ = parent;
 }
 
 //光源の生成

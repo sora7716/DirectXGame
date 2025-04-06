@@ -50,10 +50,11 @@ void TitleScene::Update() {
 
 	for (int i = 0; i < 2; i++) {
 		plane_[i]->SetTransform(planeTransform_[i]);
-		plane_[i]->Update();
 	}
+	plane_[0]->Update();
+	plane_[1]->Update();
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		plane_[1]->SetParent(&plane_[0]->GetWorldMatrix());
+		plane_[1]->SetParent(plane_[0]->GetWorldTransform());
 	}
 	else if (Input::GetInstance()->TriggerKey(DIK_S)) {
 		plane_[1]->SetParent(nullptr);

@@ -2,9 +2,11 @@ C:\Subject\CG\CG2\project\engine\2d\Sprite.cpp;C:\Subject\CG\CG2\generated\obj\C
 C:\Subject\CG\CG2\project\engine\2d\SpriteManager.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\SpriteManager.obj
 C:\Subject\CG\CG2\project\engine\2d\TextureManager.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\TextureManager.obj
 C:\Subject\CG\CG2\project\engine\2d\WorldTransform2d.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\WorldTransform2d.obj
+C:\Subject\CG\CG2\project\engine\2d\WorldTransformPlane.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\WorldTransformPlane.obj
 C:\Subject\CG\CG2\project\engine\3d\Model.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Model.obj
 C:\Subject\CG\CG2\project\engine\3d\ModelCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\ModelCommon.obj
 C:\Subject\CG\CG2\project\engine\3d\ModelManager.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\ModelManager.obj
+C:\Subject\CG\CG2\project\engine\3d\WorldTransform.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\WorldTransform.obj
 C:\Subject\CG\CG2\project\engine\audio\Audio.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Audio.obj
 C:\Subject\CG\CG2\project\engine\audio\AudioManager.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\AudioManager.obj
 C:\Subject\CG\CG2\project\engine\base\D3DResourceLeakChecker.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\D3DResourceLeakChecker.obj

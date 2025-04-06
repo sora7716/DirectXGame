@@ -350,10 +350,10 @@
     <ClInclude Include="engine\2d\WorldTransform2d.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="WorldTransform.h">
+    <ClInclude Include="engine\2d\WorldTransformPlane.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="engine\2d\WorldTransformPlane.h">
+    <ClInclude Include="engine\3d\WorldTransform.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,21 +1,13 @@
 #pragma once
 #include "engine/math/ResourceData.h"
+#include "engine/2d/WorldTransformPlane.h"
 #include "engine/3d/Model.h"
 #include <vector>
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
+#include <memory>
 
-//前方宣言
-class Camera;
-
-//正規化デバイスするときに使用する
-typedef struct PlanePoint {
-	float left;
-	float top;
-	float right;
-	float bottom;
-}PlanePoint;
 /// <summary>
 /// 平面のオブジェクト
 /// </summary>
@@ -112,7 +104,7 @@ public://メンバ関数
 	/// 親のセッター
 	/// </summary>
 	/// <param name="parent">親</param>
-	void SetParent(const Matrix4x4* parent);
+	void SetParent(const WorldTransformPlane* parent);
 
 	/// <summary>
 	/// テクスチャの変更(.pngはいらない)
@@ -163,44 +155,32 @@ public://メンバ関数
 	const Vector4& GetColor()const;
 
 	/// <summary>
-	/// ワールド行列のゲッター
+	/// ワールドトランスフォームのゲッター
 	/// </summary>
-	/// <returns>ワールド行列</returns>
-	const Matrix4x4& GetWorldMatrix()const;
+	/// <returns>ワールドトランスフォームのゲッター</returns>
+	const WorldTransformPlane* GetWorldTransform()const;
 private://メンバ関数
-	/// <summary>
-	/// 座標変換行列リソースの生成
-	/// </summary>
-	void CreateTransformationMatrixResource();
-
 	/// <summary>
 	/// 光源の生成
 	/// </summary>
 	void CreateDirectionLight();
 private://メンバ変数
-	//ローカル座標
-	Transform2d transform2d_ = {};
 	//UV座標
 	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
-	//カメラ
-	Camera* camera_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//3Dモデル
 	Model* model_ = nullptr;
 	//バッファリソース
-	ComPtr<ID3D12Resource> wvpResource_ = nullptr;//座標変換行列
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
-	TransformationMatrix* wvpData_ = nullptr;//座標変換行列
 	DirectionalLight* directionalLightData_ = nullptr;//光源
-	//親
-	const Matrix4x4* parent_ = nullptr;
-	Matrix4x4 saveWorldMatrix_ = {};
+	//ワールドトランスフォーム
+	std::unique_ptr<WorldTransformPlane>worldTransform_ = nullptr;
 };
 
 

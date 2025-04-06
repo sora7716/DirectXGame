@@ -166,5 +166,26 @@ public://メンバ関数
 	/// <param name="maxDepth">最大深度値</param>
 	/// <returns>ViewportMatrix</returns>
 	static Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth);
+
+	/// <summary>
+	/// スケールのゲッター
+	/// </summary>
+	/// <param name="m">行列</param>
+	/// <returns>スケール</returns>
+	static const Vector3 GetScale(const Matrix4x4& m);
+
+	/// <summary>
+	/// 回転のゲッター
+	/// </summary>
+	/// <param name="m">行列</param>
+	/// <returns>回転</returns>
+	static const Vector3 GetRotate(const Matrix4x4& m);
+
+	/// <summary>
+	/// 平行移動のゲッター
+	/// </summary>
+	/// <param name="m">行列</param>
+	/// <returns>平行移動</returns>
+	static const Vector3 GetTranslate(const Matrix4x4& m);
 };
 
