@@ -19,7 +19,7 @@ typedef struct PlanePoint {
 /// <summary>
 /// ワールドトランスフォーム(平面用)
 /// </summary>
-class WorldTransformPlane{
+class WorldTransformPlane {
 private://エイリアステンプレート
 	template<class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -58,6 +58,7 @@ private://メンバ関数
 	/// ローカル座標の更新
 	/// </summary>
 	void UpdateTransform2d();
+
 private://メンバ変数
 	//ローカル座標
 	Transform transform_ = {};

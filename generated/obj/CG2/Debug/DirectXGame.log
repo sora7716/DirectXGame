@@ -1,4 +1,13 @@
-﻿  WorldTransformPlane.cpp
-  DirectXGame.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\CG2.exe
+﻿  Framework.cpp
+  GameSystem.cpp
+  Object3d.cpp
+  main.cpp
+  AbstractSceneFactory.cpp
+  GameScene.cpp
+  IScene.cpp
+  SceneFactory.cpp
+  SceneManager.cpp
+  TitleScene.cpp
+  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。

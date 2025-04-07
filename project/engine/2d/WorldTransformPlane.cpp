@@ -8,9 +8,9 @@
 void WorldTransformPlane::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分の記録
 	directXBase_ = directXBase;
-	//ローカル座標
+	//ワールド座標
 	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
-	//ローカル2D座標の初期化
+	//ワールド2D座標の初期化
 	transform2d_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//wvpリソースの初期化
 	CreateTransformationMatrixResorce();
@@ -71,4 +71,5 @@ void WorldTransformPlane::UpdateTransform2d() {
 	//ワールド行列を送信
 	wvpData_->World = worldMatrix_;
 }
+
 

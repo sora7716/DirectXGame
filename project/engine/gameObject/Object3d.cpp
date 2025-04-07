@@ -9,41 +9,21 @@
 void Object3d::Initialize() {
 	//DirectXの基盤部分を受け取る
 	directXBase_ = Object3dCommon::GetInstance()->GetDirectXBase();
-	//座標変換行列の生成
-	CreateTransformationMatrixResource();
 	//光源の生成
 	CreateDirectionLight();
-	//Transform変数を作る
-	transform_ = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f} };
+	//ワールドトランスフォームの生成、初期化
+	worldTransform_ = std::make_unique<WorldTransform>();
+	worldTransform_->Initialize(directXBase_);
+	//uv座標
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
-	camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
-	//親のワールド座標を初期化
-	saveWorldMatrix_ = Math::MakeIdentity4x4();
+	worldTransform_->camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
 }
 
 //更新
 void Object3d::Update() {
-	//ワールドマトリックスの生成
-	Matrix4x4 worldMatrix = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
-	//親子付け
-	if (parent_) {
-		worldMatrix = worldMatrix * parent_;
-		saveWorldMatrix_ = *parent_;
-	}
-	else {
-		worldMatrix = worldMatrix * saveWorldMatrix_;
-	}
-	//wvpの書き込み
-	if (camera_) {
-		const Matrix4x4& viewProjectionMatrix = camera_->GetViewProjectionMatrix();
-		wvpData_->WVP = worldMatrix * viewProjectionMatrix;
-	}
-	else {
-		wvpData_->WVP = worldMatrix;
-	}
-	//worldTransformの書き込み
-	wvpData_->World = worldMatrix;
+	//ワールドトランスフォーム
+	worldTransform_->Update();
 	if (model_) {
 		model_->UVTransform(uvTransform_);
 	}
@@ -51,8 +31,8 @@ void Object3d::Update() {
 
 //描画
 void Object3d::Draw() {
-	//座標変換行列CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	//ワールドトランスフォーム
+	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 	//3Dモデルが割り当てられていれば描画
@@ -68,27 +48,27 @@ void Object3d::SetModel(const std::string& name) {
 
 //カメラのセッター
 void Object3d::SetCamera(Camera* camera) {
-	camera_ = camera;
+	worldTransform_->camera_ = camera;
 }
 
 // スケールのセッター
 void Object3d::SetScale(const Vector3& scale) {
-	transform_.scale = scale;
+	worldTransform_->transform_.scale = scale;
 }
 
 // 回転のセッター
 void Object3d::SetRotate(const Vector3& rotate) {
-	transform_.rotate = rotate;
+	worldTransform_->transform_.rotate = rotate;
 }
 
 // 平行移動のセッター
 void Object3d::SetTranslate(const Vector3& translate) {
-	transform_.translate = translate;
+	worldTransform_->transform_.translate = translate;
 }
 
 //トランスフォームのセッター
 void Object3d::SetTransform(const Transform& transform) {
-	transform_ = transform;
+	worldTransform_->transform_ = transform;
 }
 
 // uvスケールのセッター
@@ -114,8 +94,8 @@ void Object3d::SetColor(const Vector4& color) {
 }
 
 //親のセッター
-void Object3d::SetParent(const Matrix4x4* parent) {
-	parent_ = parent;
+void Object3d::SetParent(const WorldTransform* parent) {
+	worldTransform_->parent_ = parent;
 }
 
 //テクスチャの変更
@@ -128,19 +108,19 @@ void Object3d::SetTexture(const std::string& filePath) {
 // スケールのゲッター
 const Vector3& Object3d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform_.scale;
+	return worldTransform_->transform_.scale;
 }
 
 // 回転のゲッター
 const Vector3& Object3d::GetRotate() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform_.rotate;
+	return worldTransform_->transform_.rotate;
 }
 
 // 平行移動のゲッター
 const Vector3& Object3d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return transform_.translate;
+	return worldTransform_->transform_.translate;
 }
 
 // uvスケールのゲッター
@@ -172,20 +152,9 @@ const Vector4& Object3d::GetColor() const {
 }
 
 //ワールド行列のゲッター
-const Matrix4x4& Object3d::GetWorldMatrix() const {
+const WorldTransform* Object3d::GetWorldTransform() const {
 	// TODO: return ステートメントをここに挿入します
-	return wvpData_->World;
-}
-
-// 座標変換行列リソースの生成
-void Object3d::CreateTransformationMatrixResource() {
-	//WVP用のリソースを作る
-	wvpResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
-	//書き込むためのアドレスを取得
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
-	//単位行列を書き込んでおく
-	wvpData_->WVP = Math::MakeIdentity4x4();
-	wvpData_->World = Math::MakeIdentity4x4();
+	return worldTransform_.get();
 }
 
 //光源の生成

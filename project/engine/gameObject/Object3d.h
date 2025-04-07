@@ -1,6 +1,8 @@
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/3d/Model.h"
+#include "engine/3d/WorldTransform.h"
+#include <memory>
 #include <vector>
 #include <string>
 #include <wrl.h>
@@ -8,7 +10,6 @@
 
 //前方宣言
 class Object3dCommon;
-class Camera;
 
 /// <summary>
 /// 3Dオブジェクト
@@ -106,7 +107,7 @@ public://メンバ関数
 	/// 親のセッター
 	/// </summary>
 	/// <param name="parent">親</param>
-	void SetParent(const Matrix4x4* parent);
+	void SetParent(const WorldTransform* parent);
 
 	/// <summary>
 	/// テクスチャの変更(.pngはいらない)
@@ -157,43 +158,31 @@ public://メンバ関数
 	const Vector4& GetColor()const;
 
 	/// <summary>
-	/// ワールド行列のゲッター
+	/// ワールドトランスフォームのゲッター
 	/// </summary>
-	/// <returns>ワールド行列</returns>
-	const Matrix4x4& GetWorldMatrix()const;
+	/// <returns>ワールドトランスフォーム</returns>
+	const WorldTransform* GetWorldTransform()const;
 private://メンバ関数
-	/// <summary>
-	/// 座標変換行列リソースの生成
-	/// </summary>
-	void CreateTransformationMatrixResource();
-
 	/// <summary>
 	/// 光源の生成
 	/// </summary>
 	void CreateDirectionLight();
 private://メンバ変数
-	//ローカル座標
-	Transform transform_ = {};
 	//UV座標
 	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
-	//カメラ
-	Camera* camera_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;	
 	//3Dモデル
 	Model* model_ = nullptr;
 	//バッファリソース
-	ComPtr<ID3D12Resource> wvpResource_ = nullptr;//座標変換行列
 	ComPtr<ID3D12Resource> directionalLightResource_=nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
-	TransformationMatrix* wvpData_ = nullptr;//座標変換行列
 	DirectionalLight* directionalLightData_ = nullptr;//光源
-	//親
-	const Matrix4x4* parent_ = nullptr;
-	Matrix4x4 saveWorldMatrix_ = {};//親のワールド座標の保存場所
+	//ワールドトランスフォーム
+	std::unique_ptr<WorldTransform>worldTransform_ = nullptr;
 };
 
