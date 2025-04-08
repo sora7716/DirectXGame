@@ -20,6 +20,7 @@ void Object3d::Initialize() {
 	worldTransform_->camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
 }
 
+#include "ImGuiManager.h"
 //更新
 void Object3d::Update() {
 	//ワールドトランスフォーム
@@ -27,6 +28,14 @@ void Object3d::Update() {
 	if (model_) {
 		model_->UVTransform(uvTransform_);
 	}
+#ifdef USE_IMGUI
+	ImGui::Begin("light");
+	ImGui::DragFloat3("direction", &directionalLightData_->direction.x, 0.1f);
+	ImGui::ColorEdit4("color", &directionalLightData_->color.x);
+	ImGui::DragFloat("intensity", &directionalLightData_->intensity, 0.1f);
+	ImGui::End();
+#endif // USE_IMGUI
+
 }
 
 //描画

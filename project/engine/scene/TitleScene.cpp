@@ -46,10 +46,12 @@ void TitleScene::Update() {
 	object3d_->SetScale(worldTransform3d_.scale);
 	object3d_->SetRotate(worldTransform3d_.rotate);
 	object3d_->SetTranslate(worldTransform3d_.translate);
+	object3d_->SetColor(object3dColor_);
 	object3d_->Update();
 
 	for (int i = 0; i < 2; i++) {
 		plane_[i]->SetTransform(planeTransform_[i]);
+
 	}
 	plane_[0]->Update();
 	plane_[1]->Update();
@@ -80,6 +82,7 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("scale", &worldTransform3d_.scale.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform3d_.rotate.x, 0.1f);
 	ImGui::DragFloat3("translate", &worldTransform3d_.translate.x, 0.1f);
+	ImGui::ColorEdit4("color", &object3dColor_.x);
 	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了
