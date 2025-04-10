@@ -3,9 +3,7 @@
 /// 2次元ベクトル
 /// </summary>
 typedef struct Vector2 final {
-	float x;
-	float y;
-
+	float x, y;
 	//加法
 	Vector2 operator+(const Vector2& v)const;
 	//減法

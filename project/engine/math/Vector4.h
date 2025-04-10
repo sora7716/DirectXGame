@@ -3,8 +3,5 @@
 /// 4次元ベクトル
 /// </summary>
 typedef struct Vector4 final {
-	float x;
-	float y;
-	float z;
-	float w;
+	float x, y, z, w;
 }Vector4;
