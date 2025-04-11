@@ -61,6 +61,7 @@ void TitleScene::Update() {
 	else if (Input::GetInstance()->TriggerKey(DIK_S)) {
 		plane_[1]->SetParent(nullptr);
 	}
+
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
 	ImGui::DragFloat2("scale", &worldTransform_.scale.x, 0.1f);
@@ -84,6 +85,9 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("translate", &worldTransform3d_.translate.x, 0.1f);
 	ImGui::ColorEdit4("color", &object3dColor_.x);
 	ImGui::End();
+
+	ImGui::Begin("suji");
+	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了
 	ImGuiManager::GetInstance()->End();
@@ -91,11 +95,11 @@ void TitleScene::Update() {
 
 //描画
 void TitleScene::Draw() {
-	object2d_->Draw();
+	//object2d_->Draw();
 	object3d_->Draw();
-	for (int i = 0; i < 2; i++) {
+	/*for (int i = 0; i < 2; i++) {
 		plane_[i]->Draw();
-	}
+	}*/
 }
 
 //終了
