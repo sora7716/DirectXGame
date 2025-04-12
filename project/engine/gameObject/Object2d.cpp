@@ -8,17 +8,25 @@
 #include "Sprite.h"
 //初期化
 void Object2d::Initialize() {
-	object2dCommon_ = Object2dCommon::GetInstance();
-	directXBase_ = object2dCommon_->GetDirectXBase();
+	//DirectXの基盤部分を記録する
+	directXBase_ = Object2dCommon::GetInstance()->GetDirectXBase();
 	//光源の生成
 	CreateDirectionLight();
 	//uvTransform変数を作る
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//ワールドトランスフォームの生成と初期化
-	worldTransform_ = std::make_unique<WorldTransform2d>();
-	worldTransform_->Initialize(directXBase_);
+	worldTransform_ = std::make_unique<WorldTransform>();
+	worldTransform_->Initialize(directXBase_, TransformMode::k2d);
 	//カメラにデフォルトカメラを代入
-	worldTransform_->camera_ = object2dCommon_->GetDefaultCamera();
+	worldTransform_->SetCamera(Object2dCommon::GetInstance()->GetDefaultCamera());
+	//スクリーンに表示する範囲を設定
+	WorldTransform::ScreenArea screenArea = {
+		.left   = 0,
+		.top    = 0,
+		.right  = (float)WinApi::kClientWidth,
+		.bottom = (float)WinApi::kClientHeight,
+	};
+	worldTransform_->SetScreenArea(screenArea);
 }
 
 //更新
@@ -44,7 +52,7 @@ void Object2d::Draw() {
 }
 
 //スプライトのセッター
-void Object2d::SetSprite(const std::string&name) {
+void Object2d::SetSprite(const std::string& name) {
 	sprite_ = SpriteManager::GetInstance()->FindSprite(name);
 }
 
@@ -58,18 +66,22 @@ void Object2d::ChangeTexture(std::string spriteName) {
 //サイズのゲッター
 const Vector2& Object2d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform2d_.scale;
+	Vector2* result = {};
+	*result = worldTransform_->GetScale();
+	return *result;
 }
 
 //回転のゲッター
 float Object2d::GetRotate() const {
-	return worldTransform_->transform2d_.rotate;
+	return worldTransform_->GetRotate().z;
 }
 
 //位置のゲッター
 const Vector2& Object2d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform2d_.translate;
+	Vector2* result = {};
+	*result = worldTransform_->GetTranslate();
+	return *result;
 }
 
 //UVのサイズのゲッター
@@ -99,35 +111,30 @@ const Vector4& Object2d::GetColor() const {
 	return defaultColor;
 }
 
-//カメラのゲッター
-const Camera* Object2d::GetCamera() const {
-	return worldTransform_->camera_;
-}
-
 //ワールドトランスフォームのゲッター
-WorldTransform2d* Object2d::GetWorldTransform(){
+WorldTransform* Object2d::GetWorldTransform() {
 	return worldTransform_.get();
 }
 
 
 //サイズのセッター
 void Object2d::SetScale(const Vector2& scale) {
-	worldTransform_->transform2d_.scale = scale;
+	worldTransform_->SetScale({ scale.x,scale.y,1.0f });
 }
 
 //回転のセッター
 void Object2d::SetRotate(float rotate) {
-	worldTransform_->transform2d_.rotate = rotate;
+	worldTransform_->SetRotate({ 0.0f,0.0f,rotate });
 }
 
 //位置のセッター
 void Object2d::SetTranslate(const Vector2& translate) {
-	worldTransform_->transform2d_.translate = translate;
+	worldTransform_->SetTranslate({ translate.x,translate.y,0.0f });
 }
 
 //トランスフォームのセッター
-void Object2d::SetTransform(const Transform2d& transform2d){
-	worldTransform_->transform2d_ = transform2d;
+void Object2d::SetTransform(const Transform2d& transform2d) {
+	worldTransform_->SetTransform2d(transform2d);
 }
 
 //UVのサイズのセッター
@@ -154,12 +161,12 @@ void Object2d::SetColor(const Vector4& color) {
 
 //カメラのセッター
 void Object2d::SetCamera(Camera* camera) {
-	worldTransform_->camera_ = camera;
+	worldTransform_->SetCamera(camera);
 }
 
 //親のセッター
-void Object2d::SetParent(const WorldTransform2d* parent) {
-	worldTransform_->parent_ = parent;
+void Object2d::SetParent(const WorldTransform* parent) {
+	worldTransform_->SetParent(parent);
 }
 
 //光源の生成

@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/math/func/Rendering.h"
-#include "engine/2d/WorldTransform2d.h"
+#include "engine/gameObject/WorldTransform.h"
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
@@ -97,16 +97,10 @@ public://メンバ関数
 	const Vector4& GetColor()const;
 
 	/// <summary>
-	/// カメラのゲッター
-	/// </summary>
-	/// <returns>カメラ</returns>
-	const Camera* GetCamera()const;
-
-	/// <summary>
 	/// ワールドトランスフォームのゲッター
 	/// </summary>
 	/// <returns>ワールドトランスフォーム</returns>
-	WorldTransform2d* GetWorldTransform();
+	WorldTransform* GetWorldTransform();
 
 	/// <summary>
 	/// サイズのセッター
@@ -166,7 +160,7 @@ public://メンバ関数
 	/// 親のセッター
 	/// </summary>
 	/// <param name="parent">親</param>
-	void SetParent(const WorldTransform2d* parent);
+	void SetParent(const WorldTransform* parent);
 
 private://メンバ関数
 	/// <summary>
@@ -180,8 +174,6 @@ private://メンバ変数
 		.rotate = 0.0f,
 		.translate = {0.0f,0.0f}
 	};
-	//スプライトの共通部分
-	Object2dCommon* object2dCommon_ = nullptr;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//バッファリソース
@@ -191,6 +183,6 @@ private://メンバ変数
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransform2d> worldTransform_ = nullptr;
+	std::unique_ptr<WorldTransform> worldTransform_ = nullptr;
 };
 

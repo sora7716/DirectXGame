@@ -14,12 +14,9 @@
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
     <ClCompile Include="engine\2d\TextureManager.cpp" />
-    <ClCompile Include="engine\2d\WorldTransform2d.cpp" />
-    <ClCompile Include="engine\2d\WorldTransformPlane.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelCommon.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
-    <ClCompile Include="engine\3d\WorldTransform.cpp" />
     <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\audio\AudioManager.cpp" />
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp" />
@@ -39,6 +36,7 @@
     <ClCompile Include="engine\gameObject\Object2d.cpp" />
     <ClCompile Include="engine\gameObject\Object3d.cpp" />
     <ClCompile Include="engine\gameObject\PlaneObject.cpp" />
+    <ClCompile Include="engine\gameObject\WorldTransform.cpp" />
     <ClCompile Include="engine\input\Input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
@@ -62,12 +60,9 @@
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
     <ClInclude Include="engine\2d\TextureManager.h" />
-    <ClInclude Include="engine\2d\WorldTransform2d.h" />
-    <ClInclude Include="engine\2d\WorldTransformPlane.h" />
     <ClInclude Include="engine\3d\Model.h" />
     <ClInclude Include="engine\3d\ModelCommon.h" />
     <ClInclude Include="engine\3d\ModelManager.h" />
-    <ClInclude Include="engine\3d\WorldTransform.h" />
     <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\audio\AudioManager.h" />
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h" />
@@ -87,6 +82,7 @@
     <ClInclude Include="engine\gameObject\Object2d.h" />
     <ClInclude Include="engine\gameObject\Object3d.h" />
     <ClInclude Include="engine\gameObject\PlaneObject.h" />
+    <ClInclude Include="engine\gameObject\WorldTransform.h" />
     <ClInclude Include="engine\input\Input.h" />
     <ClInclude Include="engine\math\func\Aithmetic.h" />
     <ClInclude Include="engine\math\func\Math.h" />

@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "engine/2d/WorldTransformPlane.h"
+#include "engine/gameObject/WorldTransform.h"
 #include "engine/3d/Model.h"
 #include <vector>
 #include <string>
@@ -104,7 +104,7 @@ public://メンバ関数
 	/// 親のセッター
 	/// </summary>
 	/// <param name="parent">親</param>
-	void SetParent(const WorldTransformPlane* parent);
+	void SetParent(const WorldTransform* parent);
 
 	/// <summary>
 	/// テクスチャの変更(.pngはいらない)
@@ -158,7 +158,7 @@ public://メンバ関数
 	/// ワールドトランスフォームのゲッター
 	/// </summary>
 	/// <returns>ワールドトランスフォームのゲッター</returns>
-	const WorldTransformPlane* GetWorldTransform()const;
+	const WorldTransform* GetWorldTransform()const;
 private://メンバ関数
 	/// <summary>
 	/// 光源の生成
@@ -180,7 +180,7 @@ private://メンバ変数
 	//バッファリソース内のデータを指すポインタ
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransformPlane>worldTransform_ = nullptr;
+	std::unique_ptr<WorldTransform>worldTransform_ = nullptr;
 };
 
 

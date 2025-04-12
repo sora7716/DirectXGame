@@ -1,4 +1,5 @@
 #include "Vector2.h"
+#include "Vector3.h"
 
 //加法
 Vector2 Vector2::operator+(const Vector2& v)const {
@@ -62,5 +63,13 @@ Vector2& Vector2::operator*=(float n) {
 	// TODO: return ステートメントをここに挿入します
 	x *= n;
 	y *= n;
+	return *this;
+}
+
+//Vector3を代入
+Vector2& Vector2::operator=(const Vector3& v){
+	// TODO: return ステートメントをここに挿入します
+	x = v.x;
+	y = v.y;
 	return *this;
 }

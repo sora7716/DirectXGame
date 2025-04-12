@@ -15,12 +15,20 @@ void PlaneObject::Initialize() {
 	//uvTransform変数を作る
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//ワールドトランスフォームの生成と初期化
-	worldTransform_ = std::make_unique<WorldTransformPlane>();
-	worldTransform_->Initialize(directXBase_);
+	worldTransform_ = std::make_unique<WorldTransform>();
+	worldTransform_->Initialize(directXBase_, TransformMode::k2d);
 	//カメラにデフォルトカメラを代入
-	worldTransform_->camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
+	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
 	//モデルの生成
 	model_ = ModelManager::GetInstance()->FindModel("plane");
+	//スクリーンに表示する範囲を設定
+	WorldTransform::ScreenArea screenArea = {
+		.left = -(float)WinApi::kClientWidth / 2.0f,
+		.top = (float)WinApi::kClientHeight / 2.0f,
+		.right = (float)WinApi::kClientWidth / 2.0f,
+		.bottom = -(float)WinApi::kClientHeight / 2.0f,
+	};
+	worldTransform_->SetScreenArea(screenArea);
 }
 
 //更新
@@ -51,27 +59,27 @@ void PlaneObject::SetModel(const std::string& name) {
 
 //カメラのセッター
 void PlaneObject::SetCamera(Camera* camera) {
-	worldTransform_->camera_ = camera;
+	worldTransform_->SetCamera(camera);
 }
 
 // スケールのセッター
 void PlaneObject::SetScale(const Vector2& scale) {
-	worldTransform_->transform2d_.scale = scale;
+	worldTransform_->SetScale({ scale.x,scale.y,1.0f });
 }
 
 // 回転のセッター
 void PlaneObject::SetRotate(float rotate) {
-	worldTransform_->transform2d_.rotate = rotate;
+	worldTransform_->SetRotate({ 0.0f,0.0f,rotate });
 }
 
 // 平行移動のセッター
 void PlaneObject::SetTranslate(const Vector2& translate) {
-	worldTransform_->transform2d_.translate = translate;
+	worldTransform_->SetTranslate({ translate.x,translate.y,0.0f });
 }
 
 //トランスフォームのセッター
 void PlaneObject::SetTransform(const Transform2d& transform2d) {
-	worldTransform_->transform2d_ = transform2d;
+	worldTransform_->SetTransform2d(transform2d);
 }
 
 // uvスケールのセッター
@@ -97,8 +105,8 @@ void PlaneObject::SetColor(const Vector4& color) {
 }
 
 //親のセッター
-void PlaneObject::SetParent(const WorldTransformPlane* parent) {
-	worldTransform_->parent_ = parent;
+void PlaneObject::SetParent(const WorldTransform* parent) {
+	worldTransform_->SetParent(parent);
 }
 
 //テクスチャの変更
@@ -111,18 +119,22 @@ void PlaneObject::SetTexture(const std::string& filePath) {
 // スケールのゲッター
 const Vector2& PlaneObject::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform2d_.scale;
+	Vector2* result = {};
+	*result = worldTransform_->GetScale();
+	return *result;
 }
 
 // 回転のゲッター
 const float PlaneObject::GetRotate() const {
-	return worldTransform_->transform2d_.rotate;
+	return worldTransform_->GetRotate().z;
 }
 
 // 平行移動のゲッター
 const Vector2& PlaneObject::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform2d_.translate;
+	Vector2* result = {};
+	*result = worldTransform_->GetTranslate();
+	return *result;
 }
 
 // uvスケールのゲッター
@@ -154,7 +166,7 @@ const Vector4& PlaneObject::GetColor() const {
 }
 
 //ワールドトランスフォームのゲッター
-const WorldTransformPlane* PlaneObject::GetWorldTransform() const{
+const WorldTransform* PlaneObject::GetWorldTransform() const {
 	// TODO: return ステートメントをここに挿入します
 	return worldTransform_.get();
 }

@@ -13,11 +13,11 @@ void Object3d::Initialize() {
 	CreateDirectionLight();
 	//ワールドトランスフォームの生成、初期化
 	worldTransform_ = std::make_unique<WorldTransform>();
-	worldTransform_->Initialize(directXBase_);
+	worldTransform_->Initialize(directXBase_,TransformMode::k3d);
 	//uv座標
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
-	worldTransform_->camera_ = Object3dCommon::GetInstance()->GetDefaultCamera();
+	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
 }
 
 #include "ImGuiManager.h"
@@ -57,27 +57,27 @@ void Object3d::SetModel(const std::string& name) {
 
 //カメラのセッター
 void Object3d::SetCamera(Camera* camera) {
-	worldTransform_->camera_ = camera;
+	worldTransform_->SetCamera(camera);
 }
 
 // スケールのセッター
 void Object3d::SetScale(const Vector3& scale) {
-	worldTransform_->transform_.scale = scale;
+	worldTransform_->SetScale(scale);
 }
 
 // 回転のセッター
 void Object3d::SetRotate(const Vector3& rotate) {
-	worldTransform_->transform_.rotate = rotate;
+	worldTransform_->SetRotate(rotate);
 }
 
 // 平行移動のセッター
 void Object3d::SetTranslate(const Vector3& translate) {
-	worldTransform_->transform_.translate = translate;
+	worldTransform_->SetTranslate(translate);
 }
 
 //トランスフォームのセッター
 void Object3d::SetTransform(const Transform& transform) {
-	worldTransform_->transform_ = transform;
+	worldTransform_->SetTransform(transform);
 }
 
 // uvスケールのセッター
@@ -104,7 +104,7 @@ void Object3d::SetColor(const Vector4& color) {
 
 //親のセッター
 void Object3d::SetParent(const WorldTransform* parent) {
-	worldTransform_->parent_ = parent;
+	worldTransform_->SetParent(parent);
 }
 
 //テクスチャの変更
@@ -117,19 +117,19 @@ void Object3d::SetTexture(const std::string& filePath) {
 // スケールのゲッター
 const Vector3& Object3d::GetScale() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform_.scale;
+	return worldTransform_->GetScale();
 }
 
 // 回転のゲッター
 const Vector3& Object3d::GetRotate() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform_.rotate;
+	return worldTransform_->GetRotate();
 }
 
 // 平行移動のゲッター
 const Vector3& Object3d::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_->transform_.translate;
+	return worldTransform_->GetTranslate();
 }
 
 // uvスケールのゲッター

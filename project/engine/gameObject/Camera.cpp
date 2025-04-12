@@ -4,7 +4,7 @@
 /// <summary>
 /// コンストラクタ
 /// </summary>
-Camera::Camera(){
+Camera::Camera() {
 	transform_ = { {1.0f,1.0f,1.0f},{},{0.0f,0.0f,-10.0f} };
 	fovY_ = 0.45f;
 	aspectRation_ = float(WinApi::kClientWidth) / float(WinApi::kClientHeight);
@@ -13,7 +13,7 @@ Camera::Camera(){
 }
 
 //更新
-void Camera::Update(){
+void Camera::Update() {
 	//アフィン変換行列の作成
 	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	//worldMatrixの逆行列
@@ -25,27 +25,27 @@ void Camera::Update(){
 }
 
 // 回転のセッター
-void Camera::SetRotate(const Vector3& rotate){
+void Camera::SetRotate(const Vector3& rotate) {
 	transform_.rotate = rotate;
 }
 
 // 平行移動のセッター
-void Camera::SetTranslate(const Vector3& translate){
+void Camera::SetTranslate(const Vector3& translate) {
 	transform_.translate = translate;
 }
 
 // 水平方向視野角のセッター
-void Camera::SetFovY(const float fovY){
+void Camera::SetFovY(const float fovY) {
 	fovY_ = fovY;
 }
 
 // アスペクト比のセッター
-void Camera::SetAspectRation(const float aspectRation){
+void Camera::SetAspectRation(const float aspectRation) {
 	aspectRation_ = aspectRation;
 }
 
 // ニアクリップ距離のセッター
-void Camera::SetNearClip(const float nearClip){
+void Camera::SetNearClip(const float nearClip) {
 	nearClip_ = nearClip;
 }
 
@@ -55,37 +55,47 @@ void Camera::SetFarClip(const float farClip) {
 }
 
 // ワールド行列のゲッター
-const Matrix4x4& Camera::GetWorldMatrix() const{
+const Matrix4x4& Camera::GetWorldMatrix() const {
 	// TODO: return ステートメントをここに挿入します
 	return worldMatrix_;
 }
 
 // ビュー行列のゲッター
-const Matrix4x4& Camera::GetViewMatrix() const{
+const Matrix4x4& Camera::GetViewMatrix() const {
 	// TODO: return ステートメントをここに挿入します
 	return viewMatrix_;
 }
 
 // 透視投影行列のゲッター
-const Matrix4x4& Camera::GetProjectionMatrix() const{
+const Matrix4x4& Camera::GetProjectionMatrix() const {
 	// TODO: return ステートメントをここに挿入します
 	return projectionMatrix_;
 }
 
 // ビュープロジェクション行列
-const Matrix4x4& Camera::GetViewProjectionMatrix() const{
+const Matrix4x4& Camera::GetViewProjectionMatrix() const {
 	// TODO: return ステートメントをここに挿入します
 	return viewProjectionMatrix_;
 }
 
 // 回転のゲッター
-const Vector3& Camera::GetRotate() const{
+const Vector3& Camera::GetRotate() const {
 	// TODO: return ステートメントをここに挿入します
 	return transform_.rotate;
 }
 
 // 平行移動のゲッター
-const Vector3& Camera::GetTranslate() const{
+const Vector3& Camera::GetTranslate() const {
 	// TODO: return ステートメントをここに挿入します
 	return transform_.translate;
+}
+
+//ニアクリップ距離のゲッター
+const float Camera::GetNearClip() const {
+	return nearClip_;
+}
+
+//ファークリップ距離のゲッター
+const float Camera::GetFarClip() const {
+	return farClip_;
 }

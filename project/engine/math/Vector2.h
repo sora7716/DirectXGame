@@ -1,4 +1,5 @@
 #pragma once
+struct Vector3;
 /// <summary>
 /// 2次元ベクトル
 /// </summary>
@@ -24,6 +25,8 @@ typedef struct Vector2 final {
 	Vector2 operator*(float n)const;
 	//スカラー倍(複合)
 	Vector2& operator*=(float n);
+	//Vector3を代入
+	Vector2& operator=(const Vector3& v);
 }Vector2;
 
 /// <summary>

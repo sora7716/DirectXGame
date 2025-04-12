@@ -92,6 +92,18 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>平行移動</returns>
 	const Vector3& GetTranslate()const;
+
+	/// <summary>
+	/// ニアクリップ距離のゲッター
+	/// </summary>
+	/// <returns></returns>
+	const float GetNearClip()const;
+
+	/// <summary>
+	/// ファークリップ距離のゲッター
+	/// </summary>
+	/// <returns></returns>
+	const float GetFarClip()const;
 private://メンバ変数
 	//ローカル座標
 	Transform transform_ = {};
