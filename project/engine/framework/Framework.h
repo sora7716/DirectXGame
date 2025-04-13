@@ -1,7 +1,7 @@
 #pragma once
 #include "WinApi.h"
 #include "engine/base/DirectXBase.h"
-#include "engine/objectCommon/SpriteCommon.h"
+#include "engine/2d/SpriteCommon.h"
 #include "engine/objectCommon/Object2dCommon.h"
 #include "engine/objectCommon/Object3dCommon.h"
 #include "engine/base/SRVManager.h"

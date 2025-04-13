@@ -1,5 +1,5 @@
 #include "Sprite.h"
-#include "engine/objectCommon/SpriteCommon.h"
+#include "engine/2d/SpriteCommon.h"
 #include <cassert>
 #include "engine/math/func/Math.h"
 #include "TextureManager.h"

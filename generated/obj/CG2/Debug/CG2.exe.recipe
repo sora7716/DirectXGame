@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\subject\DirectXGame\DirectXGame\generated\outputs\Debug\CG2.exe</FullPath>
+      <FullPath>C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

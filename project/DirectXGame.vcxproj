@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\2d\Sprite.cpp" />
+    <ClCompile Include="engine\2d\SpriteCommon.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
     <ClCompile Include="engine\2d\TextureManager.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
@@ -48,7 +49,6 @@
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object2dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
-    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\GameScene.cpp" />
     <ClCompile Include="engine\scene\IScene.cpp" />
@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\2d\Sprite.h" />
+    <ClInclude Include="engine\2d\SpriteCommon.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
     <ClInclude Include="engine\2d\TextureManager.h" />
     <ClInclude Include="engine\3d\Model.h" />
@@ -96,7 +97,6 @@
     <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
     <ClInclude Include="engine\objectCommon\Object2dCommon.h" />
     <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
-    <ClInclude Include="engine\objectCommon\SpriteCommon.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\GameScene.h" />
     <ClInclude Include="engine\scene\IScene.h" />

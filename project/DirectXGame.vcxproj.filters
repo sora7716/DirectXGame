@@ -198,7 +198,7 @@
     <ClCompile Include="engine\gameObject\PlaneObject.cpp">
       <Filter>engine\gameObject</Filter>
     </ClCompile>
-    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp">
+    <ClCompile Include="engine\2d\SpriteCommon.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
   </ItemGroup>
@@ -341,7 +341,7 @@
     <ClInclude Include="engine\gameObject\WorldTransform.h">
       <Filter>engine\gameObject</Filter>
     </ClInclude>
-    <ClInclude Include="engine\objectCommon\SpriteCommon.h">
+    <ClInclude Include="engine\2d\SpriteCommon.h">
       <Filter>engine\2d</Filter>
     </ClInclude>
   </ItemGroup>
