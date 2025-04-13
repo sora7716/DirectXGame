@@ -11,7 +11,7 @@ void Object2d::Initialize() {
 	//DirectXの基盤部分を記録する
 	directXBase_ = Object2dCommon::GetInstance()->GetDirectXBase();
 	//光源の生成
-	CreateDirectionLight();
+	Object2dCommon::GetInstance()->CreateDirectionLight();
 	//uvTransform変数を作る
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//ワールドトランスフォームの生成と初期化
@@ -21,9 +21,9 @@ void Object2d::Initialize() {
 	worldTransform_->SetCamera(Object2dCommon::GetInstance()->GetDefaultCamera());
 	//スクリーンに表示する範囲を設定
 	WorldTransform::ScreenArea screenArea = {
-		.left   = 0,
-		.top    = 0,
-		.right  = (float)WinApi::kClientWidth,
+		.left = 0,
+		.top = 0,
+		.right = (float)WinApi::kClientWidth,
 		.bottom = (float)WinApi::kClientHeight,
 	};
 	worldTransform_->SetScreenArea(screenArea);
@@ -44,7 +44,7 @@ void Object2d::Draw() {
 	//ワールドトランスフォームの描画
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object2dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//3Dモデルが割り当てられていれば描画
 	if (sprite_) {
 		sprite_->Draw();
@@ -167,14 +167,4 @@ void Object2d::SetCamera(Camera* camera) {
 //親のセッター
 void Object2d::SetParent(const WorldTransform* parent) {
 	worldTransform_->SetParent(parent);
-}
-
-//光源の生成
-void Object2d::CreateDirectionLight() {
-	//光源
-	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
 }

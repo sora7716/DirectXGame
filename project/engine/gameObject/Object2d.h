@@ -161,12 +161,6 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="parent">親</param>
 	void SetParent(const WorldTransform* parent);
-
-private://メンバ関数
-	/// <summary>
-	/// 光源の生成
-	/// </summary>
-	void CreateDirectionLight();
 private://メンバ変数
 	//UV座標
 	Transform2d uvTransform_ = {
@@ -176,10 +170,6 @@ private://メンバ変数
 	};
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
-	//バッファリソース
-	ComPtr<ID3D12Resource>directionalLightResource_ = nullptr;//光源
-	//バッファリソース内のデータを指すポインタ
-	DirectionalLight* directionalLightData_ = nullptr;
 	//スプライト
 	Sprite* sprite_ = nullptr;
 	//ワールドトランスフォーム

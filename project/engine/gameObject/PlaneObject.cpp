@@ -1,5 +1,5 @@
 #include "PlaneObject.h"
-#include "engine/objectCommon/Object3dCommon.h"
+#include "engine/objectCommon/Object2dCommon.h"
 #include "engine/gameObject/Camera.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
@@ -9,16 +9,19 @@
 //初期化
 void PlaneObject::Initialize() {
 	//DirectXの基盤部分を受け取る
-	directXBase_ = Object3dCommon::GetInstance()->GetDirectXBase();
+	directXBase_ = Object2dCommon::GetInstance()->GetDirectXBase();
 	//光源の生成
-	CreateDirectionLight();
+	Object2dCommon::GetInstance()->CreateDirectionLight();
+	//光源の値の設定
+	directionalLightData_ = { { 1.0f,1.0f,1.0f,1.0f } ,{ 0.0f,0.0f,1.0f } ,1.0f };
+	Object2dCommon::GetInstance()->SetDirectionalLightData(directionalLightData_);
 	//uvTransform変数を作る
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//ワールドトランスフォームの生成と初期化
 	worldTransform_ = std::make_unique<WorldTransform>();
 	worldTransform_->Initialize(directXBase_, TransformMode::k2d);
 	//カメラにデフォルトカメラを代入
-	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
+	worldTransform_->SetCamera(Object2dCommon::GetInstance()->GetDefaultCamera());
 	//モデルの生成
 	model_ = ModelManager::GetInstance()->FindModel("plane");
 	//スクリーンに表示する範囲を設定
@@ -45,7 +48,7 @@ void PlaneObject::Draw() {
 	//ワールドトランスフォームの描画
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object2dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//3Dモデルが割り当てられていれば描画
 	if (model_) {
 		model_->Draw();
@@ -169,15 +172,4 @@ const Vector4& PlaneObject::GetColor() const {
 const WorldTransform* PlaneObject::GetWorldTransform() const {
 	// TODO: return ステートメントをここに挿入します
 	return worldTransform_.get();
-}
-
-//光源の生成
-void PlaneObject::CreateDirectionLight() {
-	//光源のリソースを作成
-	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
-	//光源データの書きこみ
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,0.0f,1.0f };
-	directionalLightData_->intensity = 1.0f;
 }

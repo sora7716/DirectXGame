@@ -10,17 +10,17 @@ void Object3d::Initialize() {
 	//DirectXの基盤部分を受け取る
 	directXBase_ = Object3dCommon::GetInstance()->GetDirectXBase();
 	//光源の生成
-	CreateDirectionLight();
+	Object3dCommon::GetInstance()->CreateDirectionLight();
 	//ワールドトランスフォームの生成、初期化
 	worldTransform_ = std::make_unique<WorldTransform>();
-	worldTransform_->Initialize(directXBase_,TransformMode::k3d);
+	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
 	//uv座標
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
 	//カメラにデフォルトカメラを代入
 	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
 }
 
-#include "ImGuiManager.h"
+
 //更新
 void Object3d::Update() {
 	//ワールドトランスフォーム
@@ -28,14 +28,6 @@ void Object3d::Update() {
 	if (model_) {
 		model_->UVTransform(uvTransform_);
 	}
-#ifdef USE_IMGUI
-	ImGui::Begin("light");
-	ImGui::DragFloat3("direction", &directionalLightData_->direction.x, 0.1f);
-	ImGui::ColorEdit4("color", &directionalLightData_->color.x);
-	ImGui::DragFloat("intensity", &directionalLightData_->intensity, 0.1f);
-	ImGui::End();
-#endif // USE_IMGUI
-
 }
 
 //描画
@@ -43,7 +35,7 @@ void Object3d::Draw() {
 	//ワールドトランスフォーム
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object3dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//3Dモデルが割り当てられていれば描画
 	if (model_) {
 		model_->Draw();
@@ -164,15 +156,4 @@ const Vector4& Object3d::GetColor() const {
 const WorldTransform* Object3d::GetWorldTransform() const {
 	// TODO: return ステートメントをここに挿入します
 	return worldTransform_.get();
-}
-
-//光源の生成
-void Object3d::CreateDirectionLight() {
-	//光源のリソースを作成
-	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
-	//光源データの書きこみ
-	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 1.0f;
 }

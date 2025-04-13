@@ -22,9 +22,6 @@
     <Filter Include="engine\2d">
       <UniqueIdentifier>{4d00935a-7f96-419d-af99-6e799300f223}</UniqueIdentifier>
     </Filter>
-    <Filter Include="engine\3d">
-      <UniqueIdentifier>{79d8f6c8-0826-4916-b23e-c709776c8173}</UniqueIdentifier>
-    </Filter>
     <Filter Include="engine\audio">
       <UniqueIdentifier>{7d92218e-5326-48be-b8fe-be7c59b9dcfb}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,9 @@
     </Filter>
     <Filter Include="engine\gameObject">
       <UniqueIdentifier>{fe8994bd-0b9a-44df-b447-7f1938d187b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\3d">
+      <UniqueIdentifier>{79d8f6c8-0826-4916-b23e-c709776c8173}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -121,9 +121,6 @@
       <Filter>engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp">
-      <Filter>engine\objectCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp">
       <Filter>engine\objectCommon</Filter>
     </ClCompile>
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp">
@@ -201,6 +198,9 @@
     <ClCompile Include="engine\gameObject\PlaneObject.cpp">
       <Filter>engine\gameObject</Filter>
     </ClCompile>
+    <ClCompile Include="engine\objectCommon\SpriteCommon.cpp">
+      <Filter>engine\2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -267,9 +267,6 @@
       <Filter>engine\objectCommon</Filter>
     </ClInclude>
     <ClInclude Include="engine\objectCommon\Object3dCommon.h">
-      <Filter>engine\objectCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\objectCommon\SpriteCommon.h">
       <Filter>engine\objectCommon</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\ModelManager.h">
@@ -343,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="engine\gameObject\WorldTransform.h">
       <Filter>engine\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\objectCommon\SpriteCommon.h">
+      <Filter>engine\2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

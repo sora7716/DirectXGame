@@ -159,11 +159,6 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>ワールドトランスフォームのゲッター</returns>
 	const WorldTransform* GetWorldTransform()const;
-private://メンバ関数
-	/// <summary>
-	/// 光源の生成
-	/// </summary>
-	void CreateDirectionLight();
 private://メンバ変数
 	//UV座標
 	Transform2d uvTransform_ = {
@@ -175,12 +170,10 @@ private://メンバ変数
 	DirectXBase* directXBase_ = nullptr;
 	//3Dモデル
 	Model* model_ = nullptr;
-	//バッファリソース
-	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;//光源
-	//バッファリソース内のデータを指すポインタ
-	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//ワールドトランスフォーム
 	std::unique_ptr<WorldTransform>worldTransform_ = nullptr;
+	//光源のデータ
+	DirectionalLight directionalLightData_ = {};
 };
 
 

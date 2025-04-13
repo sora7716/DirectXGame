@@ -31,6 +31,29 @@ void BaseObjectCommon::DrawSetting() {
 	directXBase_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
+//光源の生成
+void BaseObjectCommon::CreateDirectionLight() {
+	//光源のリソースを作成
+	directionalLightResource_ = directXBase_->CreateBufferResource(sizeof(DirectionalLight));
+	//光源データの書きこみ
+	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
+	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData_->intensity = 1.0f;
+}
+
+//DirectionalLightのセッター
+void BaseObjectCommon::SetDirectionalLightData(const DirectionalLight& directionalLightData) {
+	directionalLightData_->color = directionalLightData.color;
+	directionalLightData_->direction = directionalLightData.direction;
+	directionalLightData_->intensity = directionalLightData.intensity;
+}
+
+//DirectionalLightのリソースのゲッター
+ID3D12Resource* BaseObjectCommon::GetDirectionalLightResource() {
+	return directionalLightResource_.Get();
+}
+
 // DirectXの基盤のゲッター
 DirectXBase* BaseObjectCommon::GetDirectXBase() const {
 	return directXBase_;
