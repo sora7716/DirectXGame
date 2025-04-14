@@ -201,6 +201,9 @@
     <ClCompile Include="engine\2d\SpriteCommon.cpp">
       <Filter>engine\2d</Filter>
     </ClCompile>
+    <ClCompile Include="engine\gameObject\Line.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine\math\Matrix4x4.h">
@@ -344,12 +347,21 @@
     <ClInclude Include="engine\2d\SpriteCommon.h">
       <Filter>engine\2d</Filter>
     </ClInclude>
+    <ClInclude Include="engine\gameObject\Line.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resources\shaders\Object3d.PS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="engine\resources\shaders\Object3d.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Line.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Line.PS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

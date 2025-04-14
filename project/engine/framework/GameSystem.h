@@ -1,6 +1,6 @@
 #pragma once
 #include "Framework.h"
-
+#include "engine/gameObject/Line.h"
 /// <summary>
 /// ゲームシステム
 /// </summary>
@@ -36,5 +36,6 @@ public://メンバ関数
 	/// </summary>
 	void Finalize()override;
 private://メンバ変数
+	Line* line = nullptr;
 };
 

@@ -10,6 +10,8 @@ void GameSystem::Initialize() {
 	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
 	//タイトルシーンを呼び出す
 	SceneManager::GetInstance()->ChangeScene("Title");
+	line = new Line();
+	line->Initialize(directXBase_.get());
 }
 
 //更新
@@ -38,4 +40,5 @@ void GameSystem::Draw() {
 //終了
 void GameSystem::Finalize() {
 	Framework::Finalize();
+	delete line;
 }

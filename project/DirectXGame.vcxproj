@@ -34,6 +34,7 @@
     <ClCompile Include="engine\framework\GameSystem.cpp" />
     <ClCompile Include="engine\gameObject\Camera.cpp" />
     <ClCompile Include="engine\gameObject\CameraManager.cpp" />
+    <ClCompile Include="engine\gameObject\Line.cpp" />
     <ClCompile Include="engine\gameObject\Object2d.cpp" />
     <ClCompile Include="engine\gameObject\Object3d.cpp" />
     <ClCompile Include="engine\gameObject\PlaneObject.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="engine\framework\GameSystem.h" />
     <ClInclude Include="engine\gameObject\Camera.h" />
     <ClInclude Include="engine\gameObject\CameraManager.h" />
+    <ClInclude Include="engine\gameObject\Line.h" />
     <ClInclude Include="engine\gameObject\Object2d.h" />
     <ClInclude Include="engine\gameObject\Object3d.h" />
     <ClInclude Include="engine\gameObject\PlaneObject.h" />
@@ -111,6 +113,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="engine\resources\shaders\Line.PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Line.VS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="engine\resources\shaders\Object3d.PS.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

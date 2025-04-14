@@ -59,11 +59,6 @@ DirectXBase* BaseObjectCommon::GetDirectXBase() const {
 	return directXBase_;
 }
 
-// パイプラインステートのゲッター
-ComPtr<ID3D12PipelineState> BaseObjectCommon::GetGraphicsPipelineState() {
-	return graphicsPipelineState_;
-}
-
 // ルートシグネイチャの設定
 void BaseObjectCommon::InitializeRootSigneture() {
 	//RootSignature作成

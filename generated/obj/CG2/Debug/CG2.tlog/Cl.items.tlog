@@ -21,6 +21,7 @@ C:\subject\DirectXGame\project\engine\framework\GameObjectList.cpp;C:\subject\Di
 C:\subject\DirectXGame\project\engine\framework\GameSystem.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\GameSystem.obj
 C:\subject\DirectXGame\project\engine\gameObject\Camera.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Camera.obj
 C:\subject\DirectXGame\project\engine\gameObject\CameraManager.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\CameraManager.obj
+C:\subject\DirectXGame\project\engine\gameObject\Line.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Line.obj
 C:\subject\DirectXGame\project\engine\gameObject\Object2d.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object2d.obj
 C:\subject\DirectXGame\project\engine\gameObject\Object3d.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object3d.obj
 C:\subject\DirectXGame\project\engine\gameObject\PlaneObject.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\PlaneObject.obj

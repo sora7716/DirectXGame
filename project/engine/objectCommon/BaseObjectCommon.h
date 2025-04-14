@@ -57,11 +57,6 @@ public://メンバ関数
 	/// <returns>DirectXの基盤</returns>
 	DirectXBase* GetDirectXBase()const;
 
-	/// <summary>
-	/// パイプラインステートのゲッター
-	/// </summary>
-	/// <returns>パイプラインステート</returns>
-	ComPtr<ID3D12PipelineState> GetGraphicsPipelineState();
 protected://メンバ関数
 	/// <summary>
 	/// ルートシグネイチャの設定
