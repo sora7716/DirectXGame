@@ -1,3 +1,13 @@
-﻿  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
+﻿  Framework.cpp
+  GameSystem.cpp
+  Object2d.cpp
+  Object3d.cpp
+  PlaneObject.cpp
+  main.cpp
+  BaseObjectCommon.cpp
+  Object2dCommon.cpp
+  Object3dCommon.cpp
+  TitleScene.cpp
+  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。

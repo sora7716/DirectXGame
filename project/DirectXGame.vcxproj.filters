@@ -64,6 +64,9 @@
     <Filter Include="engine\3d">
       <UniqueIdentifier>{79d8f6c8-0826-4916-b23e-c709776c8173}</UniqueIdentifier>
     </Filter>
+    <Filter Include="engine\blend">
+      <UniqueIdentifier>{05db597a-c161-4c9e-8086-648f850d3793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="engine\main.cpp">
@@ -200,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="engine\2d\SpriteCommon.cpp">
       <Filter>engine\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\blend\Blend.cpp">
+      <Filter>engine\blend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +349,12 @@
     </ClInclude>
     <ClInclude Include="engine\2d\SpriteCommon.h">
       <Filter>engine\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\blend\Blend.h">
+      <Filter>engine\blend</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\blend\BlendMode.h">
+      <Filter>engine\blend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

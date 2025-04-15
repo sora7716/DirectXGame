@@ -2,9 +2,12 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "engine/math/ResourceData.h"
+#include "engine/blend/Blend.h"
+#include <memory>
 
 //前方宣言
 class DirectXBase;
+
 /// <summary>
 /// オブジェクトの管理する基底クラス
 /// </summary>
@@ -90,5 +93,8 @@ protected://メンバ変数
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
 	DirectionalLight* directionalLightData_ = nullptr;//光源
+	//ブレンド
+	std::unique_ptr<Blend>blend_ = nullptr;
+	BlendMode blendMode_ = BlendMode::kSubtract;
 };
 

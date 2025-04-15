@@ -26,6 +26,7 @@
     <ClCompile Include="engine\base\SRVManager.cpp" />
     <ClCompile Include="engine\base\StringUtility.cpp" />
     <ClCompile Include="engine\base\WinApi.cpp" />
+    <ClCompile Include="engine\blend\Blend.cpp" />
     <ClCompile Include="engine\debug\DebugCamera.cpp" />
     <ClCompile Include="engine\debug\ImGuiManager.cpp" />
     <ClCompile Include="engine\debug\Log.cpp" />
@@ -72,6 +73,8 @@
     <ClInclude Include="engine\base\SRVManager.h" />
     <ClInclude Include="engine\base\StringUtility.h" />
     <ClInclude Include="engine\base\WinApi.h" />
+    <ClInclude Include="engine\blend\Blend.h" />
+    <ClInclude Include="engine\blend\BlendMode.h" />
     <ClInclude Include="engine\debug\DebugCamera.h" />
     <ClInclude Include="engine\debug\ImGuiManager.h" />
     <ClInclude Include="engine\debug\Log.h" />
