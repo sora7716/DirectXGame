@@ -33,6 +33,9 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	planeTransform_[1].scale = { 1.0f,1.0f };
 	planeTransform_[1].rotate = 0.0f;
 	planeTransform_[1].translate = { 2.0f,0.0f };
+
+	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLight_.intensity = 1.0f;
 }
 
 //更新

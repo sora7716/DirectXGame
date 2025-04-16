@@ -34,6 +34,7 @@ C:\Subject\CG\CG2\project\engine\math\func\Rendering.cpp;C:\Subject\CG\CG2\gener
 C:\Subject\CG\CG2\project\engine\math\Matrix4x4.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Matrix4x4.obj
 C:\Subject\CG\CG2\project\engine\math\Vector2.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Vector2.obj
 C:\Subject\CG\CG2\project\engine\math\Vector3.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Vector3.obj
+C:\Subject\CG\CG2\project\engine\math\Vector4.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Vector4.obj
 C:\Subject\CG\CG2\project\engine\objectCommon\BaseObjectCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\BaseObjectCommon.obj
 C:\Subject\CG\CG2\project\engine\objectCommon\Object2dCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\Subject\CG\CG2\project\engine\objectCommon\Object3dCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Object3dCommon.obj

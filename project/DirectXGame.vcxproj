@@ -47,6 +47,7 @@
     <ClCompile Include="engine\math\Matrix4x4.cpp" />
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
+    <ClCompile Include="engine\math\Vector4.cpp" />
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object2dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
