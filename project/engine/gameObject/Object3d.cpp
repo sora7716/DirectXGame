@@ -23,6 +23,8 @@ void Object3d::Initialize() {
 
 //更新
 void Object3d::Update() {
+	//グラフィックパイプラインの生成
+	Object3dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォーム
 	worldTransform_->Update();
 	if (model_) {

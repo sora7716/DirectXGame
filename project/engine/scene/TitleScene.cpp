@@ -47,6 +47,7 @@ void TitleScene::Update() {
 	object3d_->SetRotate(worldTransform3d_.rotate);
 	object3d_->SetTranslate(worldTransform3d_.translate);
 	object3d_->SetColor(object3dColor_);
+	Object3dCommon::GetInstance()->SetDirectionalLightData(directionalLight_);
 	object3d_->Update();
 
 	for (int i = 0; i < 2; i++) {
@@ -88,6 +89,12 @@ void TitleScene::Update() {
 
 	ImGui::Begin("suji");
 	ImGui::End();
+
+	ImGui::Begin("light");
+	ImGui::ColorEdit4("color", &directionalLight_.color.x);
+	ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.1f);
+	ImGui::DragFloat("intensity", &directionalLight_.intensity);
+	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了
 	ImGuiManager::GetInstance()->End();
@@ -95,10 +102,10 @@ void TitleScene::Update() {
 
 //描画
 void TitleScene::Draw() {
-	object2d_->Draw();
+	//object2d_->Draw();
 	object3d_->Draw();
 	for (int i = 0; i < 2; i++) {
-		plane_[i]->Draw();
+		//plane_[i]->Draw();
 	}
 }
 

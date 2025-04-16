@@ -49,6 +49,8 @@ private://メンバ変数
 	//平面
 	std::unique_ptr<PlaneObject>plane_[2] = { nullptr };
 	Transform2d planeTransform_[2] = {};
+	//ライト
+	DirectionalLight directionalLight_ = {};
 };
 
 

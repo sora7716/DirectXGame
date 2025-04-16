@@ -1,4 +1,5 @@
-﻿  Framework.cpp
+﻿  Blend.cpp
+  Framework.cpp
   GameSystem.cpp
   Object2d.cpp
   Object3d.cpp
@@ -8,6 +9,6 @@
   Object2dCommon.cpp
   Object3dCommon.cpp
   TitleScene.cpp
-  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
+  DirectXGame.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。

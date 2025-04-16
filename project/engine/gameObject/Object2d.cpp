@@ -31,6 +31,8 @@ void Object2d::Initialize() {
 
 //更新
 void Object2d::Update() {
+	//グラフィックパイプラインの生成
+	Object2dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォームの更新
 	worldTransform_->Update();
 	//UV座標の更新

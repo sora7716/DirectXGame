@@ -43,6 +43,11 @@ public://メンバ関数
 	void CreateDirectionLight();
 
 	/// <summary>
+	/// グラフィックスパイプラインの生成
+	/// </summary>
+	void CreateGraphicsPipeline();
+
+	/// <summary>
 	/// DirectionalLightのセッター
 	/// </summary>
 	/// <param name="directionalLightData">DirectionalLightデータ</param>
@@ -75,11 +80,6 @@ protected://メンバ関数
 	/// ルートシグネイチャの生成
 	/// </summary>
 	void CreateRootSignature();
-
-	/// <summary>
-	/// グラフィックスパイプラインの生成
-	/// </summary>
-	void CreateGraphicsPipeline();
 protected://メンバ変数
 	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
 	//Blob
