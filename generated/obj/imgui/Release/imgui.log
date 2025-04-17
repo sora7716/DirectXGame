@@ -5,4 +5,4 @@
   imgui_impl_win32.cpp
   imgui_tables.cpp
   imgui_widgets.cpp
-  imgui.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Release\imgui.lib
+  imgui.vcxproj -> C:\subject\DirectXGame\generated\outputs\Release\imgui.lib

@@ -51,6 +51,7 @@ void TitleScene::Update() {
 	object3d_->SetTranslate(worldTransform3d_.translate);
 	object3d_->SetColor(object3dColor_);
 	Object3dCommon::GetInstance()->SetDirectionalLightData(directionalLight_);
+	Object3dCommon::GetInstance()->SetBlendMode((BlendMode)blendMode_);
 	object3d_->Update();
 
 	for (int i = 0; i < 2; i++) {
@@ -87,6 +88,7 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("scale", &worldTransform3d_.scale.x, 0.1f);
 	ImGui::DragFloat3("rotate", &worldTransform3d_.rotate.x, 0.1f);
 	ImGui::DragFloat3("translate", &worldTransform3d_.translate.x, 0.1f);
+	ImGui::DragFloat4("color", &object3dColor_.x, 0.1f);
 	ImGui::ColorEdit4("color", &object3dColor_.x);
 	ImGui::End();
 
@@ -97,6 +99,10 @@ void TitleScene::Update() {
 	ImGui::ColorEdit4("color", &directionalLight_.color.x);
 	ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.1f);
 	ImGui::DragFloat("intensity", &directionalLight_.intensity);
+	ImGui::End();
+
+	ImGui::Begin("blend");
+	ImGui::InputInt("mode", &blendMode_);
 	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了

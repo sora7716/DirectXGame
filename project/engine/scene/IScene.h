@@ -7,6 +7,7 @@
 #include "engine/gameObject/CameraManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
+#include "engine/blend/BlendMode.h"
 
 //前方宣言
 class SceneManager;

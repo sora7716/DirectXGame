@@ -1,34 +1,4 @@
-﻿  Sprite.cpp
-  SpriteManager.cpp
-  TextureManager.cpp
-  Model.cpp
-  ModelCommon.cpp
-  ModelManager.cpp
-  DirectXBase.cpp
-  SRVManager.cpp
-  ImGuiManager.cpp
-  Framework.cpp
-  GameObjectList.cpp
-  GameSystem.cpp
-  Object2d.cpp
-  Object3d.cpp
-  PlaneObject.cpp
-  WorldTransform.cpp
-  Input.cpp
-  main.cpp
-  Aithmetic.cpp
-  Math.cpp
-  Rendering.cpp
-  Vector4.cpp
-  BaseObjectCommon.cpp
-  Object2dCommon.cpp
-  Object3dCommon.cpp
-  AbstractSceneFactory.cpp
-  GameScene.cpp
-  IScene.cpp
-  SceneFactory.cpp
-  SceneManager.cpp
-  TitleScene.cpp
-  DirectXGame.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\CG2.exe
+﻿  Blend.cpp
+  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。

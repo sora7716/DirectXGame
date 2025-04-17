@@ -51,6 +51,8 @@ private://メンバ変数
 	Transform2d planeTransform_[2] = {};
 	//ライト
 	DirectionalLight directionalLight_ = {};
+	//ブレンドモード
+	int blendMode_ = BlendMode::kNone;
 };
 
 

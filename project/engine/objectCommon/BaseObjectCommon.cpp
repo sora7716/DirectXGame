@@ -119,6 +119,11 @@ void BaseObjectCommon::SetDirectionalLightData(const DirectionalLight& direction
 	directionalLightData_->intensity = directionalLightData.intensity;
 }
 
+//ブレンドモードのセッター
+void BaseObjectCommon::SetBlendMode(BlendMode blendMode){
+	blendMode_ = blendMode;
+}
+
 //DirectionalLightのリソースのゲッター
 ID3D12Resource* BaseObjectCommon::GetDirectionalLightResource() {
 	return directionalLightResource_.Get();

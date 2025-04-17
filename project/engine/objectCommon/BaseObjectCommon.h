@@ -54,6 +54,12 @@ public://メンバ関数
 	void SetDirectionalLightData(const DirectionalLight&directionalLightData);
 
 	/// <summary>
+	/// ブレンドモードのセッター
+	/// </summary>
+	/// <param name="blendMode">ブレンドモード</param>
+	void SetBlendMode(BlendMode blendMode);
+
+	/// <summary>
 	/// DirectionalLightのリソースのゲッター
 	/// </summary>
 	/// <returns>DirectionalLightのリソース</returns>
@@ -95,6 +101,6 @@ protected://メンバ変数
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//ブレンド
 	std::unique_ptr<Blend>blend_ = nullptr;
-	BlendMode blendMode_ = BlendMode::kSubtract;
+	BlendMode blendMode_ = BlendMode::kNormal;
 };
 

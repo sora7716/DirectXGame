@@ -30,6 +30,7 @@ void Model::Initialize(ModelCommon* modelCommon, const std::string& directoryPat
 
 //描画
 void Model::Draw() {
+	auto mate = materialResource_->GetGPUVirtualAddress();
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	directXBase_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定

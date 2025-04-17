@@ -48,7 +48,7 @@ D3D12_BLEND_DESC Blend::BlendNormal() {
 //加算
 D3D12_BLEND_DESC Blend::BlendAdd() {
 	D3D12_BLEND_DESC blendDesc = BlendModeCommon();
-	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
 	return blendDesc;
