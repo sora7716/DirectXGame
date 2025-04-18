@@ -23,8 +23,6 @@ D3D12_BLEND_DESC Blend::BlendModeCommon() {
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
-	//すべての色要素を書き込む
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 	return blendDesc;
 }
 
@@ -48,7 +46,7 @@ D3D12_BLEND_DESC Blend::BlendNormal() {
 //加算
 D3D12_BLEND_DESC Blend::BlendAdd() {
 	D3D12_BLEND_DESC blendDesc = BlendModeCommon();
-	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_ONE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;
 	return blendDesc;
