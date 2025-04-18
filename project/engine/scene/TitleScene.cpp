@@ -21,6 +21,7 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	worldTransform3d_.translate = { 0.0f,0.0f,0.0f };
 	object3d_->Initialize();
 	object3d_->SetModel("cube");
+	object3d_->SetTexture("uvChecker");
 
 	for (int i = 0; i < 2; i++) {
 		plane_[i] = std::make_unique<PlaneObject>();
@@ -98,7 +99,7 @@ void TitleScene::Update() {
 	ImGui::Begin("light");
 	ImGui::ColorEdit4("color", &directionalLight_.color.x);
 	ImGui::DragFloat3("direction", &directionalLight_.direction.x, 0.1f);
-	ImGui::DragFloat("intensity", &directionalLight_.intensity);
+	ImGui::DragFloat("intensity", &directionalLight_.intensity,0.1f,0.0f,10.0f);
 	ImGui::End();
 
 	ImGui::Begin("blend");
