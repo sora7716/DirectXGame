@@ -52,7 +52,7 @@ void TitleScene::Update() {
 	object3d_->SetTranslate(worldTransform3d_.translate);
 	object3d_->SetColor(object3dColor_);
 	Object3dCommon::GetInstance()->SetDirectionalLightData(directionalLight_);
-	Object3dCommon::GetInstance()->SetBlendMode((BlendMode)blendMode_);
+
 	object3d_->Update();
 
 	for (int i = 0; i < 2; i++) {
@@ -103,7 +103,10 @@ void TitleScene::Update() {
 	ImGui::End();
 
 	ImGui::Begin("blend");
-	ImGui::InputInt("mode", &blendMode_);
+	const char* blendModes[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+	if (ImGui::Combo("mode", &blendMode_, blendModes, IM_ARRAYSIZE(blendModes))) {
+		Object3dCommon::GetInstance()->SetBlendMode((BlendMode)blendMode_);
+	}
 	ImGui::End();
 #endif // USE_IMGUI
 	//ImGuiの受付終了
