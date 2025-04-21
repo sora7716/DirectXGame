@@ -19,4 +19,4 @@
   DirectXTexResize.cpp
   DirectXTexTGA.cpp
   DirectXTexWIC.cpp
-  DirectXTex_Desktop_2022_Win10.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\DirectXTex.lib
+  DirectXTex_Desktop_2022_Win10.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\DirectXTex.lib
