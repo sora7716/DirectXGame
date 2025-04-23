@@ -1,5 +1,6 @@
 #pragma once
 #include "IScene.h"
+#include "engine/particle/ParticleEmit.h"
 
 /// <summary>
 /// タイトルシーン
@@ -53,6 +54,7 @@ private://メンバ変数
 	DirectionalLight directionalLight_ = {};
 	//ブレンドモード
 	int blendMode_ = BlendMode::kNone;
+	std::unique_ptr<ParticleEmit>particleEmit_ = nullptr;
 };
 
 

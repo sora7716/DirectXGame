@@ -38,6 +38,7 @@ C:\subject\DirectXGame\project\engine\math\Vector4.cpp;C:\subject\DirectXGame\ge
 C:\subject\DirectXGame\project\engine\objectCommon\BaseObjectCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\BaseObjectCommon.obj
 C:\subject\DirectXGame\project\engine\objectCommon\Object2dCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\subject\DirectXGame\project\engine\objectCommon\Object3dCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object3dCommon.obj
+C:\subject\DirectXGame\project\engine\particle\ParticleEmit.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\ParticleEmit.obj
 C:\subject\DirectXGame\project\engine\scene\AbstractSceneFactory.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\AbstractSceneFactory.obj
 C:\subject\DirectXGame\project\engine\scene\GameScene.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\GameScene.obj
 C:\subject\DirectXGame\project\engine\scene\IScene.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\IScene.obj

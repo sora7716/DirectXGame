@@ -35,8 +35,7 @@ PixelShaderOutput main(VertexShaderOutput input) {
         float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
         output.color.rgb = gMaterial.color.rgb * textureColor.rgb * gDirectionalLight.color.rgb * cos * gDirectionalLight.intensity;
         output.color.a = gMaterial.color.a * textureColor.a;
-    }
-    else {
+    } else {
         output.color = gMaterial.color * textureColor;
     }
     //textureのα値が0.5f以下の時にPixelを棄却

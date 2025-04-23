@@ -7,6 +7,7 @@ AudioManager* AudioManager::GetInstance(){
 		instance = new AudioManager();
 	}
 	return instance;
+
 }
 
 //オーディオの追加
