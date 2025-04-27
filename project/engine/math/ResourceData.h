@@ -5,6 +5,8 @@
 #include "Matrix3x3.h"
 #include "Matrix4x4.h"
 #include <cstdint>
+#include <string>
+#include <vector>
 
 //頂点データ
 typedef struct VertexData {
@@ -27,3 +29,16 @@ typedef struct DirectionalLight {
 	Vector3 direction;//ライトの向き
 	float intensity;//輝度
 }DirectionalLight;
+
+//マテリアルデータ
+typedef struct MaterialData {
+	std::string textureFilePath;
+	uint32_t srvIndex;
+}MaterialData;
+
+
+//モデルデータの構造体
+typedef struct ModelData {
+	std::vector<VertexData> vertices;
+	MaterialData material;
+}ModelData;

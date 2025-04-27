@@ -1,40 +1,122 @@
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
-#include "engine/2d/SpriteManager.h"
-#include "engine/gameObject/Object2d.h"
+#include "engine/objectCommon/Object3dCommon.h"
+#include "engine/debug/ImGuiManager.h"
+#include "engine/2d/TextureManager.h"
+#include "engine/math/func/Math.h"
 
 //初期化
 void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
-	//スプライトの生成
-	object2d_ = new Object2d();
-	object2d_->Initialize();
-	object2d_->SetSprite("uvChecker");
-	//ワールドトランスフォームの設定
-	worldTransform_ = {
-		.scale = {100.0f,100.0f},
-		.rotate = 0.0f,
-		.translate = {0.0f,0.0f}
+	//ライトを生成
+	Object3dCommon::GetInstance()->CreateDirectionLight();
+	//ワールドトランスフォームの生成
+	worldTransform_ = std::make_unique<WorldTransform>();
+	//トランスフォームの初期化
+	transform_ = {
+		.scale = {1.0f,1.0f,1.0f},
+		.rotate = {0.0f,180.0f * rad,0.0f},
+		.translate = {0.0f,0.0f,0.0f}
 	};
+	//ワールドトランスフォームの初期化
+	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
+	//カメラを設定
+	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
+	//頂点リソースの生成
+	CreateVertexResource();
+	//マテリアルリソースの生成
+	CreateMaterialResource();
+	//テクスチャの読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 }
 
 //更新
 void ParticleEmit::Update() {
-	object2d_->SetTransform(worldTransform_);
-	//オブジェクト2d
-	object2d_->Update();
+	//sprite_->UpdateUVTransform();
+	worldTransform_->SetTransform(transform_);
+	//グラフィックパイプラインの生成
+	Object3dCommon::GetInstance()->CreateGraphicsPipeline();
+	//ワールドトランスフォームの更新
+	worldTransform_->Update();
+#ifdef USE_IMGUI
+	ImGui::Begin("parthicleEmit");
+	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f);
+	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
+	ImGui::End();
+#endif // USE_IMGUI
+
 }
 
 //描画
 void ParticleEmit::Draw() {
-	//オブジェクト2d
-	object2d_->Draw();
+	//ワールドトランスフォームの描画
+	worldTransform_->Draw();
+	//平光源CBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object3dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	//VertexBufferViewの設定
+	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
+	//マテリアルCBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
+	//SRVのDescriptorTableの先頭を設定
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
+	//描画(DrwaCall/ドローコール)
+	directXBase_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
 }
 
 //終了
 void ParticleEmit::Finalize() {
-	delete object2d_;
+
 }
 
+//モデルデータの初期化
+void ParticleEmit::InitializeModelData() {
+	modelData_.vertices.push_back({ .position = {1.0f,1.0f,0.0f,1.0f},.texcoord = {0.0f,0.0f},.normal = {0.0f,0.0f,1.0f} });//左上
+	modelData_.vertices.push_back({ .position = {-1.0f,1.0f,0.0f,1.0f},.texcoord = {1.0f,0.0f},.normal = {0.0f,0.0f,1.0f} });//右上
+	modelData_.vertices.push_back({ .position = {1.0f,-1.0f,0.0f,1.0f},.texcoord = {0.0f,1.0f},.normal = {0.0f,0.0f,1.0f} });//左下
+	modelData_.vertices.push_back({ .position = {1.0f,-1.0f,0.0f,1.0f},.texcoord = {0.0f,1.0f},.normal = {0.0f,0.0f,1.0f} });//左下
+	modelData_.vertices.push_back({ .position = {-1.0f,1.0f,0.0f,1.0f},.texcoord = {1.0f,0.0f},.normal = {0.0f,0.0f,1.0f} });//右上
+	modelData_.vertices.push_back({ .position = {-1.0f,-1.0f,0.0f,1.0f},.texcoord = {1.0f,1.0f},.normal = {0.0f,0.0f,1.0f} });//右下
+	modelData_.material.textureFilePath = "engine/resources/textures/uvChecker.png";
+}
 
+//マテリアルデータの初期化
+void ParticleEmit::InitializeMaterialData() {
+	//色を書き込む
+	materialData_->color = { 1.0f, 1.0f, 1.0f, 1.0f };
+	materialData_->enableLighting = false;
+	materialData_->uvTransform = Math::MakeIdentity4x4();
+}
+
+//頂点リソースの生成
+void ParticleEmit::CreateVertexResource() {
+	//頂点データの初期化
+	InitializeModelData();
+	//頂点リソースを生成
+	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	//VertexBufferViewを作成する(頂点バッファービュー)
+	//リソースの先頭アドレスから使う
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	//使用するリソースのサイズは頂点3つ分のサイズ
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+	//1頂点当たりのサイズ
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	//頂点リソースにデータを書き込む
+	VertexData* vertexData = nullptr;
+	//書き込むためのアドレスを取得
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));//書き込むためのアドレスを取得
+	std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());//頂点データをリソースにコピー
+}
+
+//マテリアルリソースの生成
+void ParticleEmit::CreateMaterialResource() {
+	//マテリアルリソースを作る
+	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
+	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる
+	//書き込むためのアドレスを取得
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//マテリアルデータの初期値を書き込む
+	InitializeMaterialData();
+}

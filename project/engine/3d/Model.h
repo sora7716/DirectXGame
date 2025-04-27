@@ -5,18 +5,6 @@
 #include <d3d12.h>
 #include "engine/math/ResourceData.h"
 #include "engine/math/func/Rendering.h"
-//マテリアルデータ
-typedef struct MaterialData {
-	std::string textureFilePath;
-	uint32_t srvIndex;
-}MaterialData;
-
-
-//モデルデータの構造体
-typedef struct ModelData {
-	std::vector<VertexData> vertices;
-	MaterialData material;
-}ModelData;
 
 //前方宣言
 class ModelCommon;
