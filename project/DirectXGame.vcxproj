@@ -95,6 +95,7 @@
     <ClInclude Include="engine\math\func\Rendering.h" />
     <ClInclude Include="engine\math\Matrix3x3.h" />
     <ClInclude Include="engine\math\Matrix4x4.h" />
+    <ClInclude Include="engine\math\RenderingData.h" />
     <ClInclude Include="engine\math\Vector2.h" />
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />

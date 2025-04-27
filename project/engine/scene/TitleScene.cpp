@@ -120,14 +120,19 @@ void TitleScene::Update() {
 
 //描画
 void TitleScene::Draw() {
-	//object2d_->Draw();
-	object3d_->Draw();
+	object2d_->Draw();
+	//object3d_->Draw();
 	for (int i = 0; i < 2; i++) {
 		//plane_[i]->Draw();
 	}
-	//particleEmit_->Draw();
+	particleEmit_->Draw();
 }
 
 //終了
 void TitleScene::Finalize() {
+	particleEmit_->Finalize();
+	/*object2d_->Finalize();*/
+	/*object3d_->Finalize();
+	plane_[0]->Finalize();
+	plane_[1]->Finalize();*/
 }

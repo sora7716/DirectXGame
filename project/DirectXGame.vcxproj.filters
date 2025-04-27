@@ -365,6 +365,9 @@
     <ClInclude Include="engine\particle\ParticleEmit.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="engine\math\RenderingData.h">
+      <Filter>engine\math\func</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="engine\resources\shaders\Object3d.PS.hlsl">

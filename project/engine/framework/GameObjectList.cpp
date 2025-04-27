@@ -45,6 +45,7 @@ void GameObjectList::LoadAudio() {
 void GameObjectList::LoadSprite() {
 	SpriteManager::GetInstance()->LoadSprite("monsterBall", "monsterBall");
 	SpriteManager::GetInstance()->LoadSprite("block", "block");
+	SpriteManager::GetInstance()->LoadSprite("uvChecker", "uvChecker");
 }
 
 //OBJファイルの読み込み
