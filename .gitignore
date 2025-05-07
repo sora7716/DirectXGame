@@ -1,0 +1,6 @@
+generated/outputs/Debug/*.pdb
+generated/outputs/Debug/CG2.pdb
+generated/outputs/Debug/CG2.pdb
+# Debug ファイルを無視
+*.pdb
+generated/outputs/Debug/
