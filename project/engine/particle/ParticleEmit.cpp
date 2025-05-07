@@ -35,8 +35,6 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 void ParticleEmit::Update() {
 	//sprite_->UpdateUVTransform();
 	worldTransform_->SetTransform(transform_);
-	//グラフィックパイプラインの生成
-	Object3dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォームの更新
 	worldTransform_->Update();
 #ifdef USE_IMGUI
@@ -51,6 +49,10 @@ void ParticleEmit::Update() {
 
 //描画
 void ParticleEmit::Draw() {
+	//PSOの設定
+	auto pso = Object3dCommon::GetInstance()->GetGraphicsPipelineStates()[0].Get();
+	//グラフィックスパイプラインをセットするコマンド
+	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//ワールドトランスフォームの描画
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定

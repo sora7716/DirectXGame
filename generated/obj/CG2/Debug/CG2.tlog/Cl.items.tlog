@@ -10,6 +10,7 @@ C:\subject\DirectXGame\project\engine\audio\AudioManager.cpp;C:\subject\DirectXG
 C:\subject\DirectXGame\project\engine\base\D3DResourceLeakChecker.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\D3DResourceLeakChecker.obj
 C:\subject\DirectXGame\project\engine\base\DirectXBase.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\DirectXBase.obj
 C:\subject\DirectXGame\project\engine\base\FixFPS.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\FixFPS.obj
+C:\subject\DirectXGame\project\engine\base\GraphicsPipeline.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\GraphicsPipeline.obj
 C:\subject\DirectXGame\project\engine\base\SRVManager.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\SRVManager.obj
 C:\subject\DirectXGame\project\engine\base\StringUtility.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\StringUtility.obj
 C:\subject\DirectXGame\project\engine\base\WinApi.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\WinApi.obj

@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/3d/Model.h"
 #include "engine/gameObject/WorldTransform.h"
+#include "engine/blend/BlendMode.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -115,6 +116,12 @@ public://メンバ関数
 	void SetTexture(const std::string& filePath);
 
 	/// <summary>
+	/// ブレンドモードのセッター
+	/// </summary>
+	/// <param name="blendMode"></param>
+	void SetBlendMode(const BlendMode& blendMode);
+
+	/// <summary>
 	/// スケールのゲッター
 	/// </summary>
 	/// <returns>スケール</returns>
@@ -174,5 +181,7 @@ private://メンバ変数
 	Model* model_ = nullptr;
 	//ワールドトランスフォーム
 	std::unique_ptr<WorldTransform>worldTransform_ = nullptr;
+	//ブレンドモード
+	BlendMode blendMode_ = BlendMode::kNone;
 };
 

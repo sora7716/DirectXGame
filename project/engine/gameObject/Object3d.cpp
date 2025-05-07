@@ -23,8 +23,6 @@ void Object3d::Initialize() {
 
 //更新
 void Object3d::Update() {
-	//グラフィックパイプラインの生成
-	Object3dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォーム
 	worldTransform_->Update();
 	if (model_) {
@@ -34,6 +32,10 @@ void Object3d::Update() {
 
 //描画
 void Object3d::Draw() {
+	//PSOの設定
+	auto pso = Object3dCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
+	//グラフィックスパイプラインをセットするコマンド
+	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//ワールドトランスフォーム
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
@@ -106,6 +108,11 @@ void Object3d::SetTexture(const std::string& filePath) {
 	if (model_) {
 		model_->SetTexture("engine/resources/textures/" + filePath + ".png");
 	}
+}
+
+//ブレンドモードのセッター
+void Object3d::SetBlendMode(const BlendMode& blendMode) {
+	blendMode_ = blendMode;
 }
 
 // スケールのゲッター
