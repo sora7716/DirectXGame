@@ -107,9 +107,13 @@ void TitleScene::Update() {
 	ImGui::End();
 
 	ImGui::Begin("blend");
-	const char* blendModes[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
-	if (ImGui::Combo("mode", &blendMode_, blendModes, IM_ARRAYSIZE(blendModes))) {
+	const char* blendModes3d[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+	if (ImGui::Combo("3dMode", &blendMode_, blendModes3d, IM_ARRAYSIZE(blendModes3d))) {
 		object3d_->SetBlendMode((BlendMode)blendMode_);
+	}
+	const char* blendModes2d[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+	if (ImGui::Combo("2dMode", &blendMode_, blendModes2d, IM_ARRAYSIZE(blendModes2d))) {
+		object2d_->SetBlendMode((BlendMode)blendMode_);
 	}
 	ImGui::End();
 #endif // USE_IMGUI
