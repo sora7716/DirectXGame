@@ -1,6 +1,7 @@
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/gameObject/WorldTransform.h"
+#include "engine/blend/BlendMode.h"
 #include <d3d12.h>
 #include <wrl.h>
 #include <memory>
@@ -63,6 +64,8 @@ private://メンバ関数
 	/// </summary>
 	void CreateMaterialResource();
 private://メンバ変数
+	//パーティクルの数
+	uint32_t instanceCoount_ = 10;
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
 	//ワールドトランスフォーム
@@ -77,5 +80,7 @@ private://メンバ変数
 	ComPtr<ID3D12Resource>materialResource_ = nullptr;//マテリアル
 	//バッファリソースの使い道を補足するバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
+	//ブレンドモード
+	BlendMode blendMode_ = BlendMode::kNone;
 };
 

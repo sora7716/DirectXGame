@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <memory>
 #include <array>
+#include <string>
 //前方宣言
 class DirectXBase;
 
@@ -44,12 +45,30 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>グラフィックスパイプライン達</returns>
 	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)>GetGraphicsPipelines();
+
+	/// <summary>
+	/// 頂点シェーダのファイル名をセット
+	/// </summary>
+	/// <param name="fileName">ファイル名</param>
+	void SetVertexShaderFileName(const std::wstring& fileName);
+
+	/// <summary>
+	/// ピクセルシェーダのファイル名をセット
+	/// </summary>
+	/// <param name="fileName">ファイル名</param>
+	void SetPixelShaderFileName(const std::wstring& fileName);
 private://メンバ関数
 	/// <summary>
-	/// ルートシグネイチャBlobの生成
+	/// ルートシグネイチャBlobの生成(CBV)
 	/// </summary>
 	/// <returns>ルートシグネイチャのBlob</returns>
-	ComPtr<ID3DBlob>CreateRootSignatureBlob();
+	ComPtr<ID3DBlob>CreateRootSignatureBlobForCBV();
+
+	/// <summary>
+    /// ルートシグネイチャBlobの生成(SBV)
+    /// </summary>
+    /// <returns>ルートシグネイチャのBlob</returns>
+	ComPtr<ID3DBlob>CreateRootSignatureBlobForSBV();
 
 	/// <summary>
 	/// ルートシグネイチャの生成
@@ -110,4 +129,9 @@ private://メンバ変数
 	ComPtr<IDxcBlob> pixelShaderBlob_ = nullptr;
 	//グラフィックスパイプライン達
 	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(6)>graphicsPipelines_ = { nullptr };
+	//ファイル名
+	std::wstring vertexShaderFileName_ = L"Object3d.VS.hlsl";//頂点
+	std::wstring pixelShaderFileName_ = L"Object3d.PS.hlsl";//ピクセル
+	//ルートシグネイチャBlob
+	ComPtr<ID3DBlob>signatureBlob_ = nullptr;
 };

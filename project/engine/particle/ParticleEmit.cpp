@@ -1,6 +1,6 @@
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
-#include "engine/objectCommon/Object3dCommon.h"
+#include "engine/objectCommon/ParticleCommon.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/2d/TextureManager.h"
 #include "engine/math/func/Math.h"
@@ -10,7 +10,7 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//ライトを生成
-	Object3dCommon::GetInstance()->CreateDirectionLight();
+	ParticleCommon::GetInstance()->CreateDirectionLight();
 	//ワールドトランスフォームの生成
 	worldTransform_ = std::make_unique<WorldTransform>();
 	//トランスフォームの初期化
@@ -22,7 +22,7 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//ワールドトランスフォームの初期化
 	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
 	//カメラを設定
-	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
+	worldTransform_->SetCamera(ParticleCommon::GetInstance()->GetDefaultCamera());
 	//頂点リソースの生成
 	CreateVertexResource();
 	//マテリアルリソースの生成
@@ -50,13 +50,13 @@ void ParticleEmit::Update() {
 //描画
 void ParticleEmit::Draw() {
 	//PSOの設定
-	auto pso = Object3dCommon::GetInstance()->GetGraphicsPipelineStates()[0].Get();
+	auto pso = ParticleCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
 	//グラフィックスパイプラインをセットするコマンド
 	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//ワールドトランスフォームの描画
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object3dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, ParticleCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//マテリアルCBufferの場所を設定
@@ -64,7 +64,7 @@ void ParticleEmit::Draw() {
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
 	//描画(DrwaCall/ドローコール)
-	directXBase_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
+	directXBase_->GetCommandList()->DrawInstanced(static_cast<UINT>(modelData_.vertices.size()),instanceCoount_, 0, 0);
 }
 
 //終了

@@ -14,6 +14,8 @@ using namespace Microsoft::WRL;
 void GraphicsPipeline::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
+	//シグネイチャBlobの初期化
+	signatureBlob_ = CreateRootSignatureBlobForCBV();
 	//ルートシグネイチャの保存
 	rootSignature_ = CreateRootSignature();
 	//インプットレイアウト
@@ -43,8 +45,18 @@ std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOf
 	return graphicsPipelines_;
 }
 
-//ルートシグネイチャBlobの生成
-ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlob() {
+//頂点シェーダのファイル名をセット
+void GraphicsPipeline::SetVertexShaderFileName(const std::wstring& fileName) {
+	vertexShaderFileName_ = fileName;
+}
+
+//ピクセルシェーダのファイル名をセット
+void GraphicsPipeline::SetPixelShaderFileName(const std::wstring& fileName) {
+	pixelShaderFileName_ = fileName;
+}
+
+//ルートシグネイチャBlobの生成(CBV)
+ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlobForCBV() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -67,6 +79,7 @@ ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlob() {
 	descriptorRange[0].NumDescriptors = 1;//数は1つ
 	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
 	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+
 
 	//RootParameterの作成。複数設定できるので配列。
 	D3D12_ROOT_PARAMETER rootParameters[4] = {};
@@ -104,14 +117,69 @@ ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlob() {
 	return signatureBlob;
 }
 
+//ルートシグネイチャBlobの生成(SBV)
+ComPtr<ID3DBlob> GraphicsPipeline::CreateRootSignatureBlobForSBV() {
+	//RootSignature作成
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	//Samplerの設定
+	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
+	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;//バイナリフィルター
+	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
+	staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
+	staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;//0~1の範囲外をリピート
+	staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;//比較しない
+	staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;//ありたっけのMipmapを使う
+	staticSamplers[0].ShaderRegister = 0;//レジスタ番号
+	staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	descriptionRootSignature.pStaticSamplers = staticSamplers;
+	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
+
+	//DescriptorRange
+	D3D12_DESCRIPTOR_RANGE descriptorRangeForInstancing[1] = {};
+	descriptorRangeForInstancing[0].BaseShaderRegister = 0;//0から始まる
+	descriptorRangeForInstancing[0].NumDescriptors = 1;//数は1つ
+	descriptorRangeForInstancing[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;//SRVを使う
+	descriptorRangeForInstancing[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;//Offsetを自動計算
+
+	//RootParameterの作成。複数設定できるので配列。
+	D3D12_ROOT_PARAMETER rootParameters[3] = {};
+	//色情報
+	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBVを使うb0のbと一致する	
+	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインドb0の0と一致する
+
+	//Transform
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//CBVを使う
+	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderを使う
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//レジスタ番号
+	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
+
+	//DescriptorTable(DescriptorRangeをまとめたもの)
+	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
+	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PixelShaderを使う
+	rootParameters[2].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//Tableの中身の配列を指定
+	rootParameters[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
+
+	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
+	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
+	ComPtr<ID3DBlob> signatureBlob = nullptr;
+	ComPtr<ID3DBlob> errorBlob = nullptr;
+	//シリアライズしてバイナリにする
+	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
+	if (FAILED(hr)) {
+		Log::ConsolePrintf(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
+		assert(false);
+	}
+	return signatureBlob;
+}
+
 //ルートシグネイチャの生成
 ComPtr<ID3D12RootSignature> GraphicsPipeline::CreateRootSignature() {
 	HRESULT result = S_FALSE;
-	//シグネイチャBlobの初期化
-	ComPtr<ID3DBlob>signatureBlob = CreateRootSignatureBlob();
 	//ルートシグネイチャの宣言
 	ComPtr<ID3D12RootSignature>rootSignature;
-	result = directXBase_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	result = directXBase_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
 	assert(SUCCEEDED(result));
 	return rootSignature;
 }
@@ -163,7 +231,7 @@ D3D12_RASTERIZER_DESC GraphicsPipeline::InitializeRasterizerSatate() {
 //頂点シェーダのコンパイル
 ComPtr<IDxcBlob> GraphicsPipeline::CompileVertexShader() {
 	//VertexShader
-	ComPtr<IDxcBlob> vertexShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	ComPtr<IDxcBlob> vertexShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/" + vertexShaderFileName_, L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 	return vertexShaderBlob;
 }
@@ -171,7 +239,7 @@ ComPtr<IDxcBlob> GraphicsPipeline::CompileVertexShader() {
 //ピクセルシェーダのコンパイル
 ComPtr<IDxcBlob> GraphicsPipeline::CompilePixelShader() {
 	//PixelShader
-	ComPtr<IDxcBlob> pixelShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/object3d.PS.hlsl", L"ps_6_0");
+	ComPtr<IDxcBlob> pixelShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/" + pixelShaderFileName_, L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 	return pixelShaderBlob;
 }

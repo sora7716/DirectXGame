@@ -2,6 +2,7 @@
 #include "engine/math/ResourceData.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/GraphicsPipeline.h"
+#include "engine/gameObject/Camera.h"
 #include <wrl.h>
 #include <d3d12.h>
 #include <memory>
@@ -63,6 +64,18 @@ public://メンバ関数
 	/// </summary>
 	/// <returns>グラフィックパイプライン</returns>
 	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)>GetGraphicsPipelineStates()const;
+
+	/// <summary>
+	/// デフォルトカメラのセッター
+	/// </summary>
+	/// <param name="camera">カメラ</param>
+	void SetDefaultCamera(Camera* camera);
+
+	/// <summary>
+	/// デフォルトカメラのゲッター
+	/// </summary>
+	/// <returns>デフォルトカメラ</returns>
+	Camera* GetDefaultCamera()const;
 protected://メンバ変数
 	//DirectXの基盤
 	DirectXBase* directXBase_ = nullptr;
@@ -79,4 +92,6 @@ protected://メンバ変数
 	//ブレンド
 	std::unique_ptr<Blend>blend_ = nullptr;
 	BlendMode blendMode_ = BlendMode::kNone;
+	//デフォルトカメラ
+	Camera* defaultCamera_ = nullptr;
 };

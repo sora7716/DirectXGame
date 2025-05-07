@@ -27,6 +27,8 @@ void GameSystem::Draw() {
 	Object2dCommon::GetInstance()->DrawSetting();
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
+	//パーティクルの共通部分
+	ParticleCommon::GetInstance()->DrawSetting();
 	//シーン
 	SceneManager::GetInstance()->Draw();
 	//ImGuiの管理

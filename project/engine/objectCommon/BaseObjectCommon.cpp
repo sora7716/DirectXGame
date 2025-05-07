@@ -64,3 +64,13 @@ DirectXBase* BaseObjectCommon::GetDirectXBase() const {
 std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)> BaseObjectCommon::GetGraphicsPipelineStates() const{
 	return graphicsPipelineStates_;
 }
+
+// デフォルトカメラのセッター
+void BaseObjectCommon::SetDefaultCamera(Camera* camera) {
+	defaultCamera_ = camera;
+}
+
+// デフォルトカメラのゲッター
+Camera* BaseObjectCommon::GetDefaultCamera() const {
+	return defaultCamera_;
+}

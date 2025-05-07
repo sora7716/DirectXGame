@@ -1,5 +1,4 @@
 #include "Object3dCommon.h"
-#include "engine/gameObject/Camera.h"
 #include <cassert>
 
 //インスタンスのゲッター
@@ -16,14 +15,4 @@ void Object3dCommon::Finalize(){
 	delete instance;
 	instance = nullptr;
 	isFinalize = true;
-}
-
-// デフォルトカメラのセッター
-void Object3dCommon::SetDefaultCamera(Camera* camera){
-	defaultCamera_ = camera;
-}
-
-// デフォルトカメラのゲッター
-Camera* Object3dCommon::GetDefaultCamera() const{
-	return defaultCamera_;
 }
