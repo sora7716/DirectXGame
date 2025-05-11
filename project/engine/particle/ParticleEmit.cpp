@@ -1,5 +1,6 @@
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
+#include "engine/math/func/Rendering.h"
 #include "engine/objectCommon/ParticleCommon.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/2d/TextureManager.h"
@@ -11,32 +12,26 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	directXBase_ = directXBase;
 	//ライトを生成
 	ParticleCommon::GetInstance()->CreateDirectionLight();
-	//ワールドトランスフォームの生成
-	worldTransform_ = std::make_unique<WorldTransform>();
 	//トランスフォームの初期化
 	transform_ = {
 		.scale = {1.0f,1.0f,1.0f},
 		.rotate = {0.0f,180.0f * rad,0.0f},
 		.translate = {0.0f,0.0f,0.0f}
 	};
-	//ワールドトランスフォームの初期化
-	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
-	//カメラを設定
-	worldTransform_->SetCamera(ParticleCommon::GetInstance()->GetDefaultCamera());
 	//頂点リソースの生成
 	CreateVertexResource();
 	//マテリアルリソースの生成
 	CreateMaterialResource();
+	//トランスフォーメーションリソースを生成
+	CreateTransformationMatrixResorce();
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 }
 
 //更新
 void ParticleEmit::Update() {
-	//sprite_->UpdateUVTransform();
-	worldTransform_->SetTransform(transform_);
-	//ワールドトランスフォームの更新
-	worldTransform_->Update();
+	//トランスフォームの更新	
+	UpdateTransform();
 #ifdef USE_IMGUI
 	ImGui::Begin("parthicleEmit");
 	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f);
@@ -53,8 +48,6 @@ void ParticleEmit::Draw() {
 	auto pso = ParticleCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
 	//グラフィックスパイプラインをセットするコマンド
 	directXBase_->GetCommandList()->SetPipelineState(pso);
-	//ワールドトランスフォームの描画
-	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, ParticleCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//VertexBufferViewの設定
@@ -121,4 +114,33 @@ void ParticleEmit::CreateMaterialResource() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//マテリアルデータの初期値を書き込む
 	InitializeMaterialData();
+}
+
+//ワールドビュープロジェクションのリソースの生成
+void ParticleEmit::CreateTransformationMatrixResorce(){//座標変換行列リソースを作成する
+	wvpResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix));
+	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
+	//書き込むためのアドレス
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
+	//単位行列を書き込んでおく
+	wvpData_->WVP = Math::MakeIdentity4x4();
+	wvpData_->World = Math::MakeIdentity4x4();
+}
+
+//トランスフォームの更新
+void ParticleEmit::UpdateTransform(){
+	//TransformからWorldMatrixを作る
+	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	/*if (parent_) {
+		worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
+	}*/
+	//wvpの書き込み
+	if (camera_) {
+		const Matrix4x4& viewProjectionMatrix = camera_->GetViewProjectionMatrix();
+		wvpData_->WVP = worldMatrix_ * viewProjectionMatrix;
+	} else {
+		wvpData_->WVP = worldMatrix_;
+	}
+	//ワールド行列を送信
+	wvpData_->World = worldMatrix_;
 }

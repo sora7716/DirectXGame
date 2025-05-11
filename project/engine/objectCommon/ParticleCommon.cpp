@@ -18,8 +18,8 @@ void ParticleCommon::Initialize(DirectXBase* directXBase){
 	blend_ = std::make_unique<Blend>();
 	//グラフィックスパイプラインの生成と初期化
 	graphicsPipeline_ = std::make_unique<GraphicsPipeline>();
-	graphicsPipeline_->SetVertexShaderFileName(L"ParticleVS.hlsl");
-	graphicsPipeline_->SetPixelShaderFileName(L"ParticlePS.hlsl");
+	/*graphicsPipeline_->SetVertexShaderFileName(L"ParticleVS.hlsl");
+	graphicsPipeline_->SetPixelShaderFileName(L"ParticlePS.hlsl");*/
 	graphicsPipeline_->Initialize(directXBase_);
 	//ルートシグネイチャの記録
 	rootSignature_ = graphicsPipeline_->GetRootSignature();

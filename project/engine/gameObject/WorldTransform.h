@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "engine/math/func/Rendering.h"
+#include "engine/math/RenderingData.h"
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
@@ -152,12 +152,12 @@ private://メンバ変数
 	ComPtr<ID3D12Resource>wvpResource_ = nullptr;
 	//ワールドビュープロジェクションのデータ
 	TransformationMatrix* wvpData_ = nullptr;
+	//カメラ
+	Camera* camera_ = nullptr;
 	//切り取る範囲
 	ScreenArea screenArea_ = {};
 	//トランスフォームモード
 	TransformMode transformMode_ = TransformMode::k3d;
-	//カメラ
-	Camera* camera_ = nullptr;
 	//ワールド座標
 	Transform transform_ = {};
 	//ワールド行列

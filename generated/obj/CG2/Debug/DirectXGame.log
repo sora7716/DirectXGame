@@ -1,14 +1,4 @@
-﻿  GraphicsPipeline.cpp
-  Framework.cpp
-  GameSystem.cpp
-  Object2d.cpp
-  Object3d.cpp
-  PlaneObject.cpp
-  main.cpp
-  BaseObjectCommon.cpp
-  Object2dCommon.cpp
-  Object3dCommon.cpp
-  ParticleCommon.cpp
-  ParticleEmit.cpp
-  TitleScene.cpp
-C:\subject\DirectXGame\project\engine\base\GraphicsPipeline.cpp(123,1): error C4716: 'GraphicsPipeline::CreateRootSignatureBlobForSBV': 値を返さなければいけません
+﻿  TitleScene.cpp
+  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
+          1 個のファイルをコピーしました。
+          1 個のファイルをコピーしました。

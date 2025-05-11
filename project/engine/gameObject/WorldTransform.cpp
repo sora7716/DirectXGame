@@ -1,5 +1,6 @@
 #include "WorldTransform.h"
 #include "engine/base/DirectXBase.h"
+#include "engine/math/func/Rendering.h"
 #include "engine/math/func/Math.h"
 #include "engine/gameObject/Camera.h"
 ////メンバ関数テーブルの初期化
