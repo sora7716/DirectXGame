@@ -23,7 +23,7 @@ void WorldTransform::Initialize(DirectXBase* directXBase, TransformMode transfor
 //更新
 void WorldTransform::Update() {
 	//トランスフォームの更新
-	(this->*UpdateTransformTable[transformMode_])();
+	(this->*UpdateTransformTable[static_cast<uint32_t>(transformMode_)])();
 }
 
 //描画

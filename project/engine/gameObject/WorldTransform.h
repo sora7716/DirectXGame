@@ -10,7 +10,7 @@ class DirectXBase;
 class Camera;
 
 //列挙型
-enum TransformMode {
+enum class TransformMode :uint32_t {
 	k3d,
 	k2d
 };
@@ -44,7 +44,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="directXBase">DirectXの基盤部分</param>
 	/// <param name="transformMode">トランスフォームのモード</param>
-	void Initialize(DirectXBase* directXBase,TransformMode transformMode);
+	void Initialize(DirectXBase* directXBase, TransformMode transformMode);
 
 	/// <summary>
 	/// 更新
@@ -91,7 +91,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="scale">スケール</param>
 	void SetScale(const Vector3& scale);
-	
+
 	/// <summary>
 	/// 回転のセッター
 	/// </summary>
@@ -144,7 +144,7 @@ private://メンバ関数
 	void UpdateTransform2d();
 private://メンバ関数テーブル
 	//座標の更新をまとめた
-	static void (WorldTransform::*UpdateTransformTable[])();
+	static void (WorldTransform::* UpdateTransformTable[])();
 private://メンバ変数
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
