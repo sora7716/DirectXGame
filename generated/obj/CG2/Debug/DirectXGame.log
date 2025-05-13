@@ -1,11 +1,43 @@
-﻿  Framework.cpp
+﻿  Sprite.cpp
+  SpriteCommon.cpp
+  SpriteManager.cpp
+  TextureManager.cpp
+  Model.cpp
+  ModelCommon.cpp
+  ModelManager.cpp
+  Audio.cpp
+  AudioManager.cpp
+  D3DResourceLeakChecker.cpp
+  DirectXBase.cpp
+  FixFPS.cpp
+  SRVManager.cpp
+  StringUtility.cpp
+  WinApi.cpp
+  Blend.cpp
+  DebugCamera.cpp
+  ImGuiManager.cpp
+  Log.cpp
+  Framework.cpp
+  GameObjectList.cpp
   GameSystem.cpp
+  Camera.cpp
+  CameraManager.cpp
   Object2d.cpp
   Object3d.cpp
   PlaneObject.cpp
   WorldTransform.cpp
+  Input.cpp
   main.cpp
-  ParticleCommon.cpp
+  Aithmetic.cpp
+  Math.cpp
+  Rendering.cpp
+  Matrix4x4.cpp
+  Vector2.cpp
+  Vector3.cpp
+  Vector4.cpp
+  BaseObjectCommon.cpp
+  Object2dCommon.cpp
+  Object3dCommon.cpp
   ParticleEmit.cpp
   AbstractSceneFactory.cpp
   GameScene.cpp
@@ -13,7 +45,7 @@
   SceneFactory.cpp
   SceneManager.cpp
   TitleScene.cpp
-  LINK : 前回のインクリメンタル リンクで C:\Subject\CG\CG2\project\..\generated\outputs\Debug\CG2.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  DirectXGame.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\CG2.exe
+  LINK : 前回のインクリメンタル リンクで C:\subject\DirectXGame\project\..\generated\outputs\Debug\CG2.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。
