@@ -2,12 +2,12 @@
 #include "engine/math/ResourceData.h"
 #include "engine/math/func/Rendering.h"
 #include "engine/gameObject/WorldTransform.h"
+#include "engine/blend/BlendMode.h"
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
 #include <memory>
 //前方宣言
-class Object2dCommon;
 class Sprite;
 
 /// <summary>
@@ -161,6 +161,12 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="parent">親</param>
 	void SetParent(const WorldTransform* parent);
+
+	/// <summary>
+	/// ブレンドモードセッター
+	/// </summary>
+	/// <param name="blendMode"></param>
+	void SetBlendMode(const BlendMode& blendMode);
 private://メンバ変数
 	//UV座標
 	Transform2d uvTransform_ = {
@@ -174,5 +180,7 @@ private://メンバ変数
 	Sprite* sprite_ = nullptr;
 	//ワールドトランスフォーム
 	std::unique_ptr<WorldTransform> worldTransform_ = nullptr;
+	//ブレンドモード
+	BlendMode blendMode_ = BlendMode::kNone;
 };
 

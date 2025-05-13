@@ -23,6 +23,7 @@
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="engine\base\DirectXBase.cpp" />
     <ClCompile Include="engine\base\FixFPS.cpp" />
+    <ClCompile Include="engine\base\GraphicsPipeline.cpp" />
     <ClCompile Include="engine\base\SRVManager.cpp" />
     <ClCompile Include="engine\base\StringUtility.cpp" />
     <ClCompile Include="engine\base\WinApi.cpp" />
@@ -51,6 +52,7 @@
     <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object2dCommon.cpp" />
     <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
+    <ClCompile Include="engine\objectCommon\ParticleCommon.cpp" />
     <ClCompile Include="engine\particle\ParticleEmit.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\GameScene.cpp" />
@@ -72,6 +74,7 @@
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h" />
     <ClInclude Include="engine\base\DirectXBase.h" />
     <ClInclude Include="engine\base\FixFPS.h" />
+    <ClInclude Include="engine\base\GraphicsPipeline.h" />
     <ClInclude Include="engine\base\SRVManager.h" />
     <ClInclude Include="engine\base\StringUtility.h" />
     <ClInclude Include="engine\base\WinApi.h" />
@@ -103,6 +106,7 @@
     <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
     <ClInclude Include="engine\objectCommon\Object2dCommon.h" />
     <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
+    <ClInclude Include="engine\objectCommon\ParticleCommon.h" />
     <ClInclude Include="engine\particle\ParticleEmit.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\GameScene.h" />

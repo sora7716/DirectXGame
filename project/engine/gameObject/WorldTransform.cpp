@@ -1,5 +1,6 @@
 #include "WorldTransform.h"
 #include "engine/base/DirectXBase.h"
+#include "engine/math/func/Rendering.h"
 #include "engine/math/func/Math.h"
 #include "engine/gameObject/Camera.h"
 ////メンバ関数テーブルの初期化
@@ -22,7 +23,7 @@ void WorldTransform::Initialize(DirectXBase* directXBase, TransformMode transfor
 //更新
 void WorldTransform::Update() {
 	//トランスフォームの更新
-	(this->*UpdateTransformTable[transformMode_])();
+	(this->*UpdateTransformTable[static_cast<uint32_t>(transformMode_)])();
 }
 
 //描画

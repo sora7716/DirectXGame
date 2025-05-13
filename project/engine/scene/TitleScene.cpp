@@ -55,7 +55,6 @@ void TitleScene::Update() {
 	object3d_->SetTranslate(worldTransform3d_.translate);
 	object3d_->SetColor(object3dColor_);
 	Object3dCommon::GetInstance()->SetDirectionalLightData(directionalLight_);
-
 	object3d_->Update();
 
 	for (int i = 0; i < 2; i++) {
@@ -108,9 +107,13 @@ void TitleScene::Update() {
 	ImGui::End();
 
 	ImGui::Begin("blend");
-	const char* blendModes[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
-	if (ImGui::Combo("mode", &blendMode_, blendModes, IM_ARRAYSIZE(blendModes))) {
-		Object3dCommon::GetInstance()->SetBlendMode((BlendMode)blendMode_);
+	/*const char* blendModes3d[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+	if (ImGui::Combo("3dMode", &blendMode_, blendModes3d, IM_ARRAYSIZE(blendModes3d))) {
+		object3d_->SetBlendMode((BlendMode)blendMode_);
+	}*/
+	const char* blendModes2d[] = { "None", "Normal", "Add", "Subtract", "Multiply", "Screen" };
+	if (ImGui::Combo("2dMode", &blendMode_, blendModes2d, IM_ARRAYSIZE(blendModes2d))) {
+		object2d_->SetBlendMode((BlendMode)blendMode_);
 	}
 	ImGui::End();
 #endif // USE_IMGUI
@@ -120,8 +123,8 @@ void TitleScene::Update() {
 
 //描画
 void TitleScene::Draw() {
-	object2d_->Draw();
 	//object3d_->Draw();
+	object2d_->Draw();
 	for (int i = 0; i < 2; i++) {
 		//plane_[i]->Draw();
 	}
@@ -131,8 +134,4 @@ void TitleScene::Draw() {
 //終了
 void TitleScene::Finalize() {
 	particleEmit_->Finalize();
-	/*object2d_->Finalize();*/
-	/*object3d_->Finalize();
-	plane_[0]->Finalize();
-	plane_[1]->Finalize();*/
 }

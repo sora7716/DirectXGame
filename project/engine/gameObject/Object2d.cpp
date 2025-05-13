@@ -31,8 +31,6 @@ void Object2d::Initialize() {
 
 //更新
 void Object2d::Update() {
-	//グラフィックパイプラインの生成
-	Object2dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォームの更新
 	worldTransform_->Update();
 	//UV座標の更新
@@ -43,6 +41,10 @@ void Object2d::Update() {
 
 //描画
 void Object2d::Draw() {
+	//PSOの設定
+	auto pso = Object2dCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
+	//グラフィックスパイプラインをセットするコマンド
+	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//ワールドトランスフォームの描画
 	worldTransform_->Draw();
 	//平光源CBufferの場所を設定
@@ -169,4 +171,9 @@ void Object2d::SetCamera(Camera* camera) {
 //親のセッター
 void Object2d::SetParent(const WorldTransform* parent) {
 	worldTransform_->SetParent(parent);
+}
+
+//ブレンドモードのセッター
+void Object2d::SetBlendMode(const BlendMode& blendMode){
+	blendMode_ = blendMode;
 }

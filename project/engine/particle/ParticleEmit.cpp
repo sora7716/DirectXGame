@@ -1,6 +1,7 @@
+
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
-#include "engine/objectCommon/Object3dCommon.h"
+#include "engine/objectCommon/ParticleCommon.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/2d/TextureManager.h"
 #include "engine/math/func/Math.h"
@@ -10,19 +11,17 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//ライトを生成
-	Object3dCommon::GetInstance()->CreateDirectionLight();
-	//ワールドトランスフォームの生成
-	worldTransform_ = std::make_unique<WorldTransform>();
+	ParticleCommon::GetInstance()->CreateDirectionLight();
 	//トランスフォームの初期化
 	transform_ = {
 		.scale = {1.0f,1.0f,1.0f},
 		.rotate = {0.0f,180.0f * rad,0.0f},
 		.translate = {0.0f,0.0f,0.0f}
 	};
-	//ワールドトランスフォームの初期化
+	//ワールドトランスフォームの生成
+	worldTransform_ = std::make_unique<WorldTransform>();
 	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
-	//カメラを設定
-	worldTransform_->SetCamera(Object3dCommon::GetInstance()->GetDefaultCamera());
+	worldTransform_->SetCamera(ParticleCommon::GetInstance()->GetDefaultCamera());
 	//頂点リソースの生成
 	CreateVertexResource();
 	//マテリアルリソースの生成
@@ -33,10 +32,8 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 
 //更新
 void ParticleEmit::Update() {
-	//sprite_->UpdateUVTransform();
+	//トランスフォームの設定
 	worldTransform_->SetTransform(transform_);
-	//グラフィックパイプラインの生成
-	Object3dCommon::GetInstance()->CreateGraphicsPipeline();
 	//ワールドトランスフォームの更新
 	worldTransform_->Update();
 #ifdef USE_IMGUI
@@ -51,18 +48,22 @@ void ParticleEmit::Update() {
 
 //描画
 void ParticleEmit::Draw() {
-	//ワールドトランスフォームの描画
-	worldTransform_->Draw();
+	//PSOの設定
+	auto pso = ParticleCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
+	//グラフィックスパイプラインをセットするコマンド
+	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object3dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, ParticleCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
+	//ワールドトランスフォームの描画
+	worldTransform_->Draw();
 	//描画(DrwaCall/ドローコール)
-	directXBase_->GetCommandList()->DrawInstanced(6, 1, 0, 0);
+	directXBase_->GetCommandList()->DrawInstanced(static_cast<UINT>(modelData_.vertices.size()), instanceCoount_, 0, 0);
 }
 
 //終了

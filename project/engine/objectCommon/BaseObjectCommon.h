@@ -1,12 +1,12 @@
+
 #pragma once
+#include "engine/math/ResourceData.h"
+#include "engine/base/DirectXBase.h"
+#include "engine/base/GraphicsPipeline.h"
+#include "engine/gameObject/Camera.h"
 #include <wrl.h>
 #include <d3d12.h>
-#include "engine/math/ResourceData.h"
-#include "engine/blend/Blend.h"
 #include <memory>
-
-//前方宣言
-class DirectXBase;
 
 /// <summary>
 /// オブジェクトの管理する基底クラス
@@ -38,32 +38,21 @@ public://メンバ関数
 	virtual void DrawSetting();
 
 	/// <summary>
-    /// 光源の生成
-    /// </summary>
-	void CreateDirectionLight();
-
-	/// <summary>
-	/// グラフィックスパイプラインの生成
+	/// 光源の生成
 	/// </summary>
-	void CreateGraphicsPipeline();
+	void CreateDirectionLight();
 
 	/// <summary>
 	/// DirectionalLightのセッター
 	/// </summary>
 	/// <param name="directionalLightData">DirectionalLightデータ</param>
-	void SetDirectionalLightData(const DirectionalLight&directionalLightData);
-
-	/// <summary>
-	/// ブレンドモードのセッター
-	/// </summary>
-	/// <param name="blendMode">ブレンドモード</param>
-	void SetBlendMode(BlendMode blendMode);
+	void SetDirectionalLightData(const DirectionalLight& directionalLightData);
 
 	/// <summary>
 	/// DirectionalLightのリソースのゲッター
 	/// </summary>
 	/// <returns>DirectionalLightのリソース</returns>
-	ID3D12Resource* GetDirectionalLightResource();
+	ID3D12Resource* GetDirectionalLightResource()const;
 
 	/// <summary>
 	/// DirectXの基盤のゲッター.
@@ -72,35 +61,38 @@ public://メンバ関数
 	DirectXBase* GetDirectXBase()const;
 
 	/// <summary>
-	/// パイプラインステートのゲッター
+	/// グラフィックパイプラインのゲッター
 	/// </summary>
-	/// <returns>パイプラインステート</returns>
-	ComPtr<ID3D12PipelineState> GetGraphicsPipelineState();
-protected://メンバ関数
-	/// <summary>
-	/// ルートシグネイチャの設定
-	/// </summary>
-	void InitializeRootSigneture();
+	/// <returns>グラフィックパイプライン</returns>
+	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)>GetGraphicsPipelineStates()const;
 
 	/// <summary>
-	/// ルートシグネイチャの生成
+	/// デフォルトカメラのセッター
 	/// </summary>
-	void CreateRootSignature();
+	/// <param name="camera">カメラ</param>
+	void SetDefaultCamera(Camera* camera);
+
+	/// <summary>
+	/// デフォルトカメラのゲッター
+	/// </summary>
+	/// <returns>デフォルトカメラ</returns>
+	Camera* GetDefaultCamera()const;
 protected://メンバ変数
-	DirectXBase* directXBase_ = nullptr;//DirectXの基盤
-	//Blob
-	ComPtr<ID3DBlob> signatureBlob_ = nullptr;
-	ComPtr<ID3DBlob> errorBlob_ = nullptr;
+	//DirectXの基盤
+	DirectXBase* directXBase_ = nullptr;
 	//ルートシグネイチャ
-	ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+	ComPtr<ID3D12RootSignature>rootSignature_ = nullptr;
 	//グラフィックスパイプライン(PSO)
-	ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
+	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)> graphicsPipelineStates_ = { nullptr };
+	//グラフィックスパイプライン
+	std::unique_ptr<GraphicsPipeline>graphicsPipeline_ = nullptr;
 	//バッファリソース
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
 	DirectionalLight* directionalLightData_ = nullptr;//光源
 	//ブレンド
 	std::unique_ptr<Blend>blend_ = nullptr;
-	BlendMode blendMode_ = BlendMode::kNormal;
+	BlendMode blendMode_ = BlendMode::kNone;
+	//デフォルトカメラ
+	Camera* defaultCamera_ = nullptr;
 };
-

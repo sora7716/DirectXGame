@@ -10,6 +10,7 @@ C:\subject\DirectXGame\project\engine\audio\AudioManager.cpp;C:\subject\DirectXG
 C:\subject\DirectXGame\project\engine\base\D3DResourceLeakChecker.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\D3DResourceLeakChecker.obj
 C:\subject\DirectXGame\project\engine\base\DirectXBase.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\DirectXBase.obj
 C:\subject\DirectXGame\project\engine\base\FixFPS.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\FixFPS.obj
+C:\subject\DirectXGame\project\engine\base\GraphicsPipeline.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\GraphicsPipeline.obj
 C:\subject\DirectXGame\project\engine\base\SRVManager.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\SRVManager.obj
 C:\subject\DirectXGame\project\engine\base\StringUtility.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\StringUtility.obj
 C:\subject\DirectXGame\project\engine\base\WinApi.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\WinApi.obj
@@ -38,6 +39,7 @@ C:\subject\DirectXGame\project\engine\math\Vector4.cpp;C:\subject\DirectXGame\ge
 C:\subject\DirectXGame\project\engine\objectCommon\BaseObjectCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\BaseObjectCommon.obj
 C:\subject\DirectXGame\project\engine\objectCommon\Object2dCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\subject\DirectXGame\project\engine\objectCommon\Object3dCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\Object3dCommon.obj
+C:\subject\DirectXGame\project\engine\objectCommon\ParticleCommon.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\ParticleCommon.obj
 C:\subject\DirectXGame\project\engine\particle\ParticleEmit.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\ParticleEmit.obj
 C:\subject\DirectXGame\project\engine\scene\AbstractSceneFactory.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\AbstractSceneFactory.obj
 C:\subject\DirectXGame\project\engine\scene\GameScene.cpp;C:\subject\DirectXGame\generated\obj\CG2\Debug\GameScene.obj
