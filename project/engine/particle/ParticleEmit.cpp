@@ -1,9 +1,11 @@
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/objectCommon/ParticleCommon.h"
+#include "engine/gameObject/Camera.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/2d/TextureManager.h"
 #include "engine/math/func/Math.h"
+#include "engine/base/SRVManager.h"
 
 //初期化
 void ParticleEmit::Initialize(DirectXBase* directXBase) {
@@ -17,24 +19,23 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 		.rotate = {0.0f,180.0f * rad,0.0f},
 		.translate = {0.0f,0.0f,0.0f}
 	};
-	//ワールドトランスフォームの生成
-	worldTransform_ = std::make_unique<WorldTransform>();
-	worldTransform_->Initialize(directXBase_,TransformMode::k3d);
-	worldTransform_->SetCamera(ParticleCommon::GetInstance()->GetDefaultCamera());
+	//ワールドトランスフォームのリソースの生成
+	CreateWorldTransformResource();
+	//カメラを設定
+	camera_ = ParticleCommon::GetInstance()->GetDefaultCamera();
 	//頂点リソースの生成
 	CreateVertexResource();
 	//マテリアルリソースの生成
 	CreateMaterialResource();
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
+	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3,);
 }
 
 //更新
 void ParticleEmit::Update() {
-	//トランスフォームの設定
-	worldTransform_->SetTransform(transform_);
 	//ワールドトランスフォームの更新
-	worldTransform_->Update();
+	UpdateWorldTransform();
 #ifdef USE_IMGUI
 	ImGui::Begin("parthicleEmit");
 	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f);
@@ -60,9 +61,9 @@ void ParticleEmit::Draw() {
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
 	//ワールドトランスフォームの描画
-	worldTransform_->Draw();
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());//wvp
 	//描画(DrwaCall/ドローコール)
-	directXBase_->GetCommandList()->DrawInstanced(static_cast<UINT>(modelData_.vertices.size()), instanceCoount_, 0, 0);
+	directXBase_->GetCommandList()->DrawInstanced(static_cast<UINT>(modelData_.vertices.size()), kNumInstanceCount, 0, 0);
 }
 
 //終了
@@ -119,4 +120,38 @@ void ParticleEmit::CreateMaterialResource() {
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//マテリアルデータの初期値を書き込む
 	InitializeMaterialData();
+}
+
+//ワールドトランスフォームのリソースの生成
+void ParticleEmit::CreateWorldTransformResource() {
+	//座標変換行列リソースを作成する
+	wvpResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
+	//座標変換行列リソースにデータを書き込むためのアドレスを取得してtransformationMatrixDataに割り当てる
+	//書き込むためのアドレス
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&instanceDatas_));
+	for (uint32_t i = 0;i < kNumInstanceCount;i++) {
+		//単位行列を書き込んでおく
+		instanceDatas_[i].WVP = Math::MakeIdentity4x4();
+		instanceDatas_[i].World = Math::MakeIdentity4x4();
+	}
+}
+
+//ワールドトランスフォームの更新
+void ParticleEmit::UpdateWorldTransform() {
+	for (uint32_t i = 0;i < kNumInstanceCount;i++) {
+		//TransformからWorldMatrixを作る
+		worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+		/*if (parent_) {
+			worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
+		}*/
+		//wvpの書き込み
+		if (camera_) {
+			const Matrix4x4& viewProjectionMatrix = camera_->GetViewProjectionMatrix();
+			instanceDatas_[i].WVP = worldMatrix_ * viewProjectionMatrix;
+		} else {
+			instanceDatas_[i].WVP = worldMatrix_;
+		}
+		//ワールド行列を送信
+		instanceDatas_[i].World = worldMatrix_;
+	}
 }

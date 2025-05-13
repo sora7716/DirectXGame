@@ -15,21 +15,21 @@ void GraphicsPipeline::Initialize(DirectXBase* directXBase) {
 	//DirectXの基盤部分を記録する
 	directXBase_ = directXBase;
 	//シグネイチャBlobの初期化
-	signatureBlob_ = CreateRootSignatureBlobForCBV();
+	CreateRootSignatureBlobForCBV();
 	//ルートシグネイチャの保存
-	rootSignature_ = CreateRootSignature();
+	CreateRootSignature();
 	//インプットレイアウト
-	inputLayoutDesc_ = InitializeInputLayoutDesc();
+	InitializeInputLayoutDesc();
 	//ラスタライザステート
-	rasterizerDesc_ = InitializeRasterizerSatate();
+	InitializeRasterizerSatate();
 	//頂点シェーダBlob
-	vertexShaderBlob_ = CompileVertexShader();
+	CompileVertexShader();
 	//ピクセルシェーダBlob
-	pixelShaderBlob_ = CompilePixelShader();
+	CompilePixelShader();
 	//PSO
 	for (uint32_t i = 0; i < static_cast<int32_t>(BlendMode::kCountOfBlendMode); i++) {
 		//ブレンドステート
-		blendDesc_ = InitializeBlendState(i);
+		InitializeBlendState(i);
 		//グラフィックスパイプラインの生成
 		graphicsPipelines_[i] = CreateGraphicsPipeline();
 	}
@@ -56,7 +56,7 @@ void GraphicsPipeline::SetPixelShaderFileName(const std::wstring& fileName) {
 }
 
 //ルートシグネイチャBlobの生成(CBV)
-ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlobForCBV() {
+void GraphicsPipeline::CreateRootSignatureBlobForCBV() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -106,19 +106,17 @@ ComPtr<ID3DBlob>GraphicsPipeline::CreateRootSignatureBlobForCBV() {
 
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
-	ComPtr<ID3DBlob> signatureBlob = nullptr;
 	ComPtr<ID3DBlob> errorBlob = nullptr;
 	//シリアライズしてバイナリにする
-	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
+	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob);
 	if (FAILED(hr)) {
 		Log::ConsolePrintf(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
 		assert(false);
 	}
-	return signatureBlob;
 }
 
 //ルートシグネイチャBlobの生成(SBV)
-ComPtr<ID3DBlob> GraphicsPipeline::CreateRootSignatureBlobForSBV() {
+void GraphicsPipeline::CreateRootSignatureBlobForSRV() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -163,29 +161,24 @@ ComPtr<ID3DBlob> GraphicsPipeline::CreateRootSignatureBlobForSBV() {
 
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
-	ComPtr<ID3DBlob> signatureBlob = nullptr;
 	ComPtr<ID3DBlob> errorBlob = nullptr;
 	//シリアライズしてバイナリにする
-	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
+	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob_, &errorBlob);
 	if (FAILED(hr)) {
 		Log::ConsolePrintf(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
 		assert(false);
 	}
-	return signatureBlob;
 }
 
 //ルートシグネイチャの生成
-ComPtr<ID3D12RootSignature> GraphicsPipeline::CreateRootSignature() {
+void GraphicsPipeline::CreateRootSignature() {
 	HRESULT result = S_FALSE;
-	//ルートシグネイチャの宣言
-	ComPtr<ID3D12RootSignature>rootSignature;
-	result = directXBase_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	result = directXBase_->GetDevice()->CreateRootSignature(0, signatureBlob_->GetBufferPointer(), signatureBlob_->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(result));
-	return rootSignature;
 }
 
 //インプットレイアウトの初期化
-D3D12_INPUT_LAYOUT_DESC GraphicsPipeline::InitializeInputLayoutDesc() {
+void GraphicsPipeline::InitializeInputLayoutDesc() {
 	//InputElementDesc
 	static D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
@@ -203,45 +196,37 @@ D3D12_INPUT_LAYOUT_DESC GraphicsPipeline::InitializeInputLayoutDesc() {
 	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	//InputLayout
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-	inputLayoutDesc.pInputElementDescs = inputElementDescs;
-	inputLayoutDesc.NumElements = _countof(inputElementDescs);
-	return inputLayoutDesc;
+	inputLayoutDesc_.pInputElementDescs = inputElementDescs;
+	inputLayoutDesc_.NumElements = _countof(inputElementDescs);
 }
 
 //ブレンドステートの初期化
-D3D12_BLEND_DESC GraphicsPipeline::InitializeBlendState(int32_t blendMode) {
+void GraphicsPipeline::InitializeBlendState(int32_t blendMode) {
 	//ブレンド関係のクラスの生成
 	std::unique_ptr<Blend> blend = std::make_unique<Blend>();
-	D3D12_BLEND_DESC blendDesc = blend->SetBlendDesc(static_cast<BlendMode>(blendMode));
-	return blendDesc;
+	blendDesc_ = blend->SetBlendDesc(static_cast<BlendMode>(blendMode));
 }
 
 //ラスタライザステートの初期化
-D3D12_RASTERIZER_DESC GraphicsPipeline::InitializeRasterizerSatate() {
-	//RasterizerStateの設定
-	D3D12_RASTERIZER_DESC rasterizerDesc{};
+void GraphicsPipeline::InitializeRasterizerSatate() {
 	//裏面(時計周り)を表示しない
-	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
+	rasterizerDesc_.CullMode = D3D12_CULL_MODE_BACK;
 	//三角形の中を塗りつぶす
-	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
-	return rasterizerDesc;
+	rasterizerDesc_.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
 //頂点シェーダのコンパイル
-ComPtr<IDxcBlob> GraphicsPipeline::CompileVertexShader() {
+void GraphicsPipeline::CompileVertexShader() {
 	//VertexShader
-	ComPtr<IDxcBlob> vertexShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/" + vertexShaderFileName_, L"vs_6_0");
-	assert(vertexShaderBlob != nullptr);
-	return vertexShaderBlob;
+	vertexShaderBlob_ = directXBase_->CompilerShader(L"engine/resources/shaders/" + vertexShaderFileName_, L"vs_6_0");
+	assert(vertexShaderBlob_ != nullptr);
 }
 
 //ピクセルシェーダのコンパイル
-ComPtr<IDxcBlob> GraphicsPipeline::CompilePixelShader() {
+void GraphicsPipeline::CompilePixelShader() {
 	//PixelShader
-	ComPtr<IDxcBlob> pixelShaderBlob = directXBase_->CompilerShader(L"engine/resources/shaders/" + pixelShaderFileName_, L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-	return pixelShaderBlob;
+	pixelShaderBlob_ = directXBase_->CompilerShader(L"engine/resources/shaders/" + pixelShaderFileName_, L"ps_6_0");
+	assert(pixelShaderBlob_ != nullptr);
 }
 
 //PSOの生成
@@ -276,4 +261,9 @@ ComPtr<ID3D12PipelineState> GraphicsPipeline::CreateGraphicsPipeline() {
 	result = directXBase_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState));
 	assert(SUCCEEDED(result));
 	return graphicsPipelineState;
+}
+
+//DirectXの基盤のセッター
+void GraphicsPipeline::SetDirectXBase(DirectXBase* directXBase){
+	directXBase_ = directXBase;
 }

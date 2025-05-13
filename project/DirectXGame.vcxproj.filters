@@ -213,11 +213,11 @@
     <ClCompile Include="engine\math\Vector4.cpp">
       <Filter>engine\math</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\GraphicsPipeline.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="engine\objectCommon\ParticleCommon.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>engine\objectCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\GraphicsPipeline.cpp">
+      <Filter>engine\base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,11 +374,11 @@
     <ClInclude Include="engine\math\RenderingData.h">
       <Filter>engine\math\func</Filter>
     </ClInclude>
-    <ClInclude Include="engine\base\GraphicsPipeline.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engine\objectCommon\ParticleCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>engine\objectCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\GraphicsPipeline.h">
+      <Filter>engine\base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -388,9 +388,18 @@
     <FxCompile Include="engine\resources\shaders\Object3d.VS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Particle.PS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Particle.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="engine\resources\shaders\Object3d.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="engine\resources\shaders\Particle.hlsli">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

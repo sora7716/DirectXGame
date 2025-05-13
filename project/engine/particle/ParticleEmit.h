@@ -1,10 +1,14 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "engine/gameObject/WorldTransform.h"
+#include "engine/math/RenderingData.h"
 #include "engine/blend/BlendMode.h"
 #include <d3d12.h>
 #include <wrl.h>
+#include <array>
 #include <memory>
+//前方宣言
+class DirectXBase;
+class Camera;
 
 /// <summary>
 /// パーティクルのエミット
@@ -63,15 +67,32 @@ private://メンバ関数
 	/// マテリアルリソースの生成
 	/// </summary>
 	void CreateMaterialResource();
-private://メンバ変数
+
+	/// <summary>
+	/// ワールドトランスフォームのリソースの生成
+	/// </summary>
+	void CreateWorldTransformResource();
+
+	/// <summary>
+	/// ワールドトランスフォームの更新
+	/// </summary>
+	void UpdateWorldTransform();
+private://静的メンバ変数
 	//パーティクルの数
-	uint32_t instanceCoount_ = 10;
+	static const uint32_t kNumInstanceCount = 10;
+private://メンバ変数
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
-	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransform> worldTransform_ = nullptr;
+	//カメラ
+	Camera* camera_ = nullptr;
+	//ワールドビュープロジェクションのリソース
+	ComPtr<ID3D12Resource>wvpResource_ = nullptr;
+	//ワールドビュープロジェクションのデータ
+	std::array<TransformationMatrix, kNumInstanceCount> instanceDatas_ = {};
 	//トランスフォーム
 	Transform transform_ = {};
+	//ワールドマトリックス
+	Matrix4x4 worldMatrix_ = {};
 	//モデルデータ
 	ModelData modelData_ = {};
 	//マテリアルデータ

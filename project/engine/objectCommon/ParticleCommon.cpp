@@ -17,14 +17,33 @@ void ParticleCommon::Initialize(DirectXBase* directXBase){
 	//ブレンド
 	blend_ = std::make_unique<Blend>();
 	//グラフィックスパイプラインの生成と初期化
-	graphicsPipeline_ = std::make_unique<GraphicsPipeline>();
-	/*graphicsPipeline_->SetVertexShaderFileName(L"ParticleVS.hlsl");
-	graphicsPipeline_->SetPixelShaderFileName(L"ParticlePS.hlsl");*/
-	graphicsPipeline_->Initialize(directXBase_);
-	//ルートシグネイチャの記録
-	rootSignature_ = graphicsPipeline_->GetRootSignature();
+	makeGraphicsPipeline_ = std::make_unique<GraphicsPipeline>();
+	//DirectXの基盤部分をセットする
+	makeGraphicsPipeline_->SetDirectXBase(directXBase_);
+	makeGraphicsPipeline_->SetVertexShaderFileName(L"Particle.VS.hlsl");
+	makeGraphicsPipeline_->SetPixelShaderFileName(L"Particle.PS.hlsl");
+	//シグネイチャBlobの初期化
+	makeGraphicsPipeline_->CreateRootSignatureBlobForSRV();
+	//ルートシグネイチャの保存
+	makeGraphicsPipeline_->CreateRootSignature();
+	//インプットレイアウト
+	makeGraphicsPipeline_->InitializeInputLayoutDesc();
+	//ラスタライザステート
+	makeGraphicsPipeline_->InitializeRasterizerSatate();
+	//頂点シェーダBlob
+	makeGraphicsPipeline_->CompileVertexShader();
+	//ピクセルシェーダBlob
+	makeGraphicsPipeline_->CompilePixelShader();
+	//PSO
+	for (uint32_t i = 0; i < static_cast<int32_t>(BlendMode::kCountOfBlendMode); i++) {
+		//ブレンドステート
+		makeGraphicsPipeline_->InitializeBlendState(i);
+		//グラフィックスパイプラインの生成[
+		graphicsPipelineStates_[i] = makeGraphicsPipeline_->CreateGraphicsPipeline();
+	}	//ルートシグネイチャの記録
+	rootSignature_ = makeGraphicsPipeline_->GetRootSignature();
 	//グラフィックスパイプラインステートの記録
-	graphicsPipelineStates_ = graphicsPipeline_->GetGraphicsPipelines();
+	//graphicsPipelineStates_ = makeGraphicsPipeline_->GetGraphicsPipelines();
 }
 
 //終了

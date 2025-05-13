@@ -84,7 +84,7 @@ protected://メンバ変数
 	//グラフィックスパイプライン(PSO)
 	std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)> graphicsPipelineStates_ = { nullptr };
 	//グラフィックスパイプライン
-	std::unique_ptr<GraphicsPipeline>graphicsPipeline_ = nullptr;
+	std::unique_ptr<GraphicsPipeline>makeGraphicsPipeline_ = nullptr;
 	//バッファリソース
 	ComPtr<ID3D12Resource> directionalLightResource_ = nullptr;//光源
 	//バッファリソース内のデータを指すポインタ
