@@ -10,6 +10,7 @@ C:\Subject\CG\CG2\project\engine\audio\AudioManager.cpp;C:\Subject\CG\CG2\genera
 C:\Subject\CG\CG2\project\engine\base\D3DResourceLeakChecker.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\D3DResourceLeakChecker.obj
 C:\Subject\CG\CG2\project\engine\base\DirectXBase.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\DirectXBase.obj
 C:\Subject\CG\CG2\project\engine\base\FixFPS.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\FixFPS.obj
+C:\Subject\CG\CG2\project\engine\base\GraphicsPipeline.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\GraphicsPipeline.obj
 C:\Subject\CG\CG2\project\engine\base\SRVManager.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\SRVManager.obj
 C:\Subject\CG\CG2\project\engine\base\StringUtility.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\StringUtility.obj
 C:\Subject\CG\CG2\project\engine\base\WinApi.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\WinApi.obj
@@ -38,6 +39,7 @@ C:\Subject\CG\CG2\project\engine\math\Vector4.cpp;C:\Subject\CG\CG2\generated\ob
 C:\Subject\CG\CG2\project\engine\objectCommon\BaseObjectCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\BaseObjectCommon.obj
 C:\Subject\CG\CG2\project\engine\objectCommon\Object2dCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\Subject\CG\CG2\project\engine\objectCommon\Object3dCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\Object3dCommon.obj
+C:\Subject\CG\CG2\project\engine\objectCommon\ParticleCommon.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\ParticleCommon.obj
 C:\Subject\CG\CG2\project\engine\particle\ParticleEmit.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\ParticleEmit.obj
 C:\Subject\CG\CG2\project\engine\scene\AbstractSceneFactory.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\AbstractSceneFactory.obj
 C:\Subject\CG\CG2\project\engine\scene\GameScene.cpp;C:\Subject\CG\CG2\generated\obj\CG2\Debug\GameScene.obj
