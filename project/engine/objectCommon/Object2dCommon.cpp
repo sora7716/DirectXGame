@@ -1,5 +1,4 @@
 #include "Object2dCommon.h"
-#include "engine/gameObject/Camera.h"
 #include <cassert>
 
 //インスタンスのゲッター
@@ -16,14 +15,4 @@ void Object2dCommon::Finalize() {
 	delete instance;
 	instance = nullptr;
 	isFinalize = true;
-}
-
-// デフォルトカメラのセッター
-void Object2dCommon::SetDefaultCamera(Camera* camera) {
-	defaultCamera_ = camera;
-}
-
-// デフォルトカメラのゲッター
-Camera* Object2dCommon::GetDefaultCamera() const {
-	return defaultCamera_;
 }

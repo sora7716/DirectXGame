@@ -1,4 +1,3 @@
-
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/gameObject/WorldTransform.h"
@@ -85,3 +84,4 @@ private://メンバ変数
 	//ブレンドモード
 	BlendMode blendMode_ = BlendMode::kNone;
 };
+

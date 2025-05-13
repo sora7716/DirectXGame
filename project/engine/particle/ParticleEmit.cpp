@@ -1,4 +1,3 @@
-
 #include "ParticleEmit.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/objectCommon/ParticleCommon.h"
@@ -20,7 +19,7 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	};
 	//ワールドトランスフォームの生成
 	worldTransform_ = std::make_unique<WorldTransform>();
-	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
+	worldTransform_->Initialize(directXBase_,TransformMode::k3d);
 	worldTransform_->SetCamera(ParticleCommon::GetInstance()->GetDefaultCamera());
 	//頂点リソースの生成
 	CreateVertexResource();

@@ -1,19 +1,3 @@
-﻿  Framework.cpp
-  GameSystem.cpp
-  Object2d.cpp
-  Object3d.cpp
-  PlaneObject.cpp
-  WorldTransform.cpp
-  main.cpp
-  ParticleCommon.cpp
-  ParticleEmit.cpp
-  AbstractSceneFactory.cpp
-  GameScene.cpp
-  IScene.cpp
-  SceneFactory.cpp
-  SceneManager.cpp
-  TitleScene.cpp
-  LINK : 前回のインクリメンタル リンクで C:\Subject\CG\CG2\project\..\generated\outputs\Debug\CG2.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  DirectXGame.vcxproj -> C:\Subject\CG\CG2\generated\outputs\Debug\CG2.exe
+﻿  DirectXGame.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。

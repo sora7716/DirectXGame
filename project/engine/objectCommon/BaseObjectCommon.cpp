@@ -61,7 +61,7 @@ DirectXBase* BaseObjectCommon::GetDirectXBase() const {
 }
 
 //グラフィックパイプラインのゲッター
-std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)> BaseObjectCommon::GetGraphicsPipelineStates() const {
+std::array<ComPtr<ID3D12PipelineState>, static_cast<int32_t>(BlendMode::kCountOfBlendMode)> BaseObjectCommon::GetGraphicsPipelineStates() const{
 	return graphicsPipelineStates_;
 }
 
