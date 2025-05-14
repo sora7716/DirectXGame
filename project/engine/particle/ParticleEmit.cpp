@@ -30,7 +30,7 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
 	particleResouce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
-	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3, particleResouce_.Get(),kNumInstanceCount,sizeof(TransformationMatrix));
+	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3, particleResouce_.Get(), kNumInstanceCount, sizeof(TransformationMatrix));
 }
 
 //更新
@@ -60,7 +60,7 @@ void ParticleEmit::Draw() {
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
 	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(modelData_.material.textureFilePath));
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(1, SRVManager::GetInstance()->GetGPUDescriptorHandle(3));
 	//ワールドトランスフォームの描画
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());//wvp
 	//描画(DrwaCall/ドローコール)
