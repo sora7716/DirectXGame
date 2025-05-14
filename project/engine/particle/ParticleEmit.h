@@ -95,6 +95,7 @@ private://メンバ変数
 	Matrix4x4 worldMatrix_ = {};
 	//モデルデータ
 	ModelData modelData_ = {};
+	ComPtr<ID3D12Resource>particleResouce_ = nullptr;
 	//マテリアルデータ
 	Material* materialData_ = nullptr;
 	//バッファリソース

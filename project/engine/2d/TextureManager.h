@@ -17,12 +17,12 @@ private://エイリアステンプレート
 private://構造体
 	//テクスチャデータ
 	typedef struct TextureData {
-		DirectX::TexMetadata metadata;//画像の幅や高さなどの情報
-		ComPtr<ID3D12Resource>resourece;//テクスチャリソース
-		uint32_t srvIndex;//SRVインデックス
-		ComPtr<ID3D12Resource>intermediateResource;//アップロードするリソース
-		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;//SRV作成時に必要なCPUハンドル
-		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;//描画コマンドに必要なGPUハンドル
+		DirectX::TexMetadata metadata = {};//画像の幅や高さなどの情報
+		ComPtr<ID3D12Resource>resourece = nullptr;//テクスチャリソース
+		uint32_t srvIndex = 0;//SRVインデックス
+		ComPtr<ID3D12Resource>intermediateResource = nullptr;//アップロードするリソース
+		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU = {};//SRV作成時に必要なCPUハンドル
+		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU = {};//描画コマンドに必要なGPUハンドル
 	}TextureData;
 public://メンバ関数
 	/// <summary>

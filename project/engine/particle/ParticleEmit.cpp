@@ -29,7 +29,8 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	CreateMaterialResource();
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3,);
+	particleResouce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
+	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3, particleResouce_.Get(),kNumInstanceCount,sizeof(TransformationMatrix));
 }
 
 //更新
