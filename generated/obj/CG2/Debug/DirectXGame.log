@@ -1,4 +1,21 @@
-﻿  SRVManager.cpp
+﻿  Sprite.cpp
+  SpriteCommon.cpp
+  TextureManager.cpp
+  Model.cpp
+  GraphicsPipeline.cpp
+  SRVManager.cpp
+  Framework.cpp
+  GameSystem.cpp
+  Object2d.cpp
+  Object3d.cpp
+  PlaneObject.cpp
+  main.cpp
+  BaseObjectCommon.cpp
+  Object2dCommon.cpp
+  Object3dCommon.cpp
+  ParticleCommon.cpp
   ParticleEmit.cpp
-SpriteManager.obj : warning LNK4099: PDB '' が 'SpriteManager.obj' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+  SceneFactory.cpp
+  TitleScene.cpp
+DirectXBase.obj : warning LNK4099: PDB '' が 'DirectXBase.obj' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 LINK : error LNK1218: 警告をエラーとして扱いました。出力ファイルは生成されません。
