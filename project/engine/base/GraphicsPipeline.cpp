@@ -115,7 +115,7 @@ void GraphicsPipeline::CreateRootSignatureBlobForCBV() {
 	}
 }
 
-//ルートシグネイチャBlobの生成(SBV)
+//ルートシグネイチャBlobの生成(SRV)
 void GraphicsPipeline::CreateRootSignatureBlobForSRV() {
 	//RootSignature作成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
