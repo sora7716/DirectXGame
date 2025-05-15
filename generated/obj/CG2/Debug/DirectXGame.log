@@ -1,2 +1,2 @@
-﻿SpriteManager.obj : warning LNK4099: PDB '' が 'SpriteManager.obj' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
+﻿Sprite.obj : warning LNK4099: PDB '' が 'Sprite.obj' で、または '' に見つかりません。デバッグ情報がないものとして、オブジェクトにリンクします。
 LINK : error LNK1218: 警告をエラーとして扱いました。出力ファイルは生成されません。
