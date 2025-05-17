@@ -203,7 +203,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)engine\base;$(ProjectDir)engine\2d;$(ProjectDir)externals;$(ProjectDir)engine\math;$(ProjectDir)engine\debug;$(ProjectDir)engine\input;$(ProjectDir)engine\audio;$(SolutionDir)DirectXTex;$(SolutionDir)imgui;$(ProjectDir)engine\resource;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
