@@ -16,12 +16,12 @@ void BaseObjectCommon::Initialize(DirectXBase* directXBase) {
 	//ブレンド
 	blend_ = std::make_unique<Blend>();
 	//グラフィックスパイプラインの生成と初期化
-	graphicsPipeline_ = std::make_unique<GraphicsPipeline>();
-	graphicsPipeline_->Initialize(directXBase_);
+	makeGraphicsPipeline_ = std::make_unique<GraphicsPipeline>();
+	makeGraphicsPipeline_->Initialize(directXBase_);
 	//ルートシグネイチャの記録
-	rootSignature_ = graphicsPipeline_->GetRootSignature();
+	rootSignature_ = makeGraphicsPipeline_->GetRootSignature();
 	//グラフィックスパイプラインステートの記録
-	graphicsPipelineStates_ = graphicsPipeline_->GetGraphicsPipelines();
+	graphicsPipelineStates_ = makeGraphicsPipeline_->GetGraphicsPipelines();
 }
 
 //共通描画設定

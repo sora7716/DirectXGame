@@ -388,9 +388,18 @@
     <FxCompile Include="engine\resources\shaders\Object3d.VS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Particle.PS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="engine\resources\shaders\Particle.VS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="engine\resources\shaders\Object3d.hlsli">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="engine\resources\shaders\Particle.hlsli">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

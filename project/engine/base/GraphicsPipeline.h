@@ -1,4 +1,3 @@
-
 #pragma once
 #include "engine/blend/Blend.h"
 #include <dxcapi.h>
@@ -57,62 +56,59 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	void SetPixelShaderFileName(const std::wstring& fileName);
-private://メンバ関数
+
 	/// <summary>
 	/// ルートシグネイチャBlobの生成(CBV)
 	/// </summary>
-	/// <returns>ルートシグネイチャのBlob</returns>
-	ComPtr<ID3DBlob>CreateRootSignatureBlobForCBV();
+	void CreateRootSignatureBlobForCBV();
 
 	/// <summary>
-    /// ルートシグネイチャBlobの生成(SBV)
-    /// </summary>
-    /// <returns>ルートシグネイチャのBlob</returns>
-	ComPtr<ID3DBlob>CreateRootSignatureBlobForSBV();
+	/// ルートシグネイチャBlobの生成(SRV)
+	/// </summary>
+	void CreateRootSignatureBlobForSRV();
 
 	/// <summary>
 	/// ルートシグネイチャの生成
 	/// </summary>
-	/// <returns>ルートシグネイチャ</returns>
-	ComPtr<ID3D12RootSignature>CreateRootSignature();
+	void CreateRootSignature();
 
 	/// <summary>
 	/// インプットレイアウトの初期化
 	/// </summary>
-	/// <returns>インプットレイアウトデスク</returns>
-	D3D12_INPUT_LAYOUT_DESC InitializeInputLayoutDesc();
+	void InitializeInputLayoutDesc();
 
 	/// <summary>
 	/// ブレンドステートの初期化
 	/// </summary>
 	/// <param name="blendMode">ブレンドモード</param>
-	/// <returns>ブレンドデスク</returns>
-	D3D12_BLEND_DESC InitializeBlendState(int32_t blendMode);
+	void InitializeBlendState(int32_t blendMode);
 
 	/// <summary>
 	/// ラスタライザステートの初期化
 	/// </summary>
-	/// <returns>ラスタライザデスク</returns>
-	D3D12_RASTERIZER_DESC InitializeRasterizerSatate();
+	void InitializeRasterizerSatate();
 
 	/// <summary>
 	/// 頂点シェーダのコンパイル
 	/// </summary>
-	/// <returns>頂点シェーダBlob</returns>
-	ComPtr<IDxcBlob>CompileVertexShader();
+	void CompileVertexShader();
 
 	/// <summary>
 	/// ピクセルシェーダのコンパイル
 	/// </summary>
-	/// <returns>ピクセルシェーダBlob</returns>
-	ComPtr<IDxcBlob>CompilePixelShader();
+	void CompilePixelShader();
 
 	/// <summary>
 	/// PSOの生成
 	/// </summary>
-	/// <returns>グラフィックスパイプライン</returns>
 	ComPtr<ID3D12PipelineState> CreateGraphicsPipeline();
-private://メンバ変数
+
+	/// <summary>
+	/// DirectXの基盤のセッター
+	/// </summary>
+	/// <param name="directXBase">DirectXの基盤部分</param>
+	void SetDirectXBase(DirectXBase* directXBase);
+protected://メンバ変数
 	//DirectXの基盤
 	DirectXBase* directXBase_ = nullptr;
 	//ルートシグネイチャ

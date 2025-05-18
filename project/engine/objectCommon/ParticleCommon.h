@@ -1,3 +1,4 @@
+
 #pragma once
 #include "BaseObjectCommon.h"
 
@@ -39,4 +40,3 @@ private://静的メンバ変数
 	//Finalizeをしたかどうかのフラグ
 	static inline bool isFinalize = false;
 };
-
