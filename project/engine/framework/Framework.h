@@ -4,6 +4,7 @@
 #include "engine/2d/SpriteCommon.h"
 #include "engine/objectCommon/Object2dCommon.h"
 #include "engine/objectCommon/Object3dCommon.h"
+#include "engine/objectCommon/ParticleCommon.h"
 #include "engine/base/SRVManager.h"
 #include"engine/debug/ImGuiManager.h"
 #include "engine/scene/SceneManager.h"
