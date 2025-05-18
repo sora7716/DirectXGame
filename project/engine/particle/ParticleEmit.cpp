@@ -52,7 +52,7 @@ void ParticleEmit::Draw() {
 	//グラフィックスパイプラインをセットするコマンド
 	directXBase_->GetCommandList()->SetPipelineState(pso);
 	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, ParticleCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(srvIndex_,SRVManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_).ptr);
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//マテリアルCBufferの場所を設定
