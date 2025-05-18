@@ -38,8 +38,8 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLight_.intensity = 1.0f;
 
-	particleEmit_ = std::make_unique<ParticleEmit>();
-	particleEmit_->Initialize(directXBase);
+	/*particleEmit_ = std::make_unique<ParticleEmit>();
+	particleEmit_->Initialize(directXBase);*/
 }
 
 //更新
@@ -70,7 +70,7 @@ void TitleScene::Update() {
 		plane_[1]->SetParent(nullptr);
 	}
 
-	particleEmit_->Update();
+	//particleEmit_->Update();
 
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
@@ -128,7 +128,7 @@ void TitleScene::Draw() {
 	for (int i = 0; i < 2; i++) {
 		//plane_[i]->Draw();
 	}
-	particleEmit_->Draw();
+	//particleEmit_->Draw();
 }
 
 //終了

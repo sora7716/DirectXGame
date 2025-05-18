@@ -27,10 +27,8 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	CreateVertexResource();
 	//マテリアルリソースの生成
 	CreateMaterialResource();
-	//テクスチャの読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	particleResouce_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
-	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(3, particleResouce_.Get(), kNumInstanceCount, sizeof(TransformationMatrix));
+	//ストラクチャバッファの生成
+	CreateStructuredBuffer();
 }
 
 //更新
@@ -155,4 +153,28 @@ void ParticleEmit::UpdateWorldTransform() {
 		//ワールド行列を送信
 		instanceDatas_[i].World = worldMatrix_;
 	}
+}
+
+//ストラクチャバッファの生成
+void ParticleEmit::CreateStructuredBuffer(){
+	//テクスチャの読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
+	//SRVインデックスの取得
+	srvIndex_ = TextureManager::GetInstance()->GetSRVIndex(modelData_.material.textureFilePath);
+
+	//インスタンシングリソースの生成
+	instancingResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
+	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instanceDatas_));
+
+	uint32_t instanceSrvIndex = SRVManager::GetInstance()->Allocate();
+	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(
+		instanceSrvIndex,
+		instancingResource_.Get(), 
+		kNumInstanceCount, 
+		sizeof(TransformationMatrix)
+	);
+	//SRVインデックスの記録
+	srvIndex_ = instanceSrvIndex;
+	//SRVインデックスの解放
+	SRVManager::GetInstance()->Free(instanceSrvIndex);
 }

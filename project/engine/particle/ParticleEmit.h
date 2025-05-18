@@ -77,6 +77,11 @@ private://メンバ関数
 	/// ワールドトランスフォームの更新
 	/// </summary>
 	void UpdateWorldTransform();
+
+	/// <summary>
+	/// ストラクチャバッファの生成
+	/// </summary>
+	void CreateStructuredBuffer();
 private://静的メンバ変数
 	//パーティクルの数
 	static const uint32_t kNumInstanceCount = 10;
@@ -95,7 +100,6 @@ private://メンバ変数
 	Matrix4x4 worldMatrix_ = {};
 	//モデルデータ
 	ModelData modelData_ = {};
-	ComPtr<ID3D12Resource>particleResouce_ = nullptr;
 	//マテリアルデータ
 	Material* materialData_ = nullptr;
 	//バッファリソース
@@ -105,5 +109,11 @@ private://メンバ変数
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
 	//ブレンドモード
 	BlendMode blendMode_ = BlendMode::kNone;
+
+	//ストラクチャバッファの生成に使用
+	// ストラクチャバッファのリソース
+	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
+	//SRVインデックス
+	uint32_t srvIndex_ = 0;
 };
 
