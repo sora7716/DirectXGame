@@ -14,11 +14,13 @@ void ParticleEmit::Initialize(DirectXBase* directXBase) {
 	//ライトを生成
 	ParticleCommon::GetInstance()->CreateDirectionLight();
 	//トランスフォームの初期化
-	transform_ = {
-		.scale = {1.0f,1.0f,1.0f},
-		.rotate = {0.0f,180.0f * rad,0.0f},
-		.translate = {0.0f,0.0f,0.0f}
-	};
+	for (uint32_t i = 0; i < kNumInstanceCount; i++) {
+		transforms_[i] = {
+			.scale = {1.0f,1.0f,1.0f},
+			.rotate = {0.0f,180.0f * rad,0.0f},
+			.translate = {static_cast<float>(i) * 0.1f,static_cast<float>(i) * 0.1f,static_cast<float>(i) * 0.1f}
+		};
+	}
 	//ワールドトランスフォームのリソースの生成
 	CreateWorldTransformResource();
 	//カメラを設定
@@ -36,38 +38,37 @@ void ParticleEmit::Update() {
 	//ワールドトランスフォームの更新
 	UpdateWorldTransform();
 #ifdef USE_IMGUI
-	ImGui::Begin("parthicleEmit");
-	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f);
-	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
-	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
-	ImGui::End();
+	/*ImGui::Begin("parthicleEmit");
+	ImGui::DragFloat3("scale", &transforms_.scale.x, 0.1f);
+	ImGui::DragFloat3("rotate", &transforms_.rotate.x, 0.1f);
+	ImGui::DragFloat3("translate", &transforms_.translate.x, 0.1f);
+	ImGui::End();*/
 #endif // USE_IMGUI
 
 }
 
 //描画
 void ParticleEmit::Draw() {
+	//描画準備
+	ParticleCommon::GetInstance()->DrawSetting();
 	//PSOの設定
 	auto pso = ParticleCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
 	//グラフィックスパイプラインをセットするコマンド
 	directXBase_->GetCommandList()->SetPipelineState(pso);
-	//平光源CBufferの場所を設定
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(srvIndex_,SRVManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_).ptr);
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
-	//SRVのDescriptorTableの先頭を設定
-	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(1, SRVManager::GetInstance()->GetGPUDescriptorHandle(3));
 	//ワールドトランスフォームの描画
-	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());//wvp
+	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(1, SRVManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_));
 	//描画(DrwaCall/ドローコール)
 	directXBase_->GetCommandList()->DrawInstanced(static_cast<UINT>(modelData_.vertices.size()), kNumInstanceCount, 0, 0);
 }
 
 //終了
 void ParticleEmit::Finalize() {
-
+	//srvインデックスの解放
+	SRVManager::GetInstance()->Free(srvIndex_);
 }
 
 //モデルデータの初期化
@@ -139,7 +140,7 @@ void ParticleEmit::CreateWorldTransformResource() {
 void ParticleEmit::UpdateWorldTransform() {
 	for (uint32_t i = 0; i < kNumInstanceCount; i++) {
 		//TransformからWorldMatrixを作る
-		worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+		worldMatrix_ = Rendering::MakeAffineMatrix(transforms_[i].scale, transforms_[i].rotate, transforms_[i].translate);
 		/*if (parent_) {
 			worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
 		}*/
@@ -159,22 +160,13 @@ void ParticleEmit::UpdateWorldTransform() {
 void ParticleEmit::CreateStructuredBuffer() {
 	//テクスチャの読み込み
 	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	//SRVインデックスの取得
-	srvIndex_ = TextureManager::GetInstance()->GetSRVIndex(modelData_.material.textureFilePath);
 
-	//インスタンシングリソースの生成
-	instancingResource_ = directXBase_->CreateBufferResource(sizeof(TransformationMatrix) * kNumInstanceCount);
-	instancingResource_->Map(0, nullptr, reinterpret_cast<void**>(&instanceDatas_));
-
-	uint32_t instanceSrvIndex = SRVManager::GetInstance()->Allocate();
+	//ストラクチャバッファを生成
+	srvIndex_ = SRVManager::GetInstance()->Allocate();
 	SRVManager::GetInstance()->CreateSRVforStructuredBuffer(
-		instanceSrvIndex,
-		instancingResource_.Get(),
+		srvIndex_,
+		wvpResource_.Get(),
 		kNumInstanceCount,
 		sizeof(TransformationMatrix)
 	);
-	//SRVインデックスの記録
-	srvIndex_ = instanceSrvIndex;
-	//SRVインデックスの解放
-	SRVManager::GetInstance()->Free(instanceSrvIndex);
 }

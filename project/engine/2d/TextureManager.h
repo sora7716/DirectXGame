@@ -44,6 +44,12 @@ public://メンバ関数
 	void LoadTexture(const std::string& filePath);
 
 	/// <summary>
+	/// テクスチャファイルのアンロード
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	void UnloadTexture(const std::string& filePath);
+
+	/// <summary>
 	/// メタデータの取得
 	/// </summary>
 	/// <param name="filePath">ファイルパス</param>

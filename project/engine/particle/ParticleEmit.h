@@ -95,7 +95,7 @@ private://メンバ変数
 	//ワールドビュープロジェクションのデータ
 	std::array<TransformationMatrix, kNumInstanceCount> instanceDatas_ = {};
 	//トランスフォーム
-	Transform transform_ = {};
+	Transform transforms_[kNumInstanceCount] = {};
 	//ワールドマトリックス
 	Matrix4x4 worldMatrix_ = {};
 	//モデルデータ
@@ -111,8 +111,6 @@ private://メンバ変数
 	BlendMode blendMode_ = BlendMode::kNone;
 
 	//ストラクチャバッファの生成に使用
-	// ストラクチャバッファのリソース
-	ComPtr<ID3D12Resource>instancingResource_ = nullptr;
 	//SRVインデックス
 	uint32_t srvIndex_ = 0;
 };

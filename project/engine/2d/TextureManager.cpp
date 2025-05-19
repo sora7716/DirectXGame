@@ -64,8 +64,17 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 	//SRVの設定
 	srvManager_->CreateSRVforTexture2D(textureData.srvIndex, textureData.resourece.Get(), textureData.metadata.format, UINT(textureData.metadata.mipLevels));
-	//SRVで確保したものを解放
-	srvManager_->Free(textureData.srvIndex);
+}
+
+//テクスチャファイルのアンロード
+void TextureManager::UnloadTexture(const std::string& filePath){
+	auto it = textureDatas_.find(filePath);
+	if (it != textureDatas_.end()) {
+		SRVManager::GetInstance()->Free(it->second.srvIndex);//srvIndexの解放
+		textureDatas_.erase(it);//削除
+	} else {
+		return;//存在しない場合何もしない
+	}
 }
 
 // メタデータの取得

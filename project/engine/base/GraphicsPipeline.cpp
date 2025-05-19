@@ -1,4 +1,3 @@
-
 #include "GraphicsPipeline.h"
 #include "engine/objectCommon/BaseObjectCommon.h"
 #include "DirectXBase.h"
@@ -149,9 +148,9 @@ void GraphicsPipeline::CreateRootSignatureBlobForSRV() {
 	rootParameters[0].Descriptor.ShaderRegister = 0;//レジスタ番号0とバインドb0の0と一致する
 
 	//Transform
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//SRVを使う
+	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;//DescriptorTableを使う
 	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VertexShaderを使う
-	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//レジスタ番号
+	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing;//Tableの中身の配列を指定
 	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing);//Tableで利用する数
 
 	//DescriptorTable(DescriptorRangeをまとめたもの)
