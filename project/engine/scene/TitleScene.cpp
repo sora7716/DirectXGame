@@ -124,7 +124,7 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	//object3d_->Draw();
-	object2d_->Draw();
+	//object2d_->Draw();
 	for (int i = 0; i < 2; i++) {
 		//plane_[i]->Draw();
 	}
