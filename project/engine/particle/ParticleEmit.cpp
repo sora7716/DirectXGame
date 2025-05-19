@@ -67,8 +67,7 @@ void ParticleEmit::Draw() {
 
 //終了
 void ParticleEmit::Finalize() {
-	//srvインデックスの解放
-	SRVManager::GetInstance()->Free(srvIndex_);
+
 }
 
 //モデルデータの初期化

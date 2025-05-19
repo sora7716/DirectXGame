@@ -1,9 +1,4 @@
-﻿  Sprite.cpp
-  SpriteCommon.cpp
-  TextureManager.cpp
-  Model.cpp
-  Framework.cpp
-  ParticleEmit.cpp
+﻿  ParticleEmit.cpp
   DirectXGame.vcxproj -> C:\MyProgram\subject\CG\CG2\generated\outputs\Debug\CG2.exe
           1 個のファイルをコピーしました。
           1 個のファイルをコピーしました。
