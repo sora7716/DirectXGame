@@ -6,4 +6,4 @@
   imgui_tables.cpp
   imgui_widgets.cpp
   コードを生成中...
-  imgui.vcxproj -> C:\MyProgram\subject\CG\CG2\generated\outputs\Debug\imgui.lib
+  imgui.vcxproj -> C:\subject\DirectXGame\generated\outputs\Debug\imgui.lib
