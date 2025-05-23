@@ -130,8 +130,8 @@ void ParticleEmit::CreateWorldTransformResource() {
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&instanceDatas_));
 	for (uint32_t i = 0; i < kNumInstanceCount; i++) {
 		//単位行列を書き込んでおく
-		instanceDatas_[i].WVP = Math::MakeIdentity4x4();
-		instanceDatas_[i].World = Math::MakeIdentity4x4();
+		instanceDatas_[i]->WVP = Math::MakeIdentity4x4();
+		instanceDatas_[i]->World = Math::MakeIdentity4x4();
 	}
 }
 
@@ -146,12 +146,12 @@ void ParticleEmit::UpdateWorldTransform() {
 		//wvpの書き込み
 		if (camera_) {
 			const Matrix4x4& viewProjectionMatrix = camera_->GetViewProjectionMatrix();
-			instanceDatas_[i].WVP = worldMatrix_ * viewProjectionMatrix;
+			instanceDatas_[i]->WVP = worldMatrix_ * viewProjectionMatrix;
 		} else {
-			instanceDatas_[i].WVP = worldMatrix_;
+			instanceDatas_[i]->WVP = worldMatrix_;
 		}
 		//ワールド行列を送信
-		instanceDatas_[i].World = worldMatrix_;
+		instanceDatas_[i]->World = worldMatrix_;
 	}
 }
 

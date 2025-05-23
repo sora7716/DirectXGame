@@ -93,7 +93,7 @@ private://メンバ変数
 	//ワールドビュープロジェクションのリソース
 	ComPtr<ID3D12Resource>wvpResource_ = nullptr;
 	//ワールドビュープロジェクションのデータ
-	std::array<TransformationMatrix, kNumInstanceCount> instanceDatas_ = {};
+	std::array<TransformationMatrix*, kNumInstanceCount> instanceDatas_ = {};
 	//トランスフォーム
 	Transform transforms_[kNumInstanceCount] = {};
 	//ワールドマトリックス
