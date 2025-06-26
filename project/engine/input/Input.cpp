@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "engine/base/WinApi.h"
-#include "engine/gameObject/Camera.h"
+#include "engine/camera/Camera.h"
 #include "engine/math/func/Rendering.h"
 #include "engine/math/func/Math.h"
 #include <cassert>

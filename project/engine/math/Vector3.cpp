@@ -137,6 +137,16 @@ Vector3& Vector3::operator+=(float n) {
 	return*this;
 }
 
+//加法(float)
+Vector3 Vector3::operator+(float n) {
+	Vector3 result = {
+		x + n,
+		y + n,
+		z + n,
+	};
+	return result;
+}
+
 //マイナスにする
 Vector3 Vector3::operator-()const {
 	Vector3 result{

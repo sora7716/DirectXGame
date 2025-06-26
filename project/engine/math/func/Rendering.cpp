@@ -145,8 +145,8 @@ Matrix4x4 Rendering::MakeOrthographicMatrix(const float& left, const float& top,
 //透視投影行列
 Matrix4x4 Rendering::MakePerspectiveFovMatrix(const float& fovY, const float& aspectRation, const float& nearClip, const float& farClip) {
 	Matrix4x4 result{
-		1.0f / aspectRation * cont(fovY / 2.0f),0.0f,0.0f,0.0f,
-		0.0f,cont(fovY / 2.0f),0.0f,0.0f,
+		1.0f / aspectRation * Math::Cont(fovY / 2.0f),0.0f,0.0f,0.0f,
+		0.0f,Math::Cont(fovY / 2.0f),0.0f,0.0f,
 		0.0f,0.0f,farClip / (farClip - nearClip),1.0f,
 		0.0f,0.0f,-(nearClip * farClip) / (farClip - nearClip),0.0f
 	};

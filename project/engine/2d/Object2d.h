@@ -1,19 +1,20 @@
 #pragma once
 #include "engine/math/ResourceData.h"
-#include "engine/math/func/Rendering.h"
-#include "engine/worldTransform/WorldTransform.h"
+#include "engine/math/RenderingData.h"
 #include "engine/blend/BlendMode.h"
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
 #include <memory>
 //前方宣言
-class Sprite;
+class WorldTransform;
+class Camera;
+class DirectXBase;
 
 /// <summary>
 /// 2Dオブジェクト
 /// </summary>
-class Object2d{
+class Object2d {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -25,12 +26,13 @@ public://メンバ関数
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Object2d() = default;
+	~Object2d();
 
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize();
+	/// <param name="textureName">テクスチャのファイル名</param>
+	void Initialize(const std::string& textureName);
 
 	/// <summary>
 	/// 更新
@@ -43,16 +45,10 @@ public://メンバ関数
 	void Draw();
 
 	/// <summary>
-	/// スプライトのセッター
-	/// </summary>
-	/// <param name="name">スプライトの名前</param>
-	void SetSprite(const std::string& name);
-
-	/// <summary>
 	/// テクスチャの変更
 	/// </summary>
-	/// <param name="spriteName">スプライトの名前</param>
-	void ChangeTexture(std::string spriteName);
+	/// <param name="textureName">テクスチャの名前</param>
+	void ChangeTexture(std::string textureName);
 
 	/// <summary>
 	/// サイズのゲッター
@@ -167,7 +163,45 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="blendMode"></param>
 	void SetBlendMode(const BlendMode& blendMode);
+private://メンバ関数
+	/// <summary>
+	/// 頂点データの初期化
+	/// </summary>
+	void InitializeVertexData();
+
+	/// <summary>
+	/// 頂点リソースの生成
+	/// </summary>
+	void CreateVertexResource();
+
+	/// <summary>
+	/// インデックスリソースの生成
+	/// </summary>
+	void CreateIndexResource();
+
+	/// <summary>
+	/// マテリアルデータの初期化
+	/// </summary>
+	void InitializeMaterialData();
+
+	/// <summary>
+	/// マテリアルリソースの生成
+	/// </summary>
+	void CreateMaterialResource();
 private://メンバ変数
+	//バッファリソース
+	ComPtr<ID3D12Resource>vertexResource_ = nullptr;//頂点
+	ComPtr<ID3D12Resource>materialResource_ = nullptr;//マテリアル
+	ComPtr<ID3D12Resource>indexResource_ = nullptr;//インデックス
+	//バッファリソース内のデータを指すポインタ
+	Material* materialData_ = nullptr;//マテリアル
+	//インデックスデータ
+	uint32_t* indexData_ = nullptr;
+	//モデルデータ
+	ModelData modelData_ = {};
+	//バッファリソースの使い道を補足するバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_ = {};//頂点
+	D3D12_INDEX_BUFFER_VIEW indexBufferView_ = {};//インデックス	
 	//UV座標
 	Transform2d uvTransform_ = {
 		.scale = { 1.0f,1.0f },
@@ -176,11 +210,8 @@ private://メンバ変数
 	};
 	//DirectXの基盤部分
 	DirectXBase* directXBase_ = nullptr;
-	//スプライト
-	Sprite* sprite_ = nullptr;
 	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransform> worldTransform_ = nullptr;
+	WorldTransform* worldTransform_ = nullptr;
 	//ブレンドモード
 	BlendMode blendMode_ = BlendMode::kNone;
 };
-

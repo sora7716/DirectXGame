@@ -4,11 +4,6 @@
 #include <cmath>
 #include <numbers>
 #include <algorithm>
-#define cont(theta) (1.0f/tanf(theta)) 
-#define deltaTime 1.0f/60.0f
-#define kGravity Vector3(0.0f,-9.8f,0.0f)
-#define pi_f std::numbers::pi_v<float>
-#define rad pi_f/180.0f
 
 /// <summary>
 /// 数学的な計算
@@ -161,15 +156,6 @@ public:
 	static Vector3 Lerp(const Vector3& v1, const Vector3& v2, float t);
 
 	/// <summary>
-	/// 線形補間
-	/// </summary>
-	/// <param name="num1">数字1</param>
-	/// <param name="num2">数字2</param>
-	/// <param name="t">媒介変数</param>
-	/// <returns>線形補間</returns>
-	static float Lerp(const float& num1, const float& num2, float t);
-
-	/// <summary>
 	/// 球面線形補間
 	/// </summary>
 	/// <param name="v1">ベクトル1</param>
@@ -305,6 +291,22 @@ public:
 	/// <param name="scalar">スカラー</param>
 	/// <returns>閉曲線</returns>
 	static Vector3 LissajousCurve(const Vector3& theta, const Vector3& center, const Vector3& scalar = { 1.0f,1.0f,1.0f });
+
+	/// <summary>
+	/// 逆正接関数のcotangent
+	/// </summary>
+	/// <param name="theta">θ</param>
+	/// <returns>逆正接関数</returns>
+	static float Cont(float theta);
+public://定数
+	//デルタタイム
+	static inline const float kDeltaTime = 1.0f / 60.0f;
+	//重力加速度
+	static inline const float kGravity = -9.8f;
+	//円周率
+	static inline const float kPi = std::numbers::pi_v<float>;
+	//ラジアン変換用定数
+	static inline const float kRad = std::numbers::pi_v<float> / 180.0f;
 
 private://メンバ変数
 	static inline bool defaultFall_ = true;

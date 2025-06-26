@@ -4,15 +4,18 @@
 #include "SceneFactory.h"
 #include "engine/3d/ModelManager.h"
 #include "engine/3d/Object3dCommon.h"
+#include "engine/math/func/Math.h"
 
 //初期化
 void TitleScene::Initialize(DirectXBase* directXBase) {
 	object2d_ = std::make_unique<Object2d>();
-	object2d_->Initialize();
-	//object2d_->SetSprite("block");
-	worldTransform_.scale = { 100.0f,100.0f };
-	worldTransform_.rotate = 0.0f;
-	worldTransform_.translate = { 100.0f,100.0f };
+	object2d_->Initialize("monsterBall.png");
+	//object2d_->ChangeTexture("circle.png");
+	worldTransform2d_ = {
+		{100.0f,100.0f},
+		Math::kPi,
+		{}
+	};
 	color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	object3d_ = std::make_unique<Object3d>();
@@ -32,9 +35,8 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 void TitleScene::Update() {
 	//ImGuiの受付開始
 	ImGuiManager::GetInstance()->Begin();
-	object2d_->SetTransform(worldTransform_);
-	object2d_->SetColor(color);
 	object2d_->Update();
+	object2d_->SetTransform(worldTransform2d_);
 
 	object3d_->SetScale(worldTransform3d_.scale);
 	object3d_->SetRotate(worldTransform3d_.rotate);
@@ -45,9 +47,9 @@ void TitleScene::Update() {
 
 #ifdef USE_IMGUI
 	ImGui::Begin("sprite");
-	ImGui::DragFloat2("scale", &worldTransform_.scale.x, 0.1f);
-	ImGui::DragFloat("rotate", &worldTransform_.rotate, 0.1f);
-	ImGui::DragFloat2("translate", &worldTransform_.translate.x, 0.1f);
+	ImGui::DragFloat2("scale", &worldTransform2d_.scale.x, 0.1f);
+	ImGui::DragFloat("rotate", &worldTransform2d_.rotate, 0.1f);
+	ImGui::DragFloat2("translate", &worldTransform2d_.translate.x, 0.1f);
 	ImGui::ColorEdit4("color", &color.x);
 	ImGui::End();
 
@@ -83,7 +85,7 @@ void TitleScene::Update() {
 //描画
 void TitleScene::Draw() {
 	object3d_->Draw();
-	//object2d_->Draw();
+	object2d_->Draw();
 }
 
 //終了

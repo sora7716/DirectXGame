@@ -62,6 +62,8 @@ typedef struct Vector3 final {
 	Vector3 operator/(float n)const;
 	//加法(float)
 	Vector3& operator+=(float n);
+	//加法(float)
+	Vector3 operator+(float n);
 	//マイナスにする
 	Vector3 operator-()const;
 	// vのほうが小さい
