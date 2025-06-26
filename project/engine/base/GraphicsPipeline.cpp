@@ -1,5 +1,4 @@
 #include "GraphicsPipeline.h"
-#include "engine/objectCommon/BaseObjectCommon.h"
 #include "DirectXBase.h"
 #include "engine/debug/Log.h"
 #include "StringUtility.h"

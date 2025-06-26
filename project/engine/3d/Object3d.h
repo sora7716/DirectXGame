@@ -1,20 +1,21 @@
 #pragma once
 #include "engine/3d/Model.h"
-#include "engine/gameObject/WorldTransform.h"
+#include "engine/math/ResourceData.h"
+#include "engine/math/RenderingData.h"
 #include "engine/blend/BlendMode.h"
-#include <memory>
 #include <vector>
 #include <string>
 #include <wrl.h>
 #include <d3d12.h>
-
 //前方宣言
-class Object3dCommon;
+class WorldTransform;
+class Camera;
+class DirectXBase;
 
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class Object3d{
+class Object3d {
 private://エイリアステンプレート
 	template <class T>using ComPtr = Microsoft::WRL::ComPtr<T>;
 public://メンバ関数
@@ -22,11 +23,11 @@ public://メンバ関数
 	/// コンストラクタ
 	/// </summary>
 	Object3d() = default;
-	
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Object3d() = default;
+	~Object3d();
 
 	/// <summary>
 	/// 初期化
@@ -140,9 +141,9 @@ public://メンバ関数
 	const Vector3& GetTranslate()const;
 
 	/// <summary>
-    /// uvスケールのゲッター
-    /// </summary>
-    /// <returns>uvスケール</returns>
+	/// uvスケールのゲッター
+	/// </summary>
+	/// <returns>uvスケール</returns>
 	const Vector2& GetUVScale()const;
 
 	/// <summary>
@@ -176,12 +177,11 @@ private://メンバ変数
 		.translate = {0.0f,0.0f}
 	};
 	//DirectXの基盤部分
-	DirectXBase* directXBase_ = nullptr;	
+	DirectXBase* directXBase_ = nullptr;
 	//3Dモデル
 	Model* model_ = nullptr;
 	//ワールドトランスフォーム
-	std::unique_ptr<WorldTransform>worldTransform_ = nullptr;
+	WorldTransform* worldTransform_ = nullptr;
 	//ブレンドモード
 	BlendMode blendMode_ = BlendMode::kNone;
 };
-

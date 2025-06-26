@@ -1,3 +1,4 @@
+
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/blend/blendMode.h"
@@ -113,4 +114,3 @@ private://メンバ変数
 	//デフォルトカメラ
 	Camera* defaultCamera_ = nullptr;
 };
-

@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="engine\2d\Object2d.cpp" />
+    <ClCompile Include="engine\2d\Object2dCommon.cpp" />
     <ClCompile Include="engine\2d\Sprite.cpp" />
     <ClCompile Include="engine\2d\SpriteCommon.cpp" />
     <ClCompile Include="engine\2d\SpriteManager.cpp" />
@@ -18,6 +20,8 @@
     <ClCompile Include="engine\3d\Model.cpp" />
     <ClCompile Include="engine\3d\ModelCommon.cpp" />
     <ClCompile Include="engine\3d\ModelManager.cpp" />
+    <ClCompile Include="engine\3d\Object3d.cpp" />
+    <ClCompile Include="engine\3d\Object3dCommon.cpp" />
     <ClCompile Include="engine\audio\Audio.cpp" />
     <ClCompile Include="engine\audio\AudioManager.cpp" />
     <ClCompile Include="engine\base\D3DResourceLeakChecker.cpp" />
@@ -36,9 +40,6 @@
     <ClCompile Include="engine\framework\Framework.cpp" />
     <ClCompile Include="engine\framework\GameObjectList.cpp" />
     <ClCompile Include="engine\framework\GameSystem.cpp" />
-    <ClCompile Include="engine\gameObject\Object2d.cpp" />
-    <ClCompile Include="engine\gameObject\Object3d.cpp" />
-    <ClCompile Include="engine\gameObject\WorldTransform.cpp" />
     <ClCompile Include="engine\input\Input.cpp" />
     <ClCompile Include="engine\main.cpp" />
     <ClCompile Include="engine\math\func\Aithmetic.cpp" />
@@ -48,17 +49,17 @@
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
     <ClCompile Include="engine\math\Vector4.cpp" />
-    <ClCompile Include="engine\objectCommon\BaseObjectCommon.cpp" />
-    <ClCompile Include="engine\objectCommon\Object2dCommon.cpp" />
-    <ClCompile Include="engine\objectCommon\Object3dCommon.cpp" />
     <ClCompile Include="engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="engine\scene\GameScene.cpp" />
     <ClCompile Include="engine\scene\IScene.cpp" />
     <ClCompile Include="engine\scene\SceneFactory.cpp" />
     <ClCompile Include="engine\scene\SceneManager.cpp" />
     <ClCompile Include="engine\scene\TitleScene.cpp" />
+    <ClCompile Include="engine\worldTransform\WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\2d\Object2d.h" />
+    <ClInclude Include="engine\2d\Object2dCommon.h" />
     <ClInclude Include="engine\2d\Sprite.h" />
     <ClInclude Include="engine\2d\SpriteCommon.h" />
     <ClInclude Include="engine\2d\SpriteManager.h" />
@@ -66,6 +67,8 @@
     <ClInclude Include="engine\3d\Model.h" />
     <ClInclude Include="engine\3d\ModelCommon.h" />
     <ClInclude Include="engine\3d\ModelManager.h" />
+    <ClInclude Include="engine\3d\Object3d.h" />
+    <ClInclude Include="engine\3d\Object3dCommon.h" />
     <ClInclude Include="engine\audio\Audio.h" />
     <ClInclude Include="engine\audio\AudioManager.h" />
     <ClInclude Include="engine\base\D3DResourceLeakChecker.h" />
@@ -85,9 +88,6 @@
     <ClInclude Include="engine\framework\Framework.h" />
     <ClInclude Include="engine\framework\GameObjectList.h" />
     <ClInclude Include="engine\framework\GameSystem.h" />
-    <ClInclude Include="engine\gameObject\Object2d.h" />
-    <ClInclude Include="engine\gameObject\Object3d.h" />
-    <ClInclude Include="engine\gameObject\WorldTransform.h" />
     <ClInclude Include="engine\input\Input.h" />
     <ClInclude Include="engine\math\func\Aithmetic.h" />
     <ClInclude Include="engine\math\func\Math.h" />
@@ -99,15 +99,13 @@
     <ClInclude Include="engine\math\Vector3.h" />
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\math\ResourceData.h" />
-    <ClInclude Include="engine\objectCommon\BaseObjectCommon.h" />
-    <ClInclude Include="engine\objectCommon\Object2dCommon.h" />
-    <ClInclude Include="engine\objectCommon\Object3dCommon.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="engine\scene\GameScene.h" />
     <ClInclude Include="engine\scene\IScene.h" />
     <ClInclude Include="engine\scene\SceneFactory.h" />
     <ClInclude Include="engine\scene\SceneManager.h" />
     <ClInclude Include="engine\scene\TitleScene.h" />
+    <ClInclude Include="engine\worldTransform\WorldTransform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="engine\resources\shaders\Object3d.hlsli">

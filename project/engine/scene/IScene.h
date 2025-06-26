@@ -1,6 +1,6 @@
 #pragma once
-#include "engine/gameObject/Object2d.h"
-#include "engine/gameObject/Object3d.h"
+#include "engine/2d/Object2d.h"
+#include "engine/3d/Object3d.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/audio/AudioManager.h"
 #include "engine/camera/CameraManager.h"

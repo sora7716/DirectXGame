@@ -1,10 +1,18 @@
 #include "Object3d.h"
-#include "engine/objectCommon/Object3dCommon.h"
+#include "Object3dCommon.h"
 #include "engine/camera/Camera.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
 #include "engine/3d/ModelManager.h"
+#include "engine/worldTransform/WorldTransform.h"
+#include "engine/math/func/Rendering.h"
 #include <cassert>
+
+//デストラクタ
+Object3d::~Object3d() {
+	delete worldTransform_;
+}
+
 //初期化
 void Object3d::Initialize() {
 	//DirectXの基盤部分を受け取る
@@ -12,7 +20,7 @@ void Object3d::Initialize() {
 	//光源の生成
 	Object3dCommon::GetInstance()->CreateDirectionLight();
 	//ワールドトランスフォームの生成、初期化
-	worldTransform_ = std::make_unique<WorldTransform>();
+	worldTransform_ = new WorldTransform();
 	worldTransform_->Initialize(directXBase_, TransformMode::k3d);
 	//uv座標
 	uvTransform_ = { {1.0f,1.0f},0.0f,{0.0f,0.0f} };
@@ -32,7 +40,7 @@ void Object3d::Update() {
 
 //描画
 void Object3d::Draw() {
-	//描画設定
+	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->DrawSetting();
 	//PSOの設定
 	auto pso = Object3dCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
@@ -166,5 +174,5 @@ const Vector4& Object3d::GetColor() const {
 //ワールド行列のゲッター
 const WorldTransform* Object3d::GetWorldTransform() const {
 	// TODO: return ステートメントをここに挿入します
-	return worldTransform_.get();
+	return worldTransform_;
 }

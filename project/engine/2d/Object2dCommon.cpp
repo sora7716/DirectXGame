@@ -1,3 +1,4 @@
+
 #include "Object2dCommon.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/camera/Camera.h"

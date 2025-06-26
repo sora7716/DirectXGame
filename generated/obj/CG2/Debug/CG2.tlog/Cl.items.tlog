@@ -1,3 +1,5 @@
+C:\subject\CG2\project\engine\2d\Object2d.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object2d.obj
+C:\subject\CG2\project\engine\2d\Object2dCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\subject\CG2\project\engine\2d\Sprite.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Sprite.obj
 C:\subject\CG2\project\engine\2d\SpriteCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SpriteCommon.obj
 C:\subject\CG2\project\engine\2d\SpriteManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SpriteManager.obj
@@ -5,6 +7,8 @@ C:\subject\CG2\project\engine\2d\TextureManager.cpp;C:\subject\CG2\generated\obj
 C:\subject\CG2\project\engine\3d\Model.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Model.obj
 C:\subject\CG2\project\engine\3d\ModelCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ModelCommon.obj
 C:\subject\CG2\project\engine\3d\ModelManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ModelManager.obj
+C:\subject\CG2\project\engine\3d\Object3d.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object3d.obj
+C:\subject\CG2\project\engine\3d\Object3dCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object3dCommon.obj
 C:\subject\CG2\project\engine\audio\Audio.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Audio.obj
 C:\subject\CG2\project\engine\audio\AudioManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\AudioManager.obj
 C:\subject\CG2\project\engine\base\D3DResourceLeakChecker.cpp;C:\subject\CG2\generated\obj\CG2\Debug\D3DResourceLeakChecker.obj
@@ -23,10 +27,6 @@ C:\subject\CG2\project\engine\debug\Log.cpp;C:\subject\CG2\generated\obj\CG2\Deb
 C:\subject\CG2\project\engine\framework\Framework.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Framework.obj
 C:\subject\CG2\project\engine\framework\GameObjectList.cpp;C:\subject\CG2\generated\obj\CG2\Debug\GameObjectList.obj
 C:\subject\CG2\project\engine\framework\GameSystem.cpp;C:\subject\CG2\generated\obj\CG2\Debug\GameSystem.obj
-C:\subject\CG2\project\engine\gameObject\Object2d.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object2d.obj
-C:\subject\CG2\project\engine\gameObject\Object3d.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object3d.obj
-C:\subject\CG2\project\engine\gameObject\PlaneObject.cpp;C:\subject\CG2\generated\obj\CG2\Debug\PlaneObject.obj
-C:\subject\CG2\project\engine\gameObject\WorldTransform.cpp;C:\subject\CG2\generated\obj\CG2\Debug\WorldTransform.obj
 C:\subject\CG2\project\engine\input\Input.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Input.obj
 C:\subject\CG2\project\engine\main.cpp;C:\subject\CG2\generated\obj\CG2\Debug\main.obj
 C:\subject\CG2\project\engine\math\func\Aithmetic.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Aithmetic.obj
@@ -36,14 +36,10 @@ C:\subject\CG2\project\engine\math\Matrix4x4.cpp;C:\subject\CG2\generated\obj\CG
 C:\subject\CG2\project\engine\math\Vector2.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector2.obj
 C:\subject\CG2\project\engine\math\Vector3.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector3.obj
 C:\subject\CG2\project\engine\math\Vector4.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector4.obj
-C:\subject\CG2\project\engine\objectCommon\BaseObjectCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\BaseObjectCommon.obj
-C:\subject\CG2\project\engine\objectCommon\Object2dCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object2dCommon.obj
-C:\subject\CG2\project\engine\objectCommon\Object3dCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object3dCommon.obj
-C:\subject\CG2\project\engine\objectCommon\ParticleCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ParticleCommon.obj
-C:\subject\CG2\project\engine\particle\ParticleEmit.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ParticleEmit.obj
 C:\subject\CG2\project\engine\scene\AbstractSceneFactory.cpp;C:\subject\CG2\generated\obj\CG2\Debug\AbstractSceneFactory.obj
 C:\subject\CG2\project\engine\scene\GameScene.cpp;C:\subject\CG2\generated\obj\CG2\Debug\GameScene.obj
 C:\subject\CG2\project\engine\scene\IScene.cpp;C:\subject\CG2\generated\obj\CG2\Debug\IScene.obj
 C:\subject\CG2\project\engine\scene\SceneFactory.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SceneFactory.obj
 C:\subject\CG2\project\engine\scene\SceneManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SceneManager.obj
 C:\subject\CG2\project\engine\scene\TitleScene.cpp;C:\subject\CG2\generated\obj\CG2\Debug\TitleScene.obj
+C:\subject\CG2\project\engine\worldTransform\WorldTransform.cpp;C:\subject\CG2\generated\obj\CG2\Debug\WorldTransform.obj
