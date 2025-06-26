@@ -1,6 +1,5 @@
 #pragma once
 #include "engine/audio/AudioManager.h"
-#include "engine/2d/SpriteManager.h"
 #include "engine/3d/ModelManager.h"
 #include "engine/camera/CameraManager.h"
 
@@ -62,8 +61,6 @@ private://静的メンバ変数
 private://メンバ変数
 	//オーディオの管理
 	AudioManager* audioManager_ = nullptr;
-	//スプライトの管理
-	SpriteManager* spriteManager_ = nullptr;
 	//モデルの管理
 	ModelManager* modelManager_ = nullptr;
 	//カメラの管理

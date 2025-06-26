@@ -26,7 +26,7 @@ public://メンバ関数
 	/// <param name="vector">vector</param>
 	/// <param name="matrix">matrix</param>
 	/// <returns>デカルト座標系</returns>
-	static Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
+	static Vector3 TransformVector(const Vector3& vector, const Matrix4x4& matrix);
 
 	/// <summary>
 	/// x座標を軸に回転
@@ -73,21 +73,11 @@ public://メンバ関数
 	static Matrix4x4 MakeOBBWorldMatrix(const Vector3* orientations, const Vector3 center);
 
 	/// <summary>
-	/// アフィン関数
+	/// アフィン行列の作成
 	/// </summary>
-	/// <param name="scale">倍率</param>
-	/// <param name="rotate">回転</param>
-	/// <param name="translate">移動</param>
+	/// <param name="transform">トランスフォーム</param>
 	/// <returns>アフィン行列</returns>
-	static Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
-
-	/// <summary>
-	/// アフィン関数
-	/// </summary>
-	/// <param name="rotate">回転</param>
-	/// <param name="translate">移動</param>
-	/// <returns></returns>
-	static Matrix4x4 MakeAffineMatrix(const Vector3& rotate, const Vector3& translate);
+	static Matrix4x4 MakeAffineMatrix(const Transform& transform);
 
 	/// <summary>
 	/// STRの変換
@@ -105,7 +95,7 @@ public://メンバ関数
 	/// <param name="rotate">回転</param>
 	/// <param name="translate">移動</param>
 	/// <returns></returns>
-	static Matrix4x4 MakeUVAffineMatrix(const Vector3& scale,float rotate,const Vector3&translate);
+	static Matrix4x4 MakeUVAffineMatrix(const Vector3& scale, float rotate, const Vector3& translate);
 
 	/// <summary>
 	/// 正射影行列
@@ -141,5 +131,19 @@ public://メンバ関数
 	/// <returns>ViewportMatrix</returns>
 	static Matrix4x4 MakeViewportMatrix(const float& left, const float& top, const float& width, const float& height, const float& minDepth, const float& maxDepth);
 
-};
+	/// <summary>
+	/// ビルボード行列の作成
+	/// </summary>
+	/// <param name="cameraWorldMatrix">カメラのワールド行列</param>
+	/// <param name="rotate">回転</param>
+	/// <returns>ビルボード行列</returns>
+	static Matrix4x4 MakeBillboardMatrix(const Matrix4x4& cameraWorldMatrix, const Vector3& rotate);
 
+	/// <summary>
+	/// ビルボード行列を含んだアフィン行列の作成
+	/// </summary>
+	/// <param name="cameraWorldMatrix">カメラのワールド行列</param>
+	/// <param name="transform">トランスフォーム</param>
+	/// <returns>ビルボード行列を含んだアフィン行列</returns>
+	static Matrix4x4 MakeBillboardAffineMatrix(const Matrix4x4& cameraWorldMatrix, const Transform& transform);
+};

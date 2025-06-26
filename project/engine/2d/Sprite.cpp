@@ -1,36 +1,85 @@
 #include "Sprite.h"
 #include "engine/2d/SpriteCommon.h"
+#include "engine/2d/Object2dCommon.h"
 #include <cassert>
 #include "engine/math/func/Math.h"
 #include "TextureManager.h"
 #include "engine/base/DirectXBase.h"
 #include "WinApi.h"
+#include "engine/worldTransform/WorldTransform.h"
+#include "engine/debug/ImGuiManager.h"
+
+//デストラクタ
+Sprite::~Sprite() {
+	delete worldTransform_;
+}
 
 //初期化
-void Sprite::Initialize(std::string spriteName) {
+void Sprite::Initialize(const std::string& spriteName) {
 	directXBase_ = SpriteCommon::GetInstance()->GetDirectXBase();//DirectXの基盤部分を受け取る
 	//頂点データの生成
-	CreateVertexResorce();
+	CreateVertexResource();
 	//インデックスデータの生成
-	CreateIndexResorce();
+	CreateIndexResource();
 	//マテリアルデータの生成
-	CreateMaterialResorce();
-	SpriteCommon::GetInstance()->LoadTexture(spriteName);
-	spriteName_ = spriteName;
+	CreateMaterialResource();
+	//スプライトファイルパスを記録
+	spriteName_ = "engine/resources/textures/" + spriteName;
+	//スプライトの共通部分
+	SpriteCommon::GetInstance()->LoadTexture(spriteName_);
+	//DirectXの基盤部分を記録
+	directXBase_ = SpriteCommon::GetInstance()->GetDirectXBase();
+	//ライトの生成
+	Object2dCommon::GetInstance()->CreateDirectionLight();
+	//スクリーンに表示する範囲を設定
+	WorldTransform::ScreenArea screenArea = {
+		.left = 0,
+		.top = 0,
+		.right = (float)WinApi::kClientWidth,
+		.bottom = (float)WinApi::kClientHeight,
+	};
+	//ワールドトランスフォーム
+	worldTransform_ = new WorldTransform();
+	worldTransform_->Initialize(directXBase_, TransformMode::k2d);
+	worldTransform_->SetScreenArea(screenArea);
+	worldTransform_->SetCamera(Object2dCommon::GetInstance()->GetDefaultCamera());
+}
+
+//更新
+void Sprite::Update() {
+#ifdef USE_IMGUI
+	ImGui::Begin("sprite");
+	ImGui::DragFloat3("scale", &transform_.scale.x, 0.1f);
+	ImGui::DragFloat3("rotate", &transform_.rotate.x, 0.1f);
+	ImGui::DragFloat3("translate", &transform_.translate.x, 0.1f);
+	ImGui::End();
+#endif // USE_IMGUI
+	worldTransform_->SetTransform(transform_);
+	//ワールドトランスフォームの更新
+	worldTransform_->Update();
 }
 
 //描画処理
 void Sprite::Draw() {
+	//描画準備
+	Object2dCommon::GetInstance()->DrawSetting();
+	//PSOの設定
+	auto pso = Object2dCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
+	//グラフィックスパイプラインをセットするコマンド
+	directXBase_->GetCommandList()->SetPipelineState(pso);
+	//ワールドトランスフォームの描画
+	worldTransform_->Draw();
+	//平光源CBufferの場所を設定
+	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(3, Object2dCommon::GetInstance()->GetDirectionalLightResource()->GetGPUVirtualAddress());
 	//VertexBufferViewの設定
 	directXBase_->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);//VBVを設定
 	//IndexBufferViewを設定
 	directXBase_->GetCommandList()->IASetIndexBuffer(&indexBufferView_);//IBVを設定
 	//マテリアルCBufferの場所を設定
 	directXBase_->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());//material
-
 	//SRVのDescriptorTableの先頭を設定
 	directXBase_->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSRVHandleGPU(spriteName_));
-	//描画(DrwaCall/ドローコール)
+	//描画(DrawCall/ドローコール)
 	directXBase_->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
@@ -86,7 +135,7 @@ void Sprite::InitializeVertexData() {
 }
 
 //頂点データの生成
-void Sprite::CreateVertexResorce() {
+void Sprite::CreateVertexResource() {
 	//VertexResourceを作成する
 	vertexResource_ = directXBase_->CreateBufferResource(sizeof(VertexData) * 6);
 	//VertexBufferViewを作成する
@@ -109,7 +158,7 @@ void Sprite::InitializeIndexData() {
 }
 
 //インデックスリソースの生成
-void Sprite::CreateIndexResorce() {
+void Sprite::CreateIndexResource() {
 	//IndexResourceを作成する
 	indexResource_ = directXBase_->CreateBufferResource(sizeof(uint32_t) * 6);
 	//IndexBufferViewを作成する
@@ -134,7 +183,7 @@ void Sprite::InitializeMaterialData() {
 }
 
 //マテリアルリソースの生成
-void Sprite::CreateMaterialResorce() {
+void Sprite::CreateMaterialResource() {
 	//マテリアルリソースを作る
 	materialResource_ = directXBase_->CreateBufferResource(sizeof(Material));
 	//マテリアルリソースにデータを書き込むためのアドレスを取得してmaterialDataに割り当てる

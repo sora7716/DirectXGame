@@ -1,5 +1,7 @@
 #pragma once
 #include "IScene.h"
+#include "engine/2d/Sprite.h"
+#include "engine/particle/ParticleSystem.h"
 
 /// <summary>
 /// タイトルシーン
@@ -48,6 +50,11 @@ private://メンバ変数
 	Vector4 object3dColor_ = { 1.0f,1.0f,1.0f,1.0f };
 	//ライト
 	DirectionalLight directionalLight_ = {};
+
+	std::unique_ptr<Sprite>sprite_ = nullptr;
+
+	std::unique_ptr<ParticleSystem>particleSystem_ = nullptr;
+
 	//ブレンドモード
 	int blendMode_ = BlendMode::kNone;
 };

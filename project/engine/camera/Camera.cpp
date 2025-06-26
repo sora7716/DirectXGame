@@ -16,7 +16,7 @@ Camera::Camera() {
 //更新
 void Camera::Update() {
 	//アフィン変換行列の作成
-	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale,transform_.rotate,transform_.translate);
+	worldMatrix_ = Rendering::MakeAffineMatrix(transform_);
 	//worldMatrixの逆行列
 	viewMatrix_ = ~worldMatrix_;
 	//透視投影行列の作成

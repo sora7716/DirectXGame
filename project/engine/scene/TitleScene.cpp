@@ -18,6 +18,9 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	};
 	color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("monsterBall.png");
+
 	object3d_ = std::make_unique<Object3d>();
 	worldTransform3d_.scale = { 1.0f,1.0f,1.0f };
 	worldTransform3d_.rotate = {};
@@ -29,6 +32,8 @@ void TitleScene::Initialize(DirectXBase* directXBase) {
 	directionalLight_.color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLight_.intensity = 1.0f;
 
+	particleSystem_ = std::make_unique<ParticleSystem>();
+	particleSystem_->Initialize(directXBase, "uvChecker.png");
 }
 
 //更新
@@ -45,8 +50,11 @@ void TitleScene::Update() {
 	Object3dCommon::GetInstance()->SetDirectionalLightData(directionalLight_);
 	object3d_->Update();
 
+	sprite_->Update();
+
+//	particleSystem_->Update();
 #ifdef USE_IMGUI
-	ImGui::Begin("sprite");
+	ImGui::Begin("2d");
 	ImGui::DragFloat2("scale", &worldTransform2d_.scale.x, 0.1f);
 	ImGui::DragFloat("rotate", &worldTransform2d_.rotate, 0.1f);
 	ImGui::DragFloat2("translate", &worldTransform2d_.translate.x, 0.1f);
@@ -86,6 +94,8 @@ void TitleScene::Update() {
 void TitleScene::Draw() {
 	object3d_->Draw();
 	object2d_->Draw();
+	sprite_->Draw();
+	//particleSystem_->Draw();
 }
 
 //終了

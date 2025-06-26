@@ -6,7 +6,6 @@
 #include "engine/input/Input.h"
 #include "engine/3d/ModelManager.h"
 #include "engine/camera/CameraManager.h"
-#include "engine/2d/SpriteManager.h"
 
 //初期化
 void Framework::Initialize() {
@@ -31,11 +30,14 @@ void Framework::Initialize() {
 	Object2dCommon::GetInstance()->Initialize(directXBase_.get());
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Initialize(directXBase_.get());
+	//パーティクルの共通部分
+	ParticleCommon::GetInstance()->Initialize(directXBase_.get());
 	//ゲームオブジェクトのリスト
 	GameObjectList::GetInstance()->Initialize();
 	//カメラの設定
 	Object2dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 	Object3dCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
+	ParticleCommon::GetInstance()->SetDefaultCamera(CameraManager::GetInstance()->FindCamera("defaultCamera"));
 	//シーンの管理
 	SceneManager::GetInstance()->Initialize(directXBase_.get());
 }
@@ -76,12 +78,12 @@ void Framework::Finalize() {
 	Object2dCommon::GetInstance()->Finalize();
 	//3Dオブジェクトの共通部分
 	Object3dCommon::GetInstance()->Finalize();
+	//パーティクルの共通部分
+	ParticleCommon::GetInstance()->Finalize();
 	//シーンの管理
 	SceneManager::GetInstance()->Finalize();
 	//シーンファクトリーの解放
 	delete sceneFactory_;
-	//スプライトの管理
-	SpriteManager::GetInstance()->Finalize();
 	//ゲームオブジェクトリスト
 	GameObjectList::GetInstance()->Finalize();
 }

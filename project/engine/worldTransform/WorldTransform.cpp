@@ -115,7 +115,7 @@ void WorldTransform::CreateTransformationMatrixResorce() {
 //座標の更新
 void WorldTransform::UpdateTransform() {
 	//TransformからWorldMatrixを作る
-	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	worldMatrix_ = Rendering::MakeAffineMatrix(transform_);
 	if (parent_) {
 		worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
 	}
@@ -134,7 +134,7 @@ void WorldTransform::UpdateTransform() {
 //座標の更新(2次元)
 void WorldTransform::UpdateTransform2d(){
 	//TransformからWorldMatrixを作る
-	worldMatrix_ = Rendering::MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
+	worldMatrix_ = Rendering::MakeAffineMatrix(transform_);
 	if (parent_) {
 		worldMatrix_ = worldMatrix_ * parent_->worldMatrix_;
 	}

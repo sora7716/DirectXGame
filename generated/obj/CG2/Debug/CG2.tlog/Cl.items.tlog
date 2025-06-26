@@ -2,7 +2,6 @@ C:\subject\CG2\project\engine\2d\Object2d.cpp;C:\subject\CG2\generated\obj\CG2\D
 C:\subject\CG2\project\engine\2d\Object2dCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Object2dCommon.obj
 C:\subject\CG2\project\engine\2d\Sprite.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Sprite.obj
 C:\subject\CG2\project\engine\2d\SpriteCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SpriteCommon.obj
-C:\subject\CG2\project\engine\2d\SpriteManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\SpriteManager.obj
 C:\subject\CG2\project\engine\2d\TextureManager.cpp;C:\subject\CG2\generated\obj\CG2\Debug\TextureManager.obj
 C:\subject\CG2\project\engine\3d\Model.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Model.obj
 C:\subject\CG2\project\engine\3d\ModelCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ModelCommon.obj
@@ -36,6 +35,8 @@ C:\subject\CG2\project\engine\math\Matrix4x4.cpp;C:\subject\CG2\generated\obj\CG
 C:\subject\CG2\project\engine\math\Vector2.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector2.obj
 C:\subject\CG2\project\engine\math\Vector3.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector3.obj
 C:\subject\CG2\project\engine\math\Vector4.cpp;C:\subject\CG2\generated\obj\CG2\Debug\Vector4.obj
+C:\subject\CG2\project\engine\particle\ParticleCommon.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ParticleCommon.obj
+C:\subject\CG2\project\engine\particle\ParticleSystem.cpp;C:\subject\CG2\generated\obj\CG2\Debug\ParticleSystem.obj
 C:\subject\CG2\project\engine\scene\AbstractSceneFactory.cpp;C:\subject\CG2\generated\obj\CG2\Debug\AbstractSceneFactory.obj
 C:\subject\CG2\project\engine\scene\GameScene.cpp;C:\subject\CG2\generated\obj\CG2\Debug\GameScene.obj
 C:\subject\CG2\project\engine\scene\IScene.cpp;C:\subject\CG2\generated\obj\CG2\Debug\IScene.obj

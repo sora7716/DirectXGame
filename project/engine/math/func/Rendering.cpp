@@ -25,7 +25,7 @@ Matrix4x4 Rendering::MakeTranslateMatrix(const Vector3& translate) {
 }
 
 //同次座標系で計算しデカルト座標系に変換
-Vector3 Rendering::Transform(const Vector3& vector, const Matrix4x4& matrix) {
+Vector3 Rendering::TransformVector(const Vector3& vector, const Matrix4x4& matrix) {
 	Vector3 result{};
 	result.x = vector.x * matrix.m[0][0] + vector.y * matrix.m[1][0] + vector.z * matrix.m[2][0] + 1.0f * matrix.m[3][0];
 	result.y = vector.x * matrix.m[0][1] + vector.y * matrix.m[1][1] + vector.z * matrix.m[2][1] + 1.0f * matrix.m[3][1];
@@ -111,13 +111,8 @@ Matrix4x4 Rendering::MakeOBBWorldMatrix(const Vector3* orientations, const Vecto
 }
 
 //アフィン関数
-Matrix4x4 Rendering::MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
-	return (MakeScaleMatrix(scale) * MakeRotateXYZMatrix(rotate)) * MakeTranslateMatrix(translate);
-}
-
-//アフィン関数
-Matrix4x4 Rendering::MakeAffineMatrix(const Vector3& rotate, const Vector3& translate) {
-	return (MakeRotateXYZMatrix(rotate) * MakeTranslateMatrix(translate));
+Matrix4x4 Rendering::MakeAffineMatrix(const Transform& transform) {
+	return (MakeScaleMatrix(transform.scale) * MakeRotateXYZMatrix(transform.rotate)) * MakeTranslateMatrix(transform.translate);
 }
 
 //STRの変換
@@ -146,7 +141,7 @@ Matrix4x4 Rendering::MakeOrthographicMatrix(const float& left, const float& top,
 Matrix4x4 Rendering::MakePerspectiveFovMatrix(const float& fovY, const float& aspectRation, const float& nearClip, const float& farClip) {
 	Matrix4x4 result{
 		1.0f / aspectRation * Math::Cont(fovY / 2.0f),0.0f,0.0f,0.0f,
-		0.0f,Math::Cont(fovY / 2.0f),0.0f,0.0f,
+		0.0f, Math::Cont(fovY / 2.0f),0.0f,0.0f,
 		0.0f,0.0f,farClip / (farClip - nearClip),1.0f,
 		0.0f,0.0f,-(nearClip * farClip) / (farClip - nearClip),0.0f
 	};
@@ -165,20 +160,19 @@ Matrix4x4 Rendering::MakeViewportMatrix(const float& left, const float& top, con
 	return result;
 }
 
-//乗算
-Transform Transform::operator*(const Transform transform) {
-	Transform result;
-	result.scale = this->scale * transform.scale;
-	result.rotate = this->rotate * transform.rotate;
-	result.translate = this->translate * transform.translate;
-	return result;
+//ビルボード行列を作成
+Matrix4x4 Rendering::MakeBillboardMatrix(const Matrix4x4& cameraWorldMatrix, const Vector3& rotate) {
+	//正面に向けるY軸回転の行列を作成
+	Matrix4x4 backToFrontMatrix = Rendering::MakeRotateXYZMatrix(rotate);
+	//ビルボード行列を作成
+	Matrix4x4 billboardMatrix = backToFrontMatrix * cameraWorldMatrix;
+	billboardMatrix.m[3][0] = 0.0f; // X座標を0に設定
+	billboardMatrix.m[3][1] = 0.0f; // Y座標を0に設定
+	billboardMatrix.m[3][2] = 0.0f; // Z座標を0に設定
+	return billboardMatrix;
 }
 
-//乗算
-Transform2d Transform2d::operator*(const Transform2d transform) {
-	Transform2d result;
-	result.scale = this->scale * transform.scale;
-	result.rotate = this->rotate * transform.rotate;
-	result.translate = this->translate * transform.translate;
-	return result;
+//ビルボード行列を含んだアフィン行列の作成
+Matrix4x4 Rendering::MakeBillboardAffineMatrix(const Matrix4x4& cameraWorldMatrix, const Transform& transform) {
+	return (MakeScaleMatrix(transform.scale) * MakeBillboardMatrix(cameraWorldMatrix, transform.rotate)) * MakeTranslateMatrix(transform.translate);
 }

@@ -23,8 +23,6 @@ void GameSystem::Draw() {
 	directXBase_->PreDraw();
 	//SRVの管理
 	SRVManager::GetInstance()->PreDraw();
-	//2Dオブジェクトの共通部分
-	Object2dCommon::GetInstance()->DrawSetting();
 	//シーン
 	SceneManager::GetInstance()->Draw();
 	//ImGuiの管理
