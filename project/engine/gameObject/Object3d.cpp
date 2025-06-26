@@ -1,6 +1,6 @@
 #include "Object3d.h"
 #include "engine/objectCommon/Object3dCommon.h"
-#include "engine/gameObject/Camera.h"
+#include "engine/camera/Camera.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/math/func/Math.h"
 #include "engine/3d/ModelManager.h"
@@ -32,6 +32,8 @@ void Object3d::Update() {
 
 //描画
 void Object3d::Draw() {
+	//描画設定
+	Object3dCommon::GetInstance()->DrawSetting();
 	//PSOの設定
 	auto pso = Object3dCommon::GetInstance()->GetGraphicsPipelineStates()[static_cast<int32_t>(blendMode_)].Get();
 	//グラフィックスパイプラインをセットするコマンド

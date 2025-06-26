@@ -1,10 +1,9 @@
 #pragma once
 #include "engine/gameObject/Object2d.h"
 #include "engine/gameObject/Object3d.h"
-#include "engine/gameObject/PlaneObject.h"
 #include "engine/debug/ImGuiManager.h"
 #include "engine/audio/AudioManager.h"
-#include "engine/gameObject/CameraManager.h"
+#include "engine/camera/CameraManager.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/SRVManager.h"
 #include "engine/blend/BlendMode.h"

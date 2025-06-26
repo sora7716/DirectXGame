@@ -1,9 +1,8 @@
-
 #pragma once
 #include "engine/math/ResourceData.h"
 #include "engine/base/DirectXBase.h"
 #include "engine/base/GraphicsPipeline.h"
-#include "engine/gameObject/Camera.h"
+#include "engine/camera/Camera.h"
 #include <wrl.h>
 #include <d3d12.h>
 #include <memory>

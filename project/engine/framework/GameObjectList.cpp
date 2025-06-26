@@ -43,9 +43,6 @@ void GameObjectList::LoadAudio() {
 
 //スプライトの読み込み
 void GameObjectList::LoadSprite() {
-	SpriteManager::GetInstance()->LoadSprite("monsterBall", "monsterBall");
-	SpriteManager::GetInstance()->LoadSprite("block", "block");
-	SpriteManager::GetInstance()->LoadSprite("uvChecker", "uvChecker");
 }
 
 //OBJファイルの読み込み
@@ -54,6 +51,8 @@ void GameObjectList::LoadModel() {
 	ModelManager::GetInstance()->LoadOBJModel("cube", "cube", "cube");
 	//平面
 	ModelManager::GetInstance()->LoadOBJModel("plane", "plane", "plane");
+	//軸
+	ModelManager::GetInstance()->LoadOBJModel("axis", "base", "axis");
 }
 
 //カメラの生成

@@ -1,6 +1,5 @@
 #pragma once
 #include "IScene.h"
-#include "engine/particle/ParticleEmit.h"
 
 /// <summary>
 /// タイトルシーン
@@ -47,14 +46,10 @@ private://メンバ変数
 	std::unique_ptr<Object3d>object3d_ = nullptr;
 	Transform worldTransform3d_ = {};
 	Vector4 object3dColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	//平面
-	std::unique_ptr<PlaneObject>plane_[2] = { nullptr };
-	Transform2d planeTransform_[2] = {};
 	//ライト
 	DirectionalLight directionalLight_ = {};
 	//ブレンドモード
 	int blendMode_ = BlendMode::kNone;
-	std::unique_ptr<ParticleEmit>particleEmit_ = nullptr;
 };
 
 

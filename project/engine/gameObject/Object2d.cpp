@@ -3,7 +3,7 @@
 #include "engine/base/DirectXBase.h"
 #include "engine/base/WinApi.h"
 #include "engine/math/func/Math.h"
-#include "engine/gameObject/Camera.h"
+#include "engine/camera/Camera.h"
 #include "SpriteManager.h"
 #include "Sprite.h"
 //初期化
